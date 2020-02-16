@@ -1,0 +1,121 @@
+#+TITLE: Architecting and Operating OpenShift Cluster
+#+AUTHOR: 龔存
+* Networking
+** East-West Traffic
+
+ In the default configuration, the cluster network is the *10.128.0.0/14*
+ network, and node allocated */23* subnets (i.e., *10.128.0.0/23*,
+ *10.128.2.0/23*, *10.128.4.0/23*, and so on). This means that the cluster
+ network has 512 subnets available to assign to nodes, and a given node is
+ allocated 510 addresses that it can assign to the containers running on it. The
+ size and address range of the cluster network are configurable, as is the host
+ subnet size. 
+
+ #+BEGIN_EXAMPLE
+   [root@master ~]# view /etc/origin/master/master-config.yaml
+   networkConfig:
+     clusterNetworks:
+     - cidr: 10.128.0.0/14
+       hostSubnetLength: 9
+     externalIPNetworkCIDRs:
+     - 0.0.0.0/0
+     networkPluginName: redhat/openshift-ovs-subnet
+     serviceNetworkCIDR: 172.30.0.0/16
+
+   [root@master ~]# oc get hostsubnet -o wide
+   NAME                     HOST                     HOST IP         SUBNET          EGRESS CIDRS   EGRESS IPS
+   infra.myopenshift.com    infra.myopenshift.com    192.168.23.52   10.130.0.0/23   []             []
+   master.myopenshift.com   master.myopenshift.com   192.168.23.31   10.128.0.0/23   []             []
+   node.myopenshift.com     node.myopenshift.com     192.168.23.51   10.129.0.0/23   []             []
+ #+END_EXAMPLE
+
+ OpenShift SDN creates and configures three network devices:
+
+     - br0 :: the OVS bridge device that pod containers will be attached to.
+              OpenShift SDN also configures a set of non-subnet-specific flow rules
+              on this bridge.
+     - tun0 :: an OVS internal port (port 2 on *br0*). This gets assigned the cluster
+               subnet gateway address, and is used for external network access.
+               OpenShift SDN configures *netfilter* and routing rules to enable access
+               from the cluster subnet to the external network via NAT.
+     - vxlan_sys_4789 :: The OVS VXLAN device (port 1 on *br0*), which provides access
+                         to containers on remote nodes. Referred to as *vxlan0* in the
+                         OVS rules. 
+
+ For each Pod in the Node, the local OpenShift creates a /vethXX/ interface and
+ assign it to the OVS br0. The /vxlan_sys_4789/ of /br0/ is the interface that
+ defines the /VXLAN/ tunnels, or the overlay network, that enables the
+ communication between local Pods with Pods in remote Nodes. This interface is
+ known as /vxlan0/ interface inside the OVS and that is the name used in the
+ OpenFlow entries. The /tun0/ interface gets the local cluster network subnet
+ gateway address. This is the interface that provide /NAT/ access from the
+ cluster network subnet to the external network. In additional to the local
+ cluster network subnet gateway address, on each /Node/ the Kubernetes Service
+ objects network is also pointed to the /tun0/ interface.
+
+ #+BEGIN_EXAMPLE
+   [root@node ~]# ip route
+   ...
+   10.128.0.0/14 dev tun0 scope link
+   ...
+   172.30.0.0/16 dev tun0
+
+   [root@node ~]# ifconfig tun0
+   tun0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1450
+           inet 10.129.0.1  netmask 255.255.254.0  broadcast 10.129.1.255
+           ...
+
+   [root@node ~]# iptables -v -t nat -L OPENSHIFT-MASQUERADE
+   Chain OPENSHIFT-MASQUERADE (1 references)
+    pkts bytes target     prot opt in     out     source               destination
+       0     0 RETURN     all  --  any    any     anywhere             anywhere             mark match 0x1/0x1
+       7   621 MASQUERADE  all  --  any    any     10.128.0.0/14        anywhere             /* masquerade pod-to-service and pod-to-external traffic */
+
+ #+END_EXAMPLE
+ The Pod ip will be NAT to the IP of the physical interface when it access the
+ external host.
+** North-South Traffic
+
+#+BEGIN_EXAMPLE
+  [root@master ~]# oc get all --selector='router=router' -n default -o wide
+  NAME                 READY     STATUS    RESTARTS   AGE       IP              NODE                    NOMINATED NODE
+  pod/router-2-ssfwc   1/1       Running   0          17h       192.168.23.52   infra.myopenshift.com   <none>
+
+  NAME                             DESIRED   CURRENT   READY     AGE       CONTAINERS   IMAGES                                                       SELECTOR
+  replicationcontroller/router-1   0         0         0         18h       router       registry.redhat.io/openshift3/ose-haproxy-router:v3.11       deployment=router-1,deploymentconfig=router,router=router
+  replicationcontroller/router-2   1         1         1         17h       router       registry.redhat.io/openshift3/ose-haproxy-router:v3.11.157   deployment=router-2,deploymentconfig=router,router=router
+
+  NAME             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                   AGE       SELECTOR
+  service/router   ClusterIP   172.30.169.119   <none>        80/TCP,443/TCP,1936/TCP   18h       router=router
+
+  NAME                                        REVISION   DESIRED   CURRENT   TRIGGERED BY
+  deploymentconfig.apps.openshift.io/router   2          1         1         config
+
+#+END_EXAMPLE
+
+The default OpenShift Router is one or more Router Pods running on
+Infrastructure Nodes (=infra.myopenshift.com=) and is deployed as a /Deployment
+Config/ (=deploymentconfig.apps.ose.I/O/router=).
+
+These Routers container images are based on /HAProxy/ (see =IMAGES=). These
+/Pods/ are defined to share the /Network Namespace/ with the host
+/Infrastructure Node/:
+#+BEGIN_EXAMPLE
+  [root@master ~]# oc api-resources
+  [root@master ~]# oc get dc
+  [root@master ~]# oc get services
+  [root@master ~]# oc get pods
+  [root@master ~]# oc get routes
+  [root@master ~]# oc get routes <route-name> -o yaml
+  [root@master ~]# oc get dc router -o yaml
+  [root@master ~]# oc get services router -o yaml
+  [root@master ~]# oc get services <service-name> -o yaml
+  [root@master ~]# oc get pods <pod-name> -o yaml
+
+
+#+END_EXAMPLE
+
+Sharing the /Network Namespace/ enables these /Router Pods/ to receive traffic
+over the /host-network/. By default, the /OpenShift Router/ listens on TCP ports
+80 (HTTP), 443 (HTTPS), and 1936 (HAProxy Stats). Once the traffic arrives to
+the Pod, it will match the corresponding Route object.

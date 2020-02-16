@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-02-16 周日 20:16 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Architecting and Operating OpenShift Cluster</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="龔存" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Architecting and Operating OpenShift Cluster</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org99e764a">1. Networking</a>
+<ul>
+<li><a href="#org4a41b50">1.1. East-West Traffic</a></li>
+<li><a href="#org8ba9147">1.2. North-South Traffic</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org99e764a" class="outline-2">
+<h2 id="org99e764a"><span class="section-number-2">1</span> Networking</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org4a41b50" class="outline-3">
+<h3 id="org4a41b50"><span class="section-number-3">1.1</span> East-West Traffic</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+In the default configuration, the cluster network is the <b>10.128.0.0/14</b>
+network, and node allocated <b>/23</b> subnets (i.e., <b>10.128.0.0/23</b>,
+<b>10.128.2.0/23</b>, <b>10.128.4.0/23</b>, and so on). This means that the cluster
+network has 512 subnets available to assign to nodes, and a given node is
+allocated 510 addresses that it can assign to the containers running on it. The
+size and address range of the cluster network are configurable, as is the host
+subnet size. 
+</p>
+
+<pre class="example">
+[root@master ~]# view /etc/origin/master/master-config.yaml
+networkConfig:
+  clusterNetworks:
+  - cidr: 10.128.0.0/14
+    hostSubnetLength: 9
+  externalIPNetworkCIDRs:
+  - 0.0.0.0/0
+  networkPluginName: redhat/openshift-ovs-subnet
+  serviceNetworkCIDR: 172.30.0.0/16
+
+[root@master ~]# oc get hostsubnet -o wide
+NAME                     HOST                     HOST IP         SUBNET          EGRESS CIDRS   EGRESS IPS
+infra.myopenshift.com    infra.myopenshift.com    192.168.23.52   10.130.0.0/23   []             []
+master.myopenshift.com   master.myopenshift.com   192.168.23.31   10.128.0.0/23   []             []
+node.myopenshift.com     node.myopenshift.com     192.168.23.51   10.129.0.0/23   []             []
+</pre>
+
+<p>
+OpenShift SDN creates and configures three network devices:
+</p>
+
+<dl class="org-dl">
+<dt>br0</dt><dd>the OVS bridge device that pod containers will be attached to.
+OpenShift SDN also configures a set of non-subnet-specific flow rules
+on this bridge.</dd>
+<dt>tun0</dt><dd>an OVS internal port (port 2 on <b>br0</b>). This gets assigned the cluster
+subnet gateway address, and is used for external network access.
+OpenShift SDN configures <b>netfilter</b> and routing rules to enable access
+from the cluster subnet to the external network via NAT.</dd>
+<dt>vxlan_sys_4789</dt><dd>The OVS VXLAN device (port 1 on <b>br0</b>), which provides access
+to containers on remote nodes. Referred to as <b>vxlan0</b> in the
+OVS rules.</dd>
+</dl>
+
+<p>
+For each Pod in the Node, the local OpenShift creates a <i>vethXX</i> interface and
+assign it to the OVS br0. The <i>vxlan_sys_4789</i> of <i>br0</i> is the interface that
+defines the <i>VXLAN</i> tunnels, or the overlay network, that enables the
+communication between local Pods with Pods in remote Nodes. This interface is
+known as <i>vxlan0</i> interface inside the OVS and that is the name used in the
+OpenFlow entries. The <i>tun0</i> interface gets the local cluster network subnet
+gateway address. This is the interface that provide <i>NAT</i> access from the
+cluster network subnet to the external network. In additional to the local
+cluster network subnet gateway address, on each <i>Node</i> the Kubernetes Service
+objects network is also pointed to the <i>tun0</i> interface.
+</p>
+
+<pre class="example">
+[root@node ~]# ip route
+...
+10.128.0.0/14 dev tun0 scope link
+...
+172.30.0.0/16 dev tun0
+
+[root@node ~]# ifconfig tun0
+tun0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1450
+        inet 10.129.0.1  netmask 255.255.254.0  broadcast 10.129.1.255
+        ...
+
+[root@node ~]# iptables -v -t nat -L OPENSHIFT-MASQUERADE
+Chain OPENSHIFT-MASQUERADE (1 references)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 RETURN     all  --  any    any     anywhere             anywhere             mark match 0x1/0x1
+    7   621 MASQUERADE  all  --  any    any     10.128.0.0/14        anywhere             /* masquerade pod-to-service and pod-to-external traffic */
+
+</pre>
+<p>
+The Pod ip will be NAT to the IP of the physical interface when it access the
+external host.
+</p>
+</div>
+</div>
+<div id="outline-container-org8ba9147" class="outline-3">
+<h3 id="org8ba9147"><span class="section-number-3">1.2</span> North-South Traffic</h3>
+<div class="outline-text-3" id="text-1-2">
+<pre class="example">
+[root@master ~]# oc get all --selector='router=router' -n default -o wide
+NAME                 READY     STATUS    RESTARTS   AGE       IP              NODE                    NOMINATED NODE
+pod/router-2-ssfwc   1/1       Running   0          17h       192.168.23.52   infra.myopenshift.com   &lt;none&gt;
+
+NAME                             DESIRED   CURRENT   READY     AGE       CONTAINERS   IMAGES                                                       SELECTOR
+replicationcontroller/router-1   0         0         0         18h       router       registry.redhat.io/openshift3/ose-haproxy-router:v3.11       deployment=router-1,deploymentconfig=router,router=router
+replicationcontroller/router-2   1         1         1         17h       router       registry.redhat.io/openshift3/ose-haproxy-router:v3.11.157   deployment=router-2,deploymentconfig=router,router=router
+
+NAME             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                   AGE       SELECTOR
+service/router   ClusterIP   172.30.169.119   &lt;none&gt;        80/TCP,443/TCP,1936/TCP   18h       router=router
+
+NAME                                        REVISION   DESIRED   CURRENT   TRIGGERED BY
+deploymentconfig.apps.openshift.io/router   2          1         1         config
+
+</pre>
+
+<p>
+The default OpenShift Router is one or more Router Pods running on
+Infrastructure Nodes (<code>infra.myopenshift.com</code>) and is deployed as a <i>Deployment
+Config</i> (<code>deploymentconfig.apps.ose.I/O/router</code>).
+</p>
+
+<p>
+These Routers container images are based on <i>HAProxy</i> (see <code>IMAGES</code>). These
+<i>Pods</i> are defined to share the <i>Network Namespace</i> with the host
+<i>Infrastructure Node</i>:
+</p>
+<pre class="example">
+[root@master ~]# oc api-resources
+[root@master ~]# oc get dc
+[root@master ~]# oc get services
+[root@master ~]# oc get pods
+[root@master ~]# oc get routes
+[root@master ~]# oc get routes &lt;route-name&gt; -o yaml
+[root@master ~]# oc get dc router -o yaml
+[root@master ~]# oc get services router -o yaml
+[root@master ~]# oc get services &lt;service-name&gt; -o yaml
+[root@master ~]# oc get pods &lt;pod-name&gt; -o yaml
+
+
+</pre>
+
+<p>
+Sharing the <i>Network Namespace</i> enables these <i>Router Pods</i> to receive traffic
+over the <i>host-network</i>. By default, the <i>OpenShift Router</i> listens on TCP ports
+80 (HTTP), 443 (HTTPS), and 1936 (HAProxy Stats). Once the traffic arrives to
+the Pod, it will match the corresponding Route object.
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: 龔存</p>
+<p class="date">Created: 2020-02-16 周日 20:16</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
