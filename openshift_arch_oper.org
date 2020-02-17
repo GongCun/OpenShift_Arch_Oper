@@ -119,3 +119,109 @@ Sharing the /Network Namespace/ enables these /Router Pods/ to receive traffic
 over the /host-network/. By default, the /OpenShift Router/ listens on TCP ports
 80 (HTTP), 443 (HTTPS), and 1936 (HAProxy Stats). Once the traffic arrives to
 the Pod, it will match the corresponding Route object.
+* Build & deploy docker image
+
+** Setup the proxy
+#+BEGIN_SRC sh
+  oc describe svc/docker-registry -n default
+  ...
+  Type:              ClusterIP
+  IP:                172.30.151.16
+
+  cat ~/.docker/config.json
+  ...
+  "proxies": {
+      "default": {
+          "httpProxy": "http://proxy.myopenshift.com:8888",
+          "httpsProxy": "http://proxy.myopenshift.com:8888",
+          "noProxy": "*.bocmo.com,.bocmacau.com,.myopenshift.com,172.30.151.16"
+      }
+  }
+
+  systemctl daemon-reload
+  systemctl restart docker
+
+  docker login registry.redhat.io
+  Username:
+  Password:
+  Login Succeeded
+
+  docker pull registry.redhat.io/rhel7
+  docker images
+  registry.redhat.io/rhel7 
+
+  # Get the image path
+  docker info
+  ...
+  Docker Root Dir: /var/lib/docker
+
+  ...
+
+#+END_SRC
+
+** Create docker image
+   #+begin_src sh
+     mkdir -p /opt/docker/test
+     cd /opt/docker/test
+
+     vi Dockerfile
+     # This Dockerfile uses the rhel7 image
+     # Version 1 - Edition 1
+     # Ahthor: Cun Gong
+     FROM rhel:latest
+     RUN date; sleep 30; date
+     RUN echo "Hello World" >/tmp/test.out
+     RUN date; sleep 30; date
+     CMD /bin/sh
+
+     docker build -t rhel7:v1 .
+     docker ps # get the container-id
+     docker exec -it <container-id> sh
+     sh-4.2# ps -ef
+
+     docker run -it rhel7:v1 cat /tmp/test.out
+
+     docker run -it rhel7:v1
+     sh-4.2# ls -l /tmp/test.out
+     -rw-r--r--. 1 root root 12 Feb 17 06:23 /tmp/test.out
+
+     docker run -it rhel7:v1
+     sh-4.2# yum install -y nc
+     sh-4.2# nc -4kl 8080 -c '/usr/bin/cat' &
+     sh-4.2# nc localhost 8888
+
+     ## Test again
+     cd /opt/docker/test
+     git init
+     git add ./Dockerfile
+     git commit -m"first test"
+
+     cat Dockerfile
+     # This Dockerfile uses the rhel7 image
+     # Ahthor: Cun Gong
+     FROM rhel7:v2
+     CMD ["nc", "-4", "-l", "8080", "-c", "/usr/bin/cat -v"]
+
+     docker build -t rhel7:v3 .
+     # Server terminal
+     docker run -it --rm -p 8080:8080 rhel7:v3
+     # Client terminal
+     nc localhost 8080
+     hello world
+     hello world
+
+   #+end_src
+
+** Delete container & images
+#+BEGIN_SRC sh
+  # Delete containers
+  docker ps --all | grep rhel
+  docker container kill <id>
+  docker rm -v <id> <id> ...
+
+  # Delete images
+  docker images
+  docker rmi rhel7:v2
+#+END_SRC
+
+** Push docker images to OpenShift internal registry
