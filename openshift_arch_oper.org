@@ -166,49 +166,41 @@ the Pod, it will match the corresponding Route object.
 
      vi Dockerfile
      # This Dockerfile uses the rhel7 image
-     # Version 1 - Edition 1
      # Ahthor: Cun Gong
-     FROM rhel:latest
-     RUN date; sleep 30; date
-     RUN echo "Hello World" >/tmp/test.out
-     RUN date; sleep 30; date
+     FROM rhel7:latest
+     RUN yum install -y nc
      CMD /bin/sh
 
      docker build -t rhel7:v1 .
      docker ps # get the container-id
-     docker exec -it <container-id> sh
-     sh-4.2# ps -ef
+     docker run --rm -it <container-id> sh
+     sh-4.2# type nc
 
-     docker run -it rhel7:v1 cat /tmp/test.out
-
-     docker run -it rhel7:v1
-     sh-4.2# ls -l /tmp/test.out
-     -rw-r--r--. 1 root root 12 Feb 17 06:23 /tmp/test.out
-
-     docker run -it rhel7:v1
-     sh-4.2# yum install -y nc
-     sh-4.2# nc -4kl 8080 -c '/usr/bin/cat' &
-     sh-4.2# nc localhost 8888
-
-     ## Test again
+     ## Web test by ncat
      cd /opt/docker/test
      git init
      git add ./Dockerfile
-     git commit -m"first test"
+     git commit -m"rhel7:v1"
 
      cat Dockerfile
      # This Dockerfile uses the rhel7 image
      # Ahthor: Cun Gong
-     FROM rhel7:v2
-     CMD ["nc", "-4", "-l", "8080", "-c", "/usr/bin/cat"]
+     FROM rhel7:v1
+     COPY ./index.http /index.http
+     COPY ./ncat-web.sh /ncat-web.sh
+     RUN chmod 755 ncat-web.sh
+     EXPOSE 8080
+     ENTRYPOINT ["/ncat-web.sh"]
 
-     docker build -t rhel7:v3 .
+     # Build
+     docker build -t rhel7:v2 .
+
      # Server terminal
-     docker run -it --rm -p 8080:8080 rhel7:v3
+     docker run -it --rm -P rhel7:v2
      # Client terminal
-     dd if=/dev/urandom of=/tmp/random.out bs=512k count=1
-     nc localhost 8080 </tmp/random.out >/tmp/random.out.copy
-     cksum /tmp/random.out /tmp/random.out.copy
+     docker ps
+     ... rhel7:v2 ... 0.0.0.0:32769->8080/tcp
+     curl -v -k localhost:32769
 
    #+end_src
 
@@ -225,3 +217,46 @@ the Pod, it will match the corresponding Route object.
 #+END_SRC
 
 ** Push docker images to OpenShift internal registry
+#+BEGIN_SRC sh
+  oc login -u system:admin -n default
+
+  oc describe svc/docker-registry -n default
+  Type:              ClusterIP
+  IP:                172.30.151.202
+  Port:              5000-tcp  5000/TCP
+  TargetPort:        5000/TCP
+
+  oc adm policy add-scc-to-user anyuid -z default
+  scc "anyuid" added to: ["system:serviceaccount:hello:default"]
+
+  # check permission (no use)
+  oc edit scc anyuid
+
+  # Just for debug (no use)
+  #oc adm policy add-role-to-user edit system
+  #oc adm policy remove-role-from-user edit system
+
+  ## Re-setup the docker proxy
+  # Retrieve the registry service’s IP address
+  oc describe svc/docker-registry -n default
+  vi /etc/sysconfig/docker
+  NO_PROXY=...,${docker-registry.default.svc}
+
+  systemctl restart docker
+
+  oc login -u system -p admin
+  oc new-project hello
+  docker tag rhel7:v2 172.30.151.202:5000/hello/rhel7:v2
+  docker login -p `oc whoami -t` -u system 172.30.151.202:5000
+  docker push 172.30.151.202:5000/hello/rhel7:v2
+
+  oc new-app hello/rhel7:v2 --name=myapp
+
+  oc expose svc/myapp
+  oc get svc/myapp -o wide
+
+  oc get routes
+  myapp-hello.apps.myopenshift.com
+
+  curl -v -k myapp-hello.apps.myopenshift.com
+#+END_SRC
