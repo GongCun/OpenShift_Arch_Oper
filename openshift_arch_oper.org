@@ -200,15 +200,15 @@ the Pod, it will match the corresponding Route object.
      # This Dockerfile uses the rhel7 image
      # Ahthor: Cun Gong
      FROM rhel7:v2
-     CMD ["nc", "-4", "-l", "8080", "-c", "/usr/bin/cat -v"]
+     CMD ["nc", "-4", "-l", "8080", "-c", "/usr/bin/cat"]
 
      docker build -t rhel7:v3 .
      # Server terminal
      docker run -it --rm -p 8080:8080 rhel7:v3
      # Client terminal
-     nc localhost 8080
-     hello world
-     hello world
+     dd if=/dev/urandom of=/tmp/random.out bs=512k count=1
+     nc localhost 8080 </tmp/random.out >/tmp/random.out.copy
+     cksum /tmp/random.out /tmp/random.out.copy
 
    #+end_src
 
