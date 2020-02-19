@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-02-17 周一 23:09 -->
+<!-- 2020-02-19 周三 21:53 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Architecting and Operating OpenShift Cluster</title>
@@ -234,29 +234,29 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orga570c97">1. Networking</a>
+<li><a href="#org31706e4">1. Networking</a>
 <ul>
-<li><a href="#org583cf3f">1.1. East-West Traffic</a></li>
-<li><a href="#org3f23237">1.2. North-South Traffic</a></li>
+<li><a href="#orgbd7149a">1.1. East-West Traffic</a></li>
+<li><a href="#org8127894">1.2. North-South Traffic</a></li>
 </ul>
 </li>
-<li><a href="#orgb657aeb">2. Build &amp; deploy docker image</a>
+<li><a href="#org45e8647">2. Build &amp; deploy docker image</a>
 <ul>
-<li><a href="#org1163231">2.1. Setup the proxy</a></li>
-<li><a href="#org827fe1f">2.2. Create docker image</a></li>
-<li><a href="#orgcb5f444">2.3. Delete container &amp; images</a></li>
-<li><a href="#org0093f96">2.4. Push docker images to OpenShift internal registry</a></li>
+<li><a href="#orgaf20463">2.1. Setup the proxy</a></li>
+<li><a href="#org0216e6b">2.2. Create docker image</a></li>
+<li><a href="#org591028d">2.3. Delete container &amp; images</a></li>
+<li><a href="#org29f759d">2.4. Push docker images to OpenShift internal registry</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orga570c97" class="outline-2">
-<h2 id="orga570c97"><span class="section-number-2">1</span> Networking</h2>
+<div id="outline-container-org31706e4" class="outline-2">
+<h2 id="org31706e4"><span class="section-number-2">1</span> Networking</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org583cf3f" class="outline-3">
-<h3 id="org583cf3f"><span class="section-number-3">1.1</span> East-West Traffic</h3>
+<div id="outline-container-orgbd7149a" class="outline-3">
+<h3 id="orgbd7149a"><span class="section-number-3">1.1</span> East-West Traffic</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 In the default configuration, the cluster network is the <b>10.128.0.0/14</b>
@@ -341,8 +341,8 @@ external host.
 </p>
 </div>
 </div>
-<div id="outline-container-org3f23237" class="outline-3">
-<h3 id="org3f23237"><span class="section-number-3">1.2</span> North-South Traffic</h3>
+<div id="outline-container-org8127894" class="outline-3">
+<h3 id="org8127894"><span class="section-number-3">1.2</span> North-South Traffic</h3>
 <div class="outline-text-3" id="text-1-2">
 <pre class="example">
 [root@master ~]# oc get all --selector='router=router' -n default -o wide
@@ -396,12 +396,12 @@ the Pod, it will match the corresponding Route object.
 </div>
 </div>
 </div>
-<div id="outline-container-orgb657aeb" class="outline-2">
-<h2 id="orgb657aeb"><span class="section-number-2">2</span> Build &amp; deploy docker image</h2>
+<div id="outline-container-org45e8647" class="outline-2">
+<h2 id="org45e8647"><span class="section-number-2">2</span> Build &amp; deploy docker image</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org1163231" class="outline-3">
-<h3 id="org1163231"><span class="section-number-3">2.1</span> Setup the proxy</h3>
+<div id="outline-container-orgaf20463" class="outline-3">
+<h3 id="orgaf20463"><span class="section-number-3">2.1</span> Setup the proxy</h3>
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
 <pre class="src src-sh">oc describe svc/docker-registry -n default
@@ -431,7 +431,7 @@ docker pull registry.redhat.io/rhel7
 docker images
 registry.redhat.io/rhel7 
 
-<span style="color: #ffd700; background-color: #292e34;"># </span><span style="color: #ffd700; background-color: #292e34;">Get the image path</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Get the image path</span>
 docker info
 ...
 Docker Root Dir: /var/lib/docker
@@ -443,74 +443,66 @@ Docker Root Dir: /var/lib/docker
 </div>
 </div>
 
-<div id="outline-container-org827fe1f" class="outline-3">
-<h3 id="org827fe1f"><span class="section-number-3">2.2</span> Create docker image</h3>
+<div id="outline-container-org0216e6b" class="outline-3">
+<h3 id="org0216e6b"><span class="section-number-3">2.2</span> Create docker image</h3>
 <div class="outline-text-3" id="text-2-2">
 <div class="org-src-container">
 <pre class="src src-sh">mkdir -p /opt/docker/test
 <span style="color: #4f97d7;">cd</span> /opt/docker/test
 
 vi Dockerfile
-<span style="color: #ffd700; background-color: #292e34;"># </span><span style="color: #ffd700; background-color: #292e34;">This Dockerfile uses the rhel7 image</span>
-<span style="color: #ffd700; background-color: #292e34;"># </span><span style="color: #ffd700; background-color: #292e34;">Version 1 - Edition 1</span>
-<span style="color: #ffd700; background-color: #292e34;"># </span><span style="color: #ffd700; background-color: #292e34;">Ahthor: Cun Gong</span>
-FROM rhel:latest
-RUN date; sleep <span style="color: #a45bad;">30</span>; date
-RUN echo <span style="color: #2d9574;">"Hello World"</span> &gt;/tmp/test.out
-RUN date; sleep <span style="color: #a45bad;">30</span>; date
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">This Dockerfile uses the rhel7 image</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Ahthor: Cun Gong</span>
+FROM rhel7:latest
+RUN yum install -y nc
 CMD /bin/sh
 
 docker build -t rhel7:v1 .
-docker ps <span style="color: #ffd700; background-color: #292e34;"># </span><span style="color: #ffd700; background-color: #292e34;">get the container-id</span>
-docker exec -it &lt;container-id&gt; sh
-sh-4.2# ps -ef
+docker ps <span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">get the container-id</span>
+docker run --rm -it &lt;container-id&gt; sh
+sh-4.2# type nc
 
-docker run -it rhel7:v1 cat /tmp/test.out
-
-docker run -it rhel7:v1
-sh-4.2# ls -l /tmp/test.out
--rw-r--r--. <span style="color: #a45bad;">1</span> root root <span style="color: #a45bad;">12</span> Feb <span style="color: #a45bad;">17</span> <span style="color: #a45bad;">06:23</span> /tmp/test.out
-
-docker run -it rhel7:v1
-sh-4.2# yum install -y nc
-sh-4.2# nc -4kl <span style="color: #a45bad;">8080</span> -c <span style="color: #2d9574;">'/usr/bin/cat'</span> &amp;
-sh-4.2# nc localhost <span style="color: #a45bad;">8888</span>
-
-<span style="color: #ffd700; background-color: #292e34;">## </span><span style="color: #ffd700; background-color: #292e34;">Test again</span>
+<span style="color: #ffd700; background-color: nil;">## </span><span style="color: #ffd700; background-color: nil;">Web test by ncat</span>
 <span style="color: #4f97d7;">cd</span> /opt/docker/test
 git init
 git add ./Dockerfile
-git commit -m<span style="color: #2d9574;">"first test"</span>
+git commit -m<span style="color: #2d9574;">"rhel7:v1"</span>
 
 cat Dockerfile
-<span style="color: #ffd700; background-color: #292e34;"># </span><span style="color: #ffd700; background-color: #292e34;">This Dockerfile uses the rhel7 image</span>
-<span style="color: #ffd700; background-color: #292e34;"># </span><span style="color: #ffd700; background-color: #292e34;">Ahthor: Cun Gong</span>
-FROM rhel7:v2
-CMD <span style="color: #4f97d7;">[</span><span style="color: #2d9574;">"nc"</span>, <span style="color: #2d9574;">"-4"</span>, <span style="color: #2d9574;">"-l"</span>, <span style="color: #2d9574;">"8080"</span>, <span style="color: #2d9574;">"-c"</span>, <span style="color: #2d9574;">"/usr/bin/cat -v"</span><span style="color: #4f97d7;">]</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">This Dockerfile uses the rhel7 image</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Ahthor: Cun Gong</span>
+FROM rhel7:v1
+COPY ./index.http /index.http
+COPY ./ncat-web.sh /ncat-web.sh
+RUN chmod <span style="color: #a45bad;">755</span> ncat-web.sh
+EXPOSE <span style="color: #a45bad;">8080</span>
+ENTRYPOINT <span style="color: #4f97d7;">[</span><span style="color: #2d9574;">"/ncat-web.sh"</span><span style="color: #4f97d7;">]</span>
 
-docker build -t rhel7:v3 .
-<span style="color: #ffd700; background-color: #292e34;"># </span><span style="color: #ffd700; background-color: #292e34;">Server terminal</span>
-docker run -it --rm -p <span style="color: #a45bad;">8080:8080</span> rhel7:v3
-<span style="color: #ffd700; background-color: #292e34;"># </span><span style="color: #ffd700; background-color: #292e34;">Client terminal</span>
-nc localhost <span style="color: #a45bad;">8080</span>
-hello world
-hello world
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Build</span>
+docker build -t rhel7:v2 .
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Server terminal</span>
+docker run -it --rm -P rhel7:v2
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Client terminal</span>
+docker ps
+... rhel7:v2 ... <span style="color: #a45bad;">0.0.0.0:32769-</span>&gt;<span style="color: #a45bad;">8080/tcp</span>
+curl -v -k localhost:32769
 
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgcb5f444" class="outline-3">
-<h3 id="orgcb5f444"><span class="section-number-3">2.3</span> Delete container &amp; images</h3>
+<div id="outline-container-org591028d" class="outline-3">
+<h3 id="org591028d"><span class="section-number-3">2.3</span> Delete container &amp; images</h3>
 <div class="outline-text-3" id="text-2-3">
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #ffd700; background-color: #292e34;"># </span><span style="color: #ffd700; background-color: #292e34;">Delete containers</span>
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Delete containers</span>
 docker ps --all | grep rhel
 docker container kill &lt;id&gt;
 docker rm -v &lt;id&gt; &lt;id&gt; ...
 
-<span style="color: #ffd700; background-color: #292e34;"># </span><span style="color: #ffd700; background-color: #292e34;">Delete images</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Delete images</span>
 docker images
 docker rmi rhel7:v2
 </pre>
@@ -518,14 +510,60 @@ docker rmi rhel7:v2
 </div>
 </div>
 
-<div id="outline-container-org0093f96" class="outline-3">
-<h3 id="org0093f96"><span class="section-number-3">2.4</span> Push docker images to OpenShift internal registry</h3>
+<div id="outline-container-org29f759d" class="outline-3">
+<h3 id="org29f759d"><span class="section-number-3">2.4</span> Push docker images to OpenShift internal registry</h3>
+<div class="outline-text-3" id="text-2-4">
+<div class="org-src-container">
+<pre class="src src-sh">oc login -u system:admin -n default
+
+oc describe svc/docker-registry -n default
+Type:              ClusterIP
+IP:                <span style="color: #a45bad;">172.30.151.202</span>
+Port:              <span style="color: #a45bad;">5000-tcp</span>  <span style="color: #a45bad;">5000/TCP</span>
+TargetPort:        <span style="color: #a45bad;">5000/TCP</span>
+
+oc adm policy add-scc-to-user anyuid -z default
+scc <span style="color: #2d9574;">"anyuid"</span> added to: <span style="color: #4f97d7;">[</span><span style="color: #2d9574;">"system:serviceaccount:hello:default"</span><span style="color: #4f97d7;">]</span>
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">check permission (no use)</span>
+oc edit scc anyuid
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Just for debug (no use)</span>
+<span style="color: #ffd700; background-color: nil;">#</span><span style="color: #ffd700; background-color: nil;">oc adm policy add-role-to-user edit system</span>
+<span style="color: #ffd700; background-color: nil;">#</span><span style="color: #ffd700; background-color: nil;">oc adm policy remove-role-from-user edit system</span>
+
+<span style="color: #ffd700; background-color: nil;">## </span><span style="color: #ffd700; background-color: nil;">Re-setup the docker proxy</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Retrieve the registry service&#8217;s IP address</span>
+oc describe svc/docker-registry -n default
+vi /etc/sysconfig/docker
+<span style="color: #7590db;">NO_PROXY</span>=...,$<span style="color: #4f97d7;">{</span><span style="color: #7590db;">docker</span>-registry.default.svc<span style="color: #4f97d7;">}</span>
+
+systemctl restart docker
+
+oc login -u system -p admin
+oc new-project hello
+docker tag rhel7:v2 <span style="color: #a45bad;">172.30.151.202:5000/hello/rhel7:v2</span>
+docker login -p <span style="color: #fa8072;">`oc whoami -t`</span> -u system <span style="color: #a45bad;">172.30.151.202:5000</span>
+docker push <span style="color: #a45bad;">172.30.151.202:5000/hello/rhel7:v2</span>
+
+oc new-app hello/rhel7:v2 --name=myapp
+
+oc expose svc/myapp
+oc get svc/myapp -o wide
+
+oc get routes
+myapp-hello.apps.myopenshift.com
+
+curl -v -k myapp-hello.apps.myopenshift.com
+</pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: 龔存</p>
-<p class="date">Created: 2020-02-17 周一 23:09</p>
+<p class="date">Created: 2020-02-19 周三 21:53</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
