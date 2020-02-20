@@ -351,3 +351,62 @@ Scaling up the application:
   # myapp-1-7px65   1/1       Running   0          53s       10.128.2.3   node2.myopenshift.com   <none>
   # myapp-1-rbgwd   1/1       Running   0          6m        10.130.0.4   node.myopenshift.com    <none>
 #+END_SRC
+
+*  Getting traffic into a cluster
+
+** Allow user with cluster admin role
+#+BEGIN_SRC sh
+  oc login -u system:admin -n hello
+  oc adm policy add-cluster-role-to-user cluster-admin system
+#+END_SRC
+
+** Defining the public IP range
+#+BEGIN_SRC sh
+  oc login -u system -p admin
+  oc project hello
+
+
+#+END_SRC
+
+Configure the *externalIPNetworkCIDRs* parameter in the
+=/etc/origin/master/master-config.yaml= file as shown (default is *0.0.0.0/0*):
+
+#+BEGIN_EXAMPLE
+  networkConfig:
+    externalIPNetworkCIDRs:
+    - <ip_address>/<cidr>
+
+#+END_EXAMPLE
+
+Restart the OpenShift Container Platform master service to apply the changes.
+#+BEGIN_SRC sh
+  master-restart api
+  master-restart controllers
+#+END_SRC
+
+** Create a Project and Service
+#+BEGIN_SRC sh
+  docker build -t rhel7:v5 .
+  docker tag rhel7:v5 172.30.151.202:5000/hello/rhel7:v5
+  docker login -p `oc whoami -t` -u system 172.30.151.202:5000
+  docker push 172.30.151.202:5000/hello/rhel7:v5
+  oc new-app hello/rhel7:v5 --name=myecho
+  oc get svc
+  ncat <cluster-ip> 8080
+
+  # Expose the service to crete route
+  oc expose svc/myecho
+  oc get svc
+  nc myecho-hello.apps.myopenshift.com 8080
+  # failed: Ncat: No route to host.
+
+  # Assigning an IP Address (infra. node ip) to the Service
+  oc patch svc myecho -p '{"spec":{"externalIPs":["192.168.23.52"]}}'
+  oc get svc
+  # NAME      TYPE        CLUSTER-IP       EXTERNAL-IP     PORT(S)    AGE
+  # myecho    ClusterIP   172.30.51.131    192.168.23.52   8080/TCP   6m
+
+  nc 192.168.23.52 8080
+  oc scale --replicas=4 dc/myecho
+  oc get dc
+#+END_SRC

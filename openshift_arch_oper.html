@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-02-20 周四 14:08 -->
+<!-- 2020-02-20 周四 22:12 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Architecting and Operating OpenShift Cluster</title>
@@ -234,30 +234,37 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgd850cc8">1. Networking</a>
+<li><a href="#orgb481668">1. Networking</a>
 <ul>
-<li><a href="#org391128d">1.1. East-West Traffic</a></li>
-<li><a href="#orgcae3c51">1.2. North-South Traffic</a></li>
+<li><a href="#orgf6b5d6f">1.1. East-West Traffic</a></li>
+<li><a href="#orgdbf4693">1.2. North-South Traffic</a></li>
 </ul>
 </li>
-<li><a href="#org00c9407">2. Build &amp; deploy docker image</a>
+<li><a href="#org9a4bdac">2. Build &amp; deploy docker image</a>
 <ul>
-<li><a href="#org783be8c">2.1. Setup the proxy</a></li>
-<li><a href="#org6ac2767">2.2. Create docker image</a></li>
-<li><a href="#orge7a7f53">2.3. Delete container &amp; images</a></li>
-<li><a href="#orgbea8304">2.4. Push docker images to OpenShift internal registry</a></li>
+<li><a href="#org9b5328d">2.1. Setup the proxy</a></li>
+<li><a href="#org7bce0c3">2.2. Create docker image</a></li>
+<li><a href="#orgc039f6d">2.3. Delete container &amp; images</a></li>
+<li><a href="#org2c9f3aa">2.4. Push docker images to OpenShift internal registry</a></li>
 </ul>
 </li>
-<li><a href="#org2e3d9dc">3. Re-deploy the application</a></li>
+<li><a href="#org92bbc89">3. Re-deploy the application</a></li>
+<li><a href="#org388d569">4. Getting traffic into a cluster</a>
+<ul>
+<li><a href="#org51b6366">4.1. Allow user with cluster admin role</a></li>
+<li><a href="#orgd4c2bf9">4.2. Defining the public IP range</a></li>
+<li><a href="#orgb7a8143">4.3. Create a Project and Service</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgd850cc8" class="outline-2">
-<h2 id="orgd850cc8"><span class="section-number-2">1</span> Networking</h2>
+<div id="outline-container-orgb481668" class="outline-2">
+<h2 id="orgb481668"><span class="section-number-2">1</span> Networking</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org391128d" class="outline-3">
-<h3 id="org391128d"><span class="section-number-3">1.1</span> East-West Traffic</h3>
+<div id="outline-container-orgf6b5d6f" class="outline-3">
+<h3 id="orgf6b5d6f"><span class="section-number-3">1.1</span> East-West Traffic</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 In the default configuration, the cluster network is the <b>10.128.0.0/14</b>
@@ -342,8 +349,8 @@ external host.
 </p>
 </div>
 </div>
-<div id="outline-container-orgcae3c51" class="outline-3">
-<h3 id="orgcae3c51"><span class="section-number-3">1.2</span> North-South Traffic</h3>
+<div id="outline-container-orgdbf4693" class="outline-3">
+<h3 id="orgdbf4693"><span class="section-number-3">1.2</span> North-South Traffic</h3>
 <div class="outline-text-3" id="text-1-2">
 <pre class="example">
 [root@master ~]# oc get all --selector='router=router' -n default -o wide
@@ -397,12 +404,12 @@ the Pod, it will match the corresponding Route object.
 </div>
 </div>
 </div>
-<div id="outline-container-org00c9407" class="outline-2">
-<h2 id="org00c9407"><span class="section-number-2">2</span> Build &amp; deploy docker image</h2>
+<div id="outline-container-org9a4bdac" class="outline-2">
+<h2 id="org9a4bdac"><span class="section-number-2">2</span> Build &amp; deploy docker image</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org783be8c" class="outline-3">
-<h3 id="org783be8c"><span class="section-number-3">2.1</span> Setup the proxy</h3>
+<div id="outline-container-org9b5328d" class="outline-3">
+<h3 id="org9b5328d"><span class="section-number-3">2.1</span> Setup the proxy</h3>
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
 <pre class="src src-sh">oc describe svc/docker-registry -n default
@@ -444,8 +451,8 @@ Docker Root Dir: /var/lib/docker
 </div>
 </div>
 
-<div id="outline-container-org6ac2767" class="outline-3">
-<h3 id="org6ac2767"><span class="section-number-3">2.2</span> Create docker image</h3>
+<div id="outline-container-org7bce0c3" class="outline-3">
+<h3 id="org7bce0c3"><span class="section-number-3">2.2</span> Create docker image</h3>
 <div class="outline-text-3" id="text-2-2">
 <div class="org-src-container">
 <pre class="src src-sh">mkdir -p /opt/docker/test
@@ -494,8 +501,8 @@ curl -v -k localhost:32769
 </div>
 </div>
 
-<div id="outline-container-orge7a7f53" class="outline-3">
-<h3 id="orge7a7f53"><span class="section-number-3">2.3</span> Delete container &amp; images</h3>
+<div id="outline-container-orgc039f6d" class="outline-3">
+<h3 id="orgc039f6d"><span class="section-number-3">2.3</span> Delete container &amp; images</h3>
 <div class="outline-text-3" id="text-2-3">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Delete containers</span>
@@ -511,8 +518,8 @@ docker rmi rhel7:v2
 </div>
 </div>
 
-<div id="outline-container-orgbea8304" class="outline-3">
-<h3 id="orgbea8304"><span class="section-number-3">2.4</span> Push docker images to OpenShift internal registry</h3>
+<div id="outline-container-org2c9f3aa" class="outline-3">
+<h3 id="org2c9f3aa"><span class="section-number-3">2.4</span> Push docker images to OpenShift internal registry</h3>
 <div class="outline-text-3" id="text-2-4">
 <div class="org-src-container">
 <pre class="src src-sh">oc login -u system:admin -n default
@@ -562,8 +569,8 @@ curl -v -k myapp-hello.apps.myopenshift.com
 </div>
 </div>
 
-<div id="outline-container-org2e3d9dc" class="outline-2">
-<h2 id="org2e3d9dc"><span class="section-number-2">3</span> Re-deploy the application</h2>
+<div id="outline-container-org92bbc89" class="outline-2">
+<h2 id="org92bbc89"><span class="section-number-2">3</span> Re-deploy the application</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Create new image:
@@ -669,10 +676,92 @@ oc get pods -o wide
 </div>
 </div>
 </div>
+
+<div id="outline-container-org388d569" class="outline-2">
+<h2 id="org388d569"><span class="section-number-2">4</span> Getting traffic into a cluster</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-org51b6366" class="outline-3">
+<h3 id="org51b6366"><span class="section-number-3">4.1</span> Allow user with cluster admin role</h3>
+<div class="outline-text-3" id="text-4-1">
+<div class="org-src-container">
+<pre class="src src-sh">oc login -u system:admin -n hello
+oc adm policy add-cluster-role-to-user cluster-admin system
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd4c2bf9" class="outline-3">
+<h3 id="orgd4c2bf9"><span class="section-number-3">4.2</span> Defining the public IP range</h3>
+<div class="outline-text-3" id="text-4-2">
+<div class="org-src-container">
+<pre class="src src-sh">oc login -u system -p admin
+oc project hello
+
+
+</pre>
+</div>
+
+<p>
+Configure the <b>externalIPNetworkCIDRs</b> parameter in the
+<code>/etc/origin/master/master-config.yaml</code> file as shown (default is <b>0.0.0.0/0</b>):
+</p>
+
+<pre class="example">
+networkConfig:
+  externalIPNetworkCIDRs:
+  - &lt;ip_address&gt;/&lt;cidr&gt;
+
+</pre>
+
+<p>
+Restart the OpenShift Container Platform master service to apply the changes.
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">master-restart api
+master-restart controllers
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb7a8143" class="outline-3">
+<h3 id="orgb7a8143"><span class="section-number-3">4.3</span> Create a Project and Service</h3>
+<div class="outline-text-3" id="text-4-3">
+<div class="org-src-container">
+<pre class="src src-sh">docker build -t rhel7:v5 .
+docker tag rhel7:v5 <span style="color: #a45bad;">172.30.151.202:5000/hello/rhel7:v5</span>
+docker login -p <span style="color: #fa8072;">`oc whoami -t`</span> -u system <span style="color: #a45bad;">172.30.151.202:5000</span>
+docker push <span style="color: #a45bad;">172.30.151.202:5000/hello/rhel7:v5</span>
+oc new-app hello/rhel7:v5 --name=myecho
+oc get svc
+ncat &lt;cluster-ip&gt; <span style="color: #a45bad;">8080</span>
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Expose the service to crete route</span>
+oc expose svc/myecho
+oc get svc
+nc myecho-hello.apps.myopenshift.com <span style="color: #a45bad;">8080</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">failed: Ncat: No route to host.</span>
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Assigning an IP Address (infra. node ip) to the Service</span>
+oc patch svc myecho -p <span style="color: #2d9574;">'{"spec":{"externalIPs":["192.168.23.52"]}}'</span>
+oc get svc
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">NAME      TYPE        CLUSTER-IP       EXTERNAL-IP     PORT(S)    AGE</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">myecho    ClusterIP   172.30.51.131    192.168.23.52   8080/TCP   6m</span>
+
+nc <span style="color: #a45bad;">192.168.23.52</span> <span style="color: #a45bad;">8080</span>
+oc scale --replicas=<span style="color: #a45bad;">4</span> dc/myecho
+oc get dc
+</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: 龔存</p>
-<p class="date">Created: 2020-02-20 周四 14:08</p>
+<p class="date">Created: 2020-02-20 周四 22:12</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
