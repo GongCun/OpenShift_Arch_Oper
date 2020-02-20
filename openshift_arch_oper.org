@@ -260,3 +260,94 @@ the Pod, it will match the corresponding Route object.
 
   curl -v -k myapp-hello.apps.myopenshift.com
 #+END_SRC
+
+* Re-deploy the application 
+Create new image:
+#+BEGIN_SRC sh
+  docker run -it --rm rhel7:v1
+  sh-4.2# yum install net-tools.x86_64 -y
+  sh-4.2# ifconfig eth0
+  sh-4.2# ifconfig eth0 | sed -n 's/^[[:space:]]*inet \(.*\)  netmask.*/\1/p'
+
+
+#+END_SRC
+
+Push the new image to docker-registry:
+#+BEGIN_EXAMPLE
+  # oc login -u system -p admin
+
+  # docker commit 2b8553a3eecc rhel7:v3
+  sha256:72f98ecf35e5b9ee116dc157d44959cc17f1ace8a6b2ad2cf074a784f2154ea3
+
+  # docker tag rhel7:v3 172.30.151.202:5000/hello/rhel7:v3
+  # docker login -p `oc whoami -t` -u system 172.30.151.202:5000
+  # docker push 172.30.151.202:5000/hello/rhel7:v3
+  The push refers to a repository [172.30.151.202:5000/hello/rhel7]
+  04a942261f21: Pushed
+  4ae10724cbf6: Layer already exists
+  d02565babdb9: Layer already exists
+  49577de67301: Layer already exists
+  v3: digest: sha256:bfbe84b4d8fa134cef339e5c690243d9d32345ad49742646cabcdebdc4d33176 size: 1163
+
+#+END_EXAMPLE
+
+Build new image again:
+#+BEGIN_EXAMPLE
+  [root@master test]# cat ncat-web.sh
+  #!/bin/sh
+  ip=`ifconfig eth0 | sed -n 's/^[[:space:]]*inet \(.*\)  netmask.*/\1/p'`
+  sed -i "s/_IP_/$ip/g" /index.http
+  while true; do nc -4l 8080 -c "cat /index.http"; done
+
+  [root@master test]# cat Dockerfile
+  # This Dockerfile uses the rhel7 image
+  # Ahthor: Cun Gong
+  FROM rhel7:v3
+  COPY ./index.http /index.http
+  COPY ./ncat-web.sh /ncat-web.sh
+  RUN chmod 755 ncat-web.sh
+  EXPOSE 8080
+  ENTRYPOINT ["/ncat-web.sh"]
+
+
+  [root@master test]# docker build -t rhel7:v4 .
+
+  # docker tag rhel7:v4 172.30.151.202:5000/hello/rhel7:v4
+  # docker login -p `oc whoami -t` -u system 172.30.151.202:5000
+  # docker push 172.30.151.202:5000/hello/rhel7:v4
+#+END_EXAMPLE
+
+Delete & re-create new app:
+#+BEGIN_SRC sh
+  # Delete app
+  oc delete all --selector app=myapp
+
+  # Create app
+  oc new-app hello/rhel7:v4 --name=myapp
+
+  oc expose svc/myapp
+  oc get svc/myapp -o wide
+
+  oc get routes
+  myapp-hello.apps.myopenshift.com
+
+  curl -v -k myapp-hello.apps.myopenshift.com
+#+END_SRC
+
+Scaling up the application:
+#+BEGIN_SRC sh
+  # Get all resource objects
+  oc get all -o name --selector app=myapp -o wide
+
+  # Scaleup deploymentconfig
+  oc get dc
+  oc scale --replicas=4 dc/myapp
+  oc get dc
+
+  oc get pods -o wide
+  # NAME            READY     STATUS    RESTARTS   AGE       IP           NODE                    NOMINATED NODE
+  # myapp-1-4p4qf   1/1       Running   0          53s       10.131.0.2   node3.myopenshift.com   <none>
+  # myapp-1-7ds2f   1/1       Running   0          53s       10.129.2.2   node4.myopenshift.com   <none>
+  # myapp-1-7px65   1/1       Running   0          53s       10.128.2.3   node2.myopenshift.com   <none>
+  # myapp-1-rbgwd   1/1       Running   0          6m        10.130.0.4   node.myopenshift.com    <none>
+#+END_SRC

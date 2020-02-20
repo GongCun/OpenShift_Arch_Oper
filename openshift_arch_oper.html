@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-02-19 周三 21:53 -->
+<!-- 2020-02-20 周四 14:08 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Architecting and Operating OpenShift Cluster</title>
@@ -234,29 +234,30 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org31706e4">1. Networking</a>
+<li><a href="#orgd850cc8">1. Networking</a>
 <ul>
-<li><a href="#orgbd7149a">1.1. East-West Traffic</a></li>
-<li><a href="#org8127894">1.2. North-South Traffic</a></li>
+<li><a href="#org391128d">1.1. East-West Traffic</a></li>
+<li><a href="#orgcae3c51">1.2. North-South Traffic</a></li>
 </ul>
 </li>
-<li><a href="#org45e8647">2. Build &amp; deploy docker image</a>
+<li><a href="#org00c9407">2. Build &amp; deploy docker image</a>
 <ul>
-<li><a href="#orgaf20463">2.1. Setup the proxy</a></li>
-<li><a href="#org0216e6b">2.2. Create docker image</a></li>
-<li><a href="#org591028d">2.3. Delete container &amp; images</a></li>
-<li><a href="#org29f759d">2.4. Push docker images to OpenShift internal registry</a></li>
+<li><a href="#org783be8c">2.1. Setup the proxy</a></li>
+<li><a href="#org6ac2767">2.2. Create docker image</a></li>
+<li><a href="#orge7a7f53">2.3. Delete container &amp; images</a></li>
+<li><a href="#orgbea8304">2.4. Push docker images to OpenShift internal registry</a></li>
 </ul>
 </li>
+<li><a href="#org2e3d9dc">3. Re-deploy the application</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org31706e4" class="outline-2">
-<h2 id="org31706e4"><span class="section-number-2">1</span> Networking</h2>
+<div id="outline-container-orgd850cc8" class="outline-2">
+<h2 id="orgd850cc8"><span class="section-number-2">1</span> Networking</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-orgbd7149a" class="outline-3">
-<h3 id="orgbd7149a"><span class="section-number-3">1.1</span> East-West Traffic</h3>
+<div id="outline-container-org391128d" class="outline-3">
+<h3 id="org391128d"><span class="section-number-3">1.1</span> East-West Traffic</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 In the default configuration, the cluster network is the <b>10.128.0.0/14</b>
@@ -341,8 +342,8 @@ external host.
 </p>
 </div>
 </div>
-<div id="outline-container-org8127894" class="outline-3">
-<h3 id="org8127894"><span class="section-number-3">1.2</span> North-South Traffic</h3>
+<div id="outline-container-orgcae3c51" class="outline-3">
+<h3 id="orgcae3c51"><span class="section-number-3">1.2</span> North-South Traffic</h3>
 <div class="outline-text-3" id="text-1-2">
 <pre class="example">
 [root@master ~]# oc get all --selector='router=router' -n default -o wide
@@ -396,12 +397,12 @@ the Pod, it will match the corresponding Route object.
 </div>
 </div>
 </div>
-<div id="outline-container-org45e8647" class="outline-2">
-<h2 id="org45e8647"><span class="section-number-2">2</span> Build &amp; deploy docker image</h2>
+<div id="outline-container-org00c9407" class="outline-2">
+<h2 id="org00c9407"><span class="section-number-2">2</span> Build &amp; deploy docker image</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-orgaf20463" class="outline-3">
-<h3 id="orgaf20463"><span class="section-number-3">2.1</span> Setup the proxy</h3>
+<div id="outline-container-org783be8c" class="outline-3">
+<h3 id="org783be8c"><span class="section-number-3">2.1</span> Setup the proxy</h3>
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
 <pre class="src src-sh">oc describe svc/docker-registry -n default
@@ -443,8 +444,8 @@ Docker Root Dir: /var/lib/docker
 </div>
 </div>
 
-<div id="outline-container-org0216e6b" class="outline-3">
-<h3 id="org0216e6b"><span class="section-number-3">2.2</span> Create docker image</h3>
+<div id="outline-container-org6ac2767" class="outline-3">
+<h3 id="org6ac2767"><span class="section-number-3">2.2</span> Create docker image</h3>
 <div class="outline-text-3" id="text-2-2">
 <div class="org-src-container">
 <pre class="src src-sh">mkdir -p /opt/docker/test
@@ -493,8 +494,8 @@ curl -v -k localhost:32769
 </div>
 </div>
 
-<div id="outline-container-org591028d" class="outline-3">
-<h3 id="org591028d"><span class="section-number-3">2.3</span> Delete container &amp; images</h3>
+<div id="outline-container-orge7a7f53" class="outline-3">
+<h3 id="orge7a7f53"><span class="section-number-3">2.3</span> Delete container &amp; images</h3>
 <div class="outline-text-3" id="text-2-3">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Delete containers</span>
@@ -510,8 +511,8 @@ docker rmi rhel7:v2
 </div>
 </div>
 
-<div id="outline-container-org29f759d" class="outline-3">
-<h3 id="org29f759d"><span class="section-number-3">2.4</span> Push docker images to OpenShift internal registry</h3>
+<div id="outline-container-orgbea8304" class="outline-3">
+<h3 id="orgbea8304"><span class="section-number-3">2.4</span> Push docker images to OpenShift internal registry</h3>
 <div class="outline-text-3" id="text-2-4">
 <div class="org-src-container">
 <pre class="src src-sh">oc login -u system:admin -n default
@@ -560,10 +561,118 @@ curl -v -k myapp-hello.apps.myopenshift.com
 </div>
 </div>
 </div>
+
+<div id="outline-container-org2e3d9dc" class="outline-2">
+<h2 id="org2e3d9dc"><span class="section-number-2">3</span> Re-deploy the application</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Create new image:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">docker run -it --rm rhel7:v1
+sh-4.2# yum install net-tools.x86_64 -y
+sh-4.2# ifconfig eth0
+sh-4.2# ifconfig eth0 | sed -n <span style="color: #2d9574;">'s/^[[:space:]]*inet \(.*\)  netmask.*/\1/p'</span>
+
+
+</pre>
+</div>
+
+<p>
+Push the new image to docker-registry:
+</p>
+<pre class="example">
+# oc login -u system -p admin
+
+# docker commit 2b8553a3eecc rhel7:v3
+sha256:72f98ecf35e5b9ee116dc157d44959cc17f1ace8a6b2ad2cf074a784f2154ea3
+
+# docker tag rhel7:v3 172.30.151.202:5000/hello/rhel7:v3
+# docker login -p `oc whoami -t` -u system 172.30.151.202:5000
+# docker push 172.30.151.202:5000/hello/rhel7:v3
+The push refers to a repository [172.30.151.202:5000/hello/rhel7]
+04a942261f21: Pushed
+4ae10724cbf6: Layer already exists
+d02565babdb9: Layer already exists
+49577de67301: Layer already exists
+v3: digest: sha256:bfbe84b4d8fa134cef339e5c690243d9d32345ad49742646cabcdebdc4d33176 size: 1163
+
+</pre>
+
+<p>
+Build new image again:
+</p>
+<pre class="example">
+[root@master test]# cat ncat-web.sh
+#!/bin/sh
+ip=`ifconfig eth0 | sed -n 's/^[[:space:]]*inet \(.*\)  netmask.*/\1/p'`
+sed -i "s/_IP_/$ip/g" /index.http
+while true; do nc -4l 8080 -c "cat /index.http"; done
+
+[root@master test]# cat Dockerfile
+# This Dockerfile uses the rhel7 image
+# Ahthor: Cun Gong
+FROM rhel7:v3
+COPY ./index.http /index.http
+COPY ./ncat-web.sh /ncat-web.sh
+RUN chmod 755 ncat-web.sh
+EXPOSE 8080
+ENTRYPOINT ["/ncat-web.sh"]
+
+
+[root@master test]# docker build -t rhel7:v4 .
+
+# docker tag rhel7:v4 172.30.151.202:5000/hello/rhel7:v4
+# docker login -p `oc whoami -t` -u system 172.30.151.202:5000
+# docker push 172.30.151.202:5000/hello/rhel7:v4
+</pre>
+
+<p>
+Delete &amp; re-create new app:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Delete app</span>
+oc delete all --selector <span style="color: #7590db;">app</span>=myapp
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Create app</span>
+oc new-app hello/rhel7:v4 --name=myapp
+
+oc expose svc/myapp
+oc get svc/myapp -o wide
+
+oc get routes
+myapp-hello.apps.myopenshift.com
+
+curl -v -k myapp-hello.apps.myopenshift.com
+</pre>
+</div>
+
+<p>
+Scaling up the application:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Get all resource objects</span>
+oc get all -o name --selector <span style="color: #7590db;">app</span>=myapp -o wide
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Scaleup deploymentconfig</span>
+oc get dc
+oc scale --replicas=<span style="color: #a45bad;">4</span> dc/myapp
+oc get dc
+
+oc get pods -o wide
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">NAME            READY     STATUS    RESTARTS   AGE       IP           NODE                    NOMINATED NODE</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">myapp-1-4p4qf   1/1       Running   0          53s       10.131.0.2   node3.myopenshift.com   &lt;none&gt;</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">myapp-1-7ds2f   1/1       Running   0          53s       10.129.2.2   node4.myopenshift.com   &lt;none&gt;</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">myapp-1-7px65   1/1       Running   0          53s       10.128.2.3   node2.myopenshift.com   &lt;none&gt;</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">myapp-1-rbgwd   1/1       Running   0          6m        10.130.0.4   node.myopenshift.com    &lt;none&gt;</span>
+</pre>
+</div>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: 龔存</p>
-<p class="date">Created: 2020-02-19 周三 21:53</p>
+<p class="date">Created: 2020-02-20 周四 14:08</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
