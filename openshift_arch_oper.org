@@ -352,7 +352,7 @@ Scaling up the application:
   # myapp-1-rbgwd   1/1       Running   0          6m        10.130.0.4   node.myopenshift.com    <none>
 #+END_SRC
 
-*  Getting traffic into a cluster
+* Getting traffic into a cluster
 
 ** Allow user with cluster admin role
 #+BEGIN_SRC sh
@@ -409,4 +409,301 @@ Restart the OpenShift Container Platform master service to apply the changes.
   nc 192.168.23.52 8080
   oc scale --replicas=4 dc/myecho
   oc get dc
+#+END_SRC
+
+* Test pod services & attach NFS
+
+** Configure NFS server/client
+In the server:
+#+begin_src sh
+  # Enable NFS service and allow iptable rules
+  systemctl enable nfs-server
+  systemctl enable rpcbind
+  systemctl enable nfs-lock
+  systemctl enable nfs-idmap
+
+  vi /etc/sysconfig/nfs
+  # ...
+  # LOCKD_TCPPORT=32803
+  # LOCKD_UDPPORT=32769
+  # MOUNTD_PORT=892
+  # STATD_PORT=662
+
+  grep -w -e 111 -e 2049 /etc/services
+
+  systemctl restart rpcbind
+  systemctl restart nfs-server
+  systemctl restart nfs-lock
+  systemctl restart nfs-idmap
+
+  rpcinfo -p | grep -E '(rquota|mount|nlock)'
+
+  iptables -I INPUT -i ens192 -p tcp -s 192.168.23.0/24 -m multiport --dport 111,2049,32803,32769,892,662 -j ACCEPT
+  iptables -I INPUT -i ens192 -p udp -s 192.168.23.0/24 -m multiport --dport 111,2049,32803,32769,892,662 -j ACCEPT
+
+  iptables-save
+
+  # Setup /etc/exports & enable anonymity access
+  mkdir -p /ose/public
+  setfacl -m u:nobody:rwx /ose/public
+  getfacl /ose/public
+  ls -lZd /ose/public
+  vi /etc/exports
+  # /ose/public 192.168.23.0/24(rw,all_squash,anonuid=99,anongid=99) *(ro)
+
+  # Exporting the share:
+  exportfs -r
+  # '-r' re-exports entries in /etc/exports and sync /var/lib/nfs/etab with /etc/exports.
+
+  # Restart the NfS services:
+  systemctl restart nfs-server
+
+#+end_src
+
+In the client:
+
+#+begin_src sh
+  mount -t nfs nfs.myopenshift.com:/ose/public /mnt
+  (hostname; date) >/mnt/test.txt
+#+end_src
+
+** Configure OpenShift persistent storage (NFS)
+You must first create an object definition for the PVs (Persistent Volumes):
+#+begin_example
+  apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    name: nfs01 
+  spec:
+    capacity:
+      storage: 30Gi 
+    accessModes:
+    - ReadWriteOnce 
+    nfs: 
+      path: /ose/public
+      server: nfs.myopenshift.com
+    persistentVolumeReclaimPolicy: Retain 
+#+end_example
+
+Create the PV:
+#+begin_src sh
+  oc create -f ./nfs-pv.yaml
+  oc get pv
+#+end_src
+
+The next steps can be to create a PVC (persistent volume claims), to provide a
+convenient method for sharing a volume across a project:
+#+begin_example
+  apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: nfs-claim01
+  spec:
+    accessModes:
+      - ReadWriteOnce 
+    resources:
+      requests:
+        storage: 1Gi
+#+end_example
+
+Create the PVC:
+#+begin_src sh
+oc create -f ./nfs-pvc.yaml
+oc get pvc
+# NAME          STATUS    VOLUME    CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+# nfs-claim01   Bound     nfs01     30Gi       RWO                           11s
+
+#+end_src
+
+Add the volume to pod in management console, OpenShift will terminate old pods
+and create new pods (rolling out).
+
+* Migrate the [[https://github.com/GongCun/Pentomino/tree/map][PuzzleBrain]] to OpenShift
+
+** Install build tools
+   #+begin_src sh
+     # Install GCC and C++
+     yum group list
+     yum group install "Development Tools" -y
+   #+end_src
+
+** Build PuzzleBrain
+
+*** Install rapidjson
+    #+begin_src sh
+      cd /opt
+      git clone https://github.com/Tencent/rapidjson.git
+      yum install -y cmake valgrind
+      cd ./rapidjson
+      git submodule update --init
+      mkdir build
+      cd build/
+      cmake ..
+      make
+      make test
+      make install
+    #+end_src
+
+*** Install PuzzleBrain
+    #+begin_src sh
+      mkdir -p /ose/Develop
+      cd /ose/Develop
+      git clone https://github.com/GongCun/Pentomino.git
+      cd Pentomino
+      git branch -a
+      git checkout map
+      make puzzler
+      make -B -f ./Makefile.opt puzzler
+      cp -p ./puzzler /opt/docker/PuzzleBrain
+      sed -i 's///g' ./run2.sh
+    #+end_src
+
+*** Build puzzle docker image
+    #+begin_src sh
+      cd /opt/docker/PuzzleBrain
+      # Edit the run.sh, puzzle-entry.sh, and Dockerfile
+      docker build -t puzzle:v1 .
+      docker tag puzzle:v1 172.30.151.202:5000/hello/puzzle:v1
+      docker login -p `oc whoami -t` -u system 172.30.151.202:5000
+      docker push 172.30.151.202:5000/hello/puzzle:v1
+      oc new-app hello/puzzle:v1 --name=puzzle
+      oc expose svc/puzzle
+      # Attach the NFS volume by web console
+      oc set volume dc --all
+      oc rsh <pod>
+      oc exec <pod> -- df -h /data
+      #Filesystem                       Size  Used Avail Use% Mounted on
+      #nfs.myopenshift.com:/ose/public   30G   32M   30G   1% /data
+
+      # Scaleup the pods
+      oc scale --replicas=4 dc/puzzle
+      # Expose to external (not necessary)
+      oc patch svc puzzle -p '{"spec":{"externalIPs":["192.168.23.52"]}}'
+    #+end_src
+
+*** Testing in intra-net 
+#+BEGIN_SRC sh
+  mkdir -p /opt/docker/PuzzleBrain/tmp
+  cd /opt/docker/PuzzleBrain/tmp
+  ../puzzler -m -b4 -s ${PUZZLE_CLUSTER} -p 3001
+#+END_SRC
+
+*** Setup pod-autoscalinag 
+/Should in the pod 'complete' stage, not success./
+#+BEGIN_SRC sh
+  ansible-playbook \
+      /usr/share/ansible/openshift-ansible/playbooks/metrics-server/config.yml \
+      -e openshift_metrics_server_install=true \
+      -e openshift_metrics_install_metrics=True
+
+  oc adm top pod
+  oc adm top node
+
+#+END_SRC
+
+*** Create the puzzle-master-node pod
+    #+begin_src sh
+      # Prepare the run-master.sh, puzzle-master-entry.sh, Dockerfile-master
+      docker build -t puzzle-master:v3.16 -f ./Dockerfile-master .
+      docker tag puzzle-master:v3.16 172.30.151.202:5000/hello/puzzle-master:v3.16
+      docker login -p `oc whoami -t` -u system 172.30.151.202:5000
+      docker push 172.30.151.202:5000/hello/puzzle-master:v3.16
+      oc new-app hello/puzzle-master:v3.16 --name=puzzle-master -e PUZZLE_CLUSTER=172.30.63.122
+      oc expose svc/puzzle-master
+
+      # Record the service ip
+      oc get svc
+    #+end_src
+
+*** Create the front-end web pod
+    Download the Apache docker image
+    #+begin_src sh
+      docker search --filter is-official=true --filter stars=3 apache
+      docker pull docker.io/httpd
+      docker images
+
+      docker run --rm -dit --name apache-test -p 8080:80 \
+             -v /opt/docker/apache:/usr/local/apache2/htdocs:rw httpd:latest bash
+    #+end_src
+    
+    Test & update the image. Prepare =/opt/docker/apache/docker.html=:
+    #+begin_example
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <title>Hello Docker</title>
+      </head>
+      <body>
+          <h1>Hello Docker</h1>
+      </body>
+      </html>
+
+    #+end_example
+
+    Run the apache image:
+    #+begin_src sh
+      docker run --privileged --rm -dit --name apache-test -p 8080:80 \
+             -v /opt/docker/apache:/usr/local/apache2/htdocs:rw httpd:latest 
+    #+end_src
+    
+    Test by =curl=:
+    #+begin_src sh
+      curl -k 127.0.0.1:8080/docker.html
+    #+end_src
+
+    Update the Apache image:
+    #+begin_src sh
+      docker exec -it <container> bash
+      cat >/etc/apt/apt.conf.d/proxy.conf <<\EOF
+      Acquire {
+        HTTP::proxy "http://tinyproxy@password@192.168.19.19:8888";
+        HTTPS::proxy "http://tinyproxy@password@192.168.19.19:8888";
+      }
+      EOF
+
+      apt-get update
+      apt-get install -y vim
+      apt-get install -y ncat
+      apt-get install -y ksh
+
+      # Edit the /usr/local/apache2/conf/httpd.conf file
+      /usr/local/apache2/bin/apachectl -k graceful
+
+      # Capture the container to new image
+      docker commit <container> httpd:v1
+      docker tag httpd:v1 172.30.151.202:5000/hello/httpd:v1
+      docker login -p `oc whoami -t` -u system 172.30.151.202:5000
+      docker push 172.30.151.202:5000/hello/httpd:v1
+      oc new-app hello/httpd:v1 --name=myweb
+      oc expose svc/myweb
+
+      # Update the environment variable (puzzle-master-node ip)
+      # Note: will rollout update the pod.
+      oc set env dc/myweb PUZZLE_MASTER=172.30.218.85
+      # Unset the env
+      # Note: will rollout update the pod.
+      oc set env dc/myecho PUZZLE_MASTER-
+
+    #+end_src
+
+    Update the pod and push image:
+#+BEGIN_SRC sh
+  # Get token from master node
+  oc login -u system -p admin
+  oc whoami -t
+  <token>
+
+  # Locate the OCP node that running the node
+  oc get pods -o wide
+
+  # Capture the image from running container in the OCP node
+  docker ps # get container id
+  docker commit <container> httpd:v2
+  docker tag httpd:v2 172.30.151.202:5000/hello/httpd:v2
+  docker login -p <token> -u system 172.30.151.202:5000
+
+  # Redeploy web-app in the master node
+  oc new-app hello/httpd:v2 --name=myweb2
+  oc expose svc/myweb2
 #+END_SRC
