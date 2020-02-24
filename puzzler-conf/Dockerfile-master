@@ -1,0 +1,15 @@
+# This Dockerfile uses the rhel7 image
+# Ahthor: Cun Gong
+#FROM rhel7:v3
+FROM puzzle:v3.0
+COPY ./puzzler /puzzler
+COPY ./run-master.sh /run-master.sh
+COPY ./puzzle-master-entry.sh /puzzle-master-entry.sh
+RUN chmod 755 puzzler && \
+    chmod 755 run-master.sh && \
+    chmod 755 puzzle-master-entry.sh && \
+    strip -s puzzler && \
+    mkdir -p /data
+EXPOSE 3000
+CMD ["/puzzle-master-entry.sh"]
+

@@ -1,0 +1,6 @@
+# This Dockerfile uses the rhel7 image
+# Ahthor: Cun Gong
+FROM rhel7:v3
+RUN yum install -y socat
+CMD /bin/sh
+
