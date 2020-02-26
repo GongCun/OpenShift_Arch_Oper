@@ -1,0 +1,16 @@
+.PS
+offset = .05
+linewid = linewid *1.5
+CLIENT: box "\s-2Client outside" "the Cluster"
+arrow "External Net" above aligned
+box
+box "\v'.3v'Router" "\v'-.1v'Pod" wid boxwid*.6 ht boxht*.55 at last box
+"Node with" "\v'-.3v'external access" at 2th last box.bottom + (0, -.2)
+line from last box.e to 2th last box.e
+move to 2th last box.e
+line "Cluster Net" above aligned
+box
+box "\v'.3v'Cluster" "\v'-.1v'Pod" wid boxwid*.6 ht boxht*.55 at last box
+"Cluster Node" at 2th last box.bottom + (0, -.1)
+line <- from last box.w to 2th last box.w
+.PE

@@ -1,0 +1,18 @@
+.PS
+r = .15
+pi = atan2(0, -1)
+c = sin(pi/4)
+off = .15
+box "Pod" ht .35 wid .35
+"\v'.6v'\s-210.128.0.0/14\s0" at last box.s
+box ht .8 wid .8 at last box + (0,-.06)
+"Node" "192.168.2.0/24" at last box.s + (0, -.25)
+P1: last box.nw + (off, off)
+P2: last box.ne + (off, off)
+P3: last box.se + (off, off)
+line from P1 to P2 to P3
+line from last box.nw to P1
+line from last box.ne to P2
+line from last box.se to P3
+.PE
+

@@ -1,0 +1,24 @@
+.PS
+NODE1: [
+copy "vm.pic"
+]
+move movewid*5
+NODE2: [
+copy "vm2.pic"
+]
+
+E1: ellipse wid .12 ht .2 with .w at NODE1.e + (.05, 0)
+"IP1" at last ellipse .n + (0.05, .1)
+
+E2: ellipse wid .12 ht .2 with .e at NODE2.w + (-.05, 0)
+"IP2" at last ellipse .n + (-0.05, .1)
+
+box invis fill 0 with .ne at E2.n ht E2.ht wid E2.wid
+
+line from E1.n to E2.n
+line "\v'-.05v'VxLan" above aligned from E1.s to E2.s
+
+.PE
+.ce 1000
+Default cluster network is \fB10.128.0.0/14\fP.
+.ce 0

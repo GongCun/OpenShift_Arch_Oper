@@ -1,7 +1,42 @@
 #+TITLE: Architecting and Operating OpenShift Cluster
 #+AUTHOR: 龔存
 * Networking
-** East-West Traffic
+** Overview
+- Cluster :: The set of machines in the cluster. i.e. the Masters and the Nodes.
+
+- Master :: A controller of the OpenShift Container Platform cluster. Note that
+            the master may not be a node in the cluster, and thus, may not have
+            IP connectivity to the pods.
+
+- Node :: Group of containers running on a node, managed by OpenShift Container
+          Platform.
+
+- Service :: Abstraction that presents a unified network interface that is
+             backed by one or more pods.
+
+- Router :: A web proxy that can map various URLs and paths into OpenShift
+            Container Platform services to allow external traffic to travel into
+            the cluster.
+
+- Node Address :: The IP address of a node. This is assigned and managed by the
+                  owner of the network to which the node is attached. Must be
+                  reachable from any node in the cluster (master and client).
+
+- Pod Address :: The IP address of a pod. These are assigned and managed by
+                 OpenShift Container Platform. By default they are assigned out
+                 of the *10.128.0.0/14* network. Only reachable from the client
+                 nodes.
+
+- Service Address :: An IP address that represents the service, and is mapped to
+     a pod address internally. These are assigned and managed by OpenShift
+     Container Platform. By default they are assigned out of the *172.30.0.0/16*
+     network. Only reachable from the client nodes.
+
+The following diagram shows all of the pieces involved with external access:
+	 #+CAPTION: Traffic Path
+	 [[./traffic_path.PNG]]
+
+** SDN Flows Inside Nodes
 
  In the default configuration, the cluster network is the *10.128.0.0/14*
  network, and node allocated */23* subnets (i.e., *10.128.0.0/23*,
@@ -22,11 +57,14 @@
      networkPluginName: redhat/openshift-ovs-subnet
      serviceNetworkCIDR: 172.30.0.0/16
 
-   [root@master ~]# oc get hostsubnet -o wide
+   [root@master ~]# oc get hostsubnet
    NAME                     HOST                     HOST IP         SUBNET          EGRESS CIDRS   EGRESS IPS
-   infra.myopenshift.com    infra.myopenshift.com    192.168.23.52   10.130.0.0/23   []             []
+   infra.myopenshift.com    infra.myopenshift.com    192.168.23.52   10.129.0.0/23   []             []
    master.myopenshift.com   master.myopenshift.com   192.168.23.31   10.128.0.0/23   []             []
-   node.myopenshift.com     node.myopenshift.com     192.168.23.51   10.129.0.0/23   []             []
+   node.myopenshift.com     node.myopenshift.com     192.168.23.51   10.130.0.0/23   []             []
+   node2.myopenshift.com    node2.myopenshift.com    192.168.23.32   10.128.2.0/23   []             []
+   node3.myopenshift.com    node3.myopenshift.com    192.168.23.33   10.131.0.0/23   []             []
+   node4.myopenshift.com    node4.myopenshift.com    192.168.23.34   10.129.2.0/23   []             []
  #+END_EXAMPLE
 
  OpenShift SDN creates and configures three network devices:
@@ -53,72 +91,68 @@
  cluster network subnet gateway address, on each /Node/ the Kubernetes Service
  objects network is also pointed to the /tun0/ interface.
 
- #+BEGIN_EXAMPLE
-   [root@node ~]# ip route
-   ...
-   10.128.0.0/14 dev tun0 scope link
-   ...
-   172.30.0.0/16 dev tun0
+ #+CAPTION: OpenShift Network & VxLan
+ [[./OpenShift_network.PNG]]
 
+
+ #+BEGIN_EXAMPLE
    [root@node ~]# ifconfig tun0
    tun0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1450
            inet 10.129.0.1  netmask 255.255.254.0  broadcast 10.129.1.255
            ...
 
-   [root@node ~]# iptables -v -t nat -L OPENSHIFT-MASQUERADE
-   Chain OPENSHIFT-MASQUERADE (1 references)
-    pkts bytes target     prot opt in     out     source               destination
-       0     0 RETURN     all  --  any    any     anywhere             anywhere             mark match 0x1/0x1
-       7   621 MASQUERADE  all  --  any    any     10.128.0.0/14        anywhere             /* masquerade pod-to-service and pod-to-external traffic */
+   [root@node ~]# ip route
+   default via 192.168.16.1 dev ens192
+   10.128.0.0/14 dev tun0 scope link                                     # This sends all pod traffic into OVS
+   169.254.0.0/16 dev ens192 scope link metric 1002                      # This is for Zeroconf
+   172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1      # Docker's private IPs... used only by things directly configured by docker; not OpenShift
+   172.30.0.0/16 dev tun0                                                # To the Kubernetes Service objects network
+   192.168.16.0/20 dev ens192 proto kernel scope link src 192.168.23.31  # The physical interface on the local subnet
+   192.168.122.0/24 dev virbr0 proto kernel scope link src 192.168.122.1 # Linux virtual network switch (use NAT mode) for hypervisor
 
  #+END_EXAMPLE
- The Pod ip will be NAT to the IP of the physical interface when it access the
- external host.
-** North-South Traffic
-
-#+BEGIN_EXAMPLE
-  [root@master ~]# oc get all --selector='router=router' -n default -o wide
-  NAME                 READY     STATUS    RESTARTS   AGE       IP              NODE                    NOMINATED NODE
-  pod/router-2-ssfwc   1/1       Running   0          17h       192.168.23.52   infra.myopenshift.com   <none>
-
-  NAME                             DESIRED   CURRENT   READY     AGE       CONTAINERS   IMAGES                                                       SELECTOR
-  replicationcontroller/router-1   0         0         0         18h       router       registry.redhat.io/openshift3/ose-haproxy-router:v3.11       deployment=router-1,deploymentconfig=router,router=router
-  replicationcontroller/router-2   1         1         1         17h       router       registry.redhat.io/openshift3/ose-haproxy-router:v3.11.157   deployment=router-2,deploymentconfig=router,router=router
-
-  NAME             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                   AGE       SELECTOR
-  service/router   ClusterIP   172.30.169.119   <none>        80/TCP,443/TCP,1936/TCP   18h       router=router
-
-  NAME                                        REVISION   DESIRED   CURRENT   TRIGGERED BY
-  deploymentconfig.apps.openshift.io/router   2          1         1         config
-
-#+END_EXAMPLE
-
-The default OpenShift Router is one or more Router Pods running on
-Infrastructure Nodes (=infra.myopenshift.com=) and is deployed as a /Deployment
-Config/ (=deploymentconfig.apps.ose.I/O/router=).
-
-These Routers container images are based on /HAProxy/ (see =IMAGES=). These
-/Pods/ are defined to share the /Network Namespace/ with the host
-/Infrastructure Node/:
-#+BEGIN_EXAMPLE
-  [root@master ~]# oc api-resources
-  [root@master ~]# oc get dc
-  [root@master ~]# oc get services
-  [root@master ~]# oc get pods
-  [root@master ~]# oc get routes
-  [root@master ~]# oc get routes <route-name> -o yaml
-  [root@master ~]# oc get dc router -o yaml
-  [root@master ~]# oc get services router -o yaml
-  [root@master ~]# oc get services <service-name> -o yaml
-  [root@master ~]# oc get pods <pod-name> -o yaml
 
 
-#+END_EXAMPLE
+ The default OpenShift Router is one or more Router Pods running on
+ Infrastructure Nodes (=infra.myopenshift.com=) and is deployed as a /Deployment
+ Config/ (=deploymentconfig.apps.openshift.io/router=). Sharing the /Network
+ Namespace/ enables these /Router Pods/ to receive traffic over the
+ /host-network/. By default, the /OpenShift Router/ listens on TCP ports 80
+ (HTTP), 443 (HTTPS), and 1936 (HAProxy Stats). Once the traffic arrives to the
+ Pod, it will match the corresponding Route object.
 
-Sharing the /Network Namespace/ enables these /Router Pods/ to receive traffic
-over the /host-network/. By default, the /OpenShift Router/ listens on TCP ports
-80 (HTTP), 443 (HTTPS), and 1936 (HAProxy Stats). Once the traffic arrives to
-the Pod, it will match the corresponding Route object.
+ #+BEGIN_EXAMPLE
+   [root@master ~]# oc get all --selector='router=router' -n default -o wide
+   NAME                 READY     STATUS    RESTARTS   AGE       IP              NODE                    NOMINATED NODE
+   pod/router-1-qv5f7   1/1       Running   1          5d        192.168.23.52   infra.myopenshift.com   <none>
+
+   NAME                             DESIRED   CURRENT   READY     AGE       CONTAINERS   IMAGES                                                   SELECTOR
+   replicationcontroller/router-1   1         1         1         5d        router       registry.redhat.io/openshift3/ose-haproxy-router:v3.11   deployment=router-1,deploymentconfig=router,router=router
+
+   NAME             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                   AGE       SELECTOR
+   service/router   ClusterIP   172.30.210.30   <none>        80/TCP,443/TCP,1936/TCP   5d        router=router
+
+   NAME                                        REVISION   DESIRED   CURRENT   TRIGGERED BY
+   deploymentconfig.apps.openshift.io/router   1          1         1         config
+ #+END_EXAMPLE
+ 
+
+ - Pod to pod in the same node
+
+   /*eth0 (pod)*/ $\rightarrow$ /*vethA*/ $\rightarrow$ /*br0*/ $\rightarrow$ /*vethB*/ $\rightarrow$ /*eth0 (pod)*/
+
+ - Pod to pod in the different nodes
+
+   /*eth0 (pod)*/ $\rightarrow$ /*vethA*/ $\rightarrow$ /*br0*/ $\rightarrow$
+   /*vxlan0*/ $\rightarrow$ /network/ $\rightarrow$ /*vxlan0*/ $\rightarrow$
+   /*br0*/ $\rightarrow$ /*vethB*/ $\rightarrow$ /*eth0 (pod)*/
+
+ - Pod to external host
+
+   /*eth0 (pod)*/ $\rightarrow$ /*vethA*/ $\rightarrow$ /*br0*/ $\rightarrow$
+   /*tun0*/ $\rightarrow$ $\texttt{SNAT} \atop \texttt{(MASQUERADE)}$
+   $\rightarrow$ /*eth0 (phy.)*/ $\rightarrow$ /*Host*/
+
 * Build & deploy docker image
 
 ** Setup the proxy
@@ -519,7 +553,8 @@ Add the volume to pod in management console, OpenShift will terminate old pods
 and create new pods (rolling out).
 
 * Migrate the [[https://github.com/GongCun/Pentomino/tree/map][PuzzleBrain]] to OpenShift
-
+	 #+CAPTION: PuzzleBrain in OpenShift
+	 [[./OpenShift_farm.PNG]]
 ** Install build tools
    #+begin_src sh
      # Install GCC and C++
@@ -666,6 +701,8 @@ and create new pods (rolling out).
       apt-get install -y vim
       apt-get install -y ncat
       apt-get install -y ksh
+      apt-get install -y telnet
+      apt-get install -y telnetd
 
       # Edit the /usr/local/apache2/conf/httpd.conf file
       /usr/local/apache2/bin/apachectl -k graceful
@@ -699,11 +736,17 @@ and create new pods (rolling out).
 
   # Capture the image from running container in the OCP node
   docker ps # get container id
+  # Double confirm the container
+  docker exec -it <container> hostname
+
+  # Capture the image in the OCP node
   docker commit <container> httpd:v2
   docker tag httpd:v2 172.30.151.202:5000/hello/httpd:v2
   docker login -p <token> -u system 172.30.151.202:5000
+  docker push 172.30.151.202:5000/hello/httpd:v2
 
   # Redeploy web-app in the master node
   oc new-app hello/httpd:v2 --name=myweb2
   oc expose svc/myweb2
 #+END_SRC
+Login http://myweb-hello.apps.myopenshift.com/ to test application.

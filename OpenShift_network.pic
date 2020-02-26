@@ -1,0 +1,165 @@
+.PS
+#scale = 1.2
+u = .08
+offset = .2
+ow = movewid / 3
+oh = moveht / 1
+pod = .6
+
+define pod_box {
+  box $1 ht pod wid pod
+}
+
+define host_box {
+  box $1 ht pod*.8 wid pod*.8
+}
+
+NODE1: [
+[
+P1: [
+B1_: pod_box("pod")
+move ow
+B2_: pod_box("pod")
+B1: box wid 0 ht 0 "\s-3eth0\s0" with .c at 1th box.s + (0, u)
+B2: box wid 0 ht 0 "\s-3eth0\s0" with .c at 2th box.s + (0, u)
+]
+
+move down oh from P1
+
+OVS1: box wid P1.wid ht pod "\s-1OVS br0\s0"
+
+V1_: OVS1.n + (-ow/2, 0)
+V1: 1/2 of the way between OVS1.nw and V1_
+B1: box wid 0 ht 0 "\s-3veth1\s0" at V1 + (0, -u*1.5)
+
+V2_: OVS1.n + (ow/2, 0)
+V2: 1/2 of the way between OVS1.ne and V2_
+B2: box wid 0 ht 0 "\s-3veth2\s0" at V2 + (0, -u*1.5)
+
+V3_: OVS1.s + (-ow/2, 0)
+V3: 1/2 of the way between OVS1.sw and V3_
+B3: box wid 0 ht 0 "\s-3vxlan0" "\v'-.4v'(port1)\s0" at V3 + (0, u)
+
+
+V4_: OVS1.s + (ow/2, 0)
+V4: 1/2 of the way between OVS1.se and V4_
+B4: box wid 0 ht 0 "\s-3tun0" "\v'-.4v'(port2)\s0" at V4 + (0, u)
+
+move down oh/2 from V3
+NIC: box ht boxht/2 wid boxwid*.4 "\s-3NIC\s0"
+move down oh/2 from V4
+FW: box dashed ht boxht/2 wid boxwid/2 "\s-3iptables\s0"
+
+line from P1.B1_.s to V1
+line from P1.B2_.s to V2
+line from V3 to NIC.n
+line from V4 to FW.n
+line from FW.w to NIC.e
+]
+
+NIC: last [].NIC
+
+N1: box dashed ht last [].ht + offset wid last [].wid + offset at last []
+NEX: 1/3 of the way between NIC.sw and NIC.se
+NIN: 2/3 of the way between NIC.sw and NIC.se
+move down moveht from NEX
+host_box("\s-1Host\s0")
+line from NEX to last box.n
+]
+
+move right movewid*3 from last []
+
+NODE2: [
+[
+P1: [
+B1_: pod_box("pod")
+move ow
+B2_: pod_box("pod")
+B1: box wid 0 ht 0 "\s-3eth0\s0" with .c at 1th box.s + (0, u)
+B2: box wid 0 ht 0 "\s-3eth0\s0" with .c at 2th box.s + (0, u)
+]
+
+move down oh from P1
+
+OVS1: box wid P1.wid ht pod "\s-1OVS br0\s0"
+
+V1_: OVS1.n + (-ow/2, 0)
+V1: 1/2 of the way between OVS1.nw and V1_
+B1: box wid 0 ht 0 "\s-3veth1\s0" at V1 + (0, -u*1.5)
+
+V2_: OVS1.n + (ow/2, 0)
+V2: 1/2 of the way between OVS1.ne and V2_
+B2: box wid 0 ht 0 "\s-3veth2\s0" at V2 + (0, -u*1.5)
+
+V3_: OVS1.s + (-ow/2, 0)
+V3: 1/2 of the way between OVS1.sw and V3_
+B3: box wid 0 ht 0 "\s-3tun0" "\v'-.4v'(port2)\s0" at V3 + (0, u)
+
+
+V4_: OVS1.s + (ow/2, 0)
+V4: 1/2 of the way between OVS1.se and V4_
+B4: box wid 0 ht 0 "\s-3vxlan0" "\v'-.4v'(port1)\s0" at V4 + (0, u)
+
+move down oh/2 from V4
+NIC: box ht boxht/2 wid boxwid*.4 "\s-3NIC\s0"
+move down oh/2 from V3
+FW: box dashed ht boxht/2 wid boxwid/2 "\s-3iptables\s0"
+
+line from P1.B1_.s to V1
+line from P1.B2_.s to V2
+line from V4 to NIC.n
+line from V3 to FW.n
+line from FW.e to NIC.w
+]
+
+NIC: last [].NIC
+
+N1: box dashed ht last [].ht + offset wid last [].wid + offset at last []
+NEX: 2/3 of the way between NIC.sw and NIC.se
+NIN: 1/3 of the way between NIC.sw and NIC.se
+move down moveht from NEX
+host_box("\s-1Host\s0")
+line from NEX to last box.n
+]
+
+X_: 1/2 of the way between NODE1.NIN and NODE2.NIN + (0, -moveht*1.4)
+fac = .7
+VXLAN: box invis wid boxwid*1.2 ht boxht/2 "\s-2VxLan Tunnel\s0" with .c at X_
+arc cw rad arcrad*fac from VXLAN.nw to VXLAN.sw
+arc rad arcrad*fac from VXLAN.nw to VXLAN.sw
+arc cw rad arcrad*fac from VXLAN.ne to VXLAN.se
+line from VXLAN.nw to VXLAN.ne
+line from VXLAN.sw to VXLAN.se
+T1: 2th arc.center + (-arcrad*fac, 0)
+T2: 3th arc.center + (arcrad*fac, 0)
+line from NODE1.NIN down NODE1.NIN.y - T1.y then to T1
+line from NODE2.NIN down NODE2.NIN.y - T2.y then to T2
+box wid 0 ht 0 "\rNode" with .c at NODE1.n
+box wid 0 ht 0 "\rNode" with .c at NODE2.n
+
+.PE
+
+.PS
+NODE1: [
+copy "vm.pic"
+]
+move movewid*5
+NODE2: [
+copy "vm2.pic"
+]
+
+E1: ellipse wid .12 ht .2 with .w at NODE1.e + (.05, 0)
+"IP1" at last ellipse .n + (0.05, .1)
+
+E2: ellipse wid .12 ht .2 with .e at NODE2.w + (-.05, 0)
+"IP2" at last ellipse .n + (-0.05, .1)
+
+box invis fill 0 with .ne at E2.n ht E2.ht wid E2.wid
+
+line from E1.n to E2.n
+line "\v'-.05v'VxLan" above aligned from E1.s to E2.s
+
+.PE
+.ce 1000
+Default cluster network is \fB10.128.0.0/14\fP.
+.ce 0

@@ -1,0 +1,66 @@
+.PS
+mh = moveht * .5
+podht = boxht * .55
+podwid = boxwid * .65
+define cli { box ht $1 wid $1 $2 }
+define web { box wid podwid ht boxht*.4 }
+cli(.5, "client")
+move down moveht*1.2 left movewid*.6 from last box.s
+C: cli(.5, "client")
+move down moveht*1.2 right movewid*.6 from last box.s
+cli(.5, "client")
+move right movewid*4 from 2th box
+SF: [
+#W: box "WAF"
+W: box
+box "\v'.3v'\s-2Router" "\v'-.1v'pod\s0" wid podwid ht podht at last box
+"Infra. node with" "\v'-.3v'external access" at 2th last box.bottom + (0, -.2)
+
+movewid = movewid * .8
+move right from 2th last box.e
+F: box wid podwid ht podht "\v'.3v'\s-2Front end" "\v'-.1v'pod\s0"
+move right from last box.e
+A: ellipse wid podwid ht podht dashed "\s-2Service\s0"
+move right movewid*3 from last ellipse
+W1: web()
+move up mh from last box
+W2: web()
+move up mh from last box
+W3: web()
+move down mh from W1
+W4: web()
+move down mh from last box
+W5: web()
+"\d\dcomputer pods" at last box.s
+line from W.e to F.w
+line from F.e to A.w
+line from A.e to W1.w
+line from A.e to W2.w
+line from A.e to W3.w
+line from A.e to W4.w
+line from A.e to W5.w
+box invis "\d\v'.2v'Balances load" "\d\v'-.1v'across pods" with .s at A.top
+]
+line dashed from C.e to 1/4 of the way between C.e and SF.W.w
+line from last line.end to SF.W.w
+P: 1/2 of the way between C.e and SF.W.w
+line from (P.x, P.y + moveht/2) to (P.x, P.y - moveht/2)
+box invis "\d\v'.2v'External" "\d\v'.1v'access" with .s at last line.start
+box dashed with .c  at last [] + (0,-.1) ht last [].ht + .4 wid last [].wid + .4
+box wid boxwid * 1.8 ht boxht/2 invis "\h'-\w'a'u'\fBOpenShift Cluster\fP" with .sw at last box.sw
+#box ht boxht * 1.5 "\b'\f(CWproxy\fP'" 
+#box ht boxht * 1.5 "\b'proxy'" 
+move right from last [].e
+N: box invis wid boxwid*.7 ht podht
+ellipse with .w at last box .nw wid last box.wid ht .15
+ellipse with .w at last box .sw wid last box.wid ht .15
+box invis with .sw at last ellipse.w wid last ellipse.wid ht .15 fill 0
+line from N.sw to N.nw
+line from N.se to N.ne
+"\v'.5v'NFS" at N
+line from last [].W1.e to N.w color "grey"
+line from last [].W2.e to N.w color "grey"
+line from last [].W3.e to N.w color "grey"
+line from last [].W4.e to N.w color "grey"
+line from last [].W5.e to N.w color "grey"
+.PE

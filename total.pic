@@ -1,0 +1,515 @@
+.NH
+Architecture
+.PP
+.PS
+
+scale = 1.2
+offset = .2
+u = .4
+ow = movewid / 4
+oh = moveht / 1.5
+pod = .4
+hm = moveht / 3.5
+
+define pod_box {
+  box $1 ht pod wid pod
+}
+
+define flow_circle {
+  circle diam pod*1.2 $1
+}
+
+define flow_box {
+  box ht pod wid pod/.618 $1
+}
+
+X: [
+P1: [
+T1: pod_box("\s-3pod\s0")
+move ow
+T2: pod_box("\s-3pod\s0")
+move ow
+T3: pod_box("\s-3pod\s0")
+move down oh from 3th last box
+#R: pod_box("\s-3\v'.15v'router" "\v'-.15v'pod\s0")
+R: pod_box(invis "\s-3\v'1v'App." "\v'.7v'Node\s0")
+move up oh from 1th box
+#S: pod_box("\s-3\v'.15v'cluster" "\v'-.15v'IP\s0" dashed)
+S: pod_box("\s-3\v'.15v'service" "\v'-.15v'\fIiptables\fP\s0" dashed)
+#move right movewid*1.5 from 4th box
+move right ow*2 from R.e
+HA: box dashed ht pod wid pod*2 \
+"\s-3\v'.15v'\m[black]Infra. Node" "\v'-.15v'HAProxy\s0\m[]" \
+outline "blue"
+move right movewid*1.4 from S.c
+box wid 0 ht 0 "\s-2OVS\s0"
+
+move up oh from S
+KUBE: pod_box("\s-3\v'.15v'kube" "\v'-.15v'proxy\s0")
+move right ow*2 from KUBE.e
+API: box dashed ht pod wid pod*2 \
+"\s-3\v'.15v'\m[black]Master Node" "\v'-.15v'API Server\m[]\s0" \
+outline "red"
+
+
+arrow <- from KUBE.e to API.w
+arrow -> from KUBE.s to S.n
+
+#arrow from R.n to 1st box.s
+arrow from HA.w to R.c then to 1st box.s
+arrow from 1st box.n to S.s
+arrow from S.e + (0, .1) right 2nd box.n.x - S.e.x then to 2nd box.n
+
+#circle "\s-3OCP\s0" invis diam pod*.8 fill 0 with .c at R.c
+]
+
+B1: box dashed ht P1.ht + offset wid P1.wid + offset at P1
+
+move .6
+
+P2: [
+T1: pod_box("\s-3pod\s0")
+move ow
+T2: pod_box("\s-3pod\s0")
+move ow
+T3: pod_box("\s-3pod\s0")
+move down oh from last box
+#R: pod_box("\s-3\v'.15v'router" "\v'-.15v'pod\s0")
+R: pod_box(invis "\s-3\v'1v'App." "\v'.7v'Node\s0")
+#move left movewid*1.5 from last box
+move left ow*2 from R.w
+HA: box dashed ht pod wid pod*2 \
+"\s-3\v'.15v'\m[black]Infra. Node" "\v'-.15v'HAProxy\m[]\s0" \
+outline "blue"
+#move up oh from 3th last box
+move up oh from T3
+#S: pod_box("\s-3\v'.15v'cluster" "\v'-.15v'IP\s0" dashed)
+S: pod_box("\s-3\v'.15v'service" "\v'-.15v'\fIiptables\fP\s0" dashed)
+move left movewid*1.4 from last box.c
+box wid 0 ht 0 "\s-2OVS\s0"
+
+move up oh from S
+KUBE: pod_box("\s-3\v'.15v'kube" "\v'-.15v'proxy\s0")
+move left ow*2 from KUBE.w
+API: box dashed ht pod wid pod*2 \
+"\s-3\v'.15v'\m[black]Master Node" "\v'-.15v'API Server\m[]\s0" \
+outline "red"
+
+arrow -> from API.e to KUBE.w
+arrow -> from KUBE.s to S.n
+
+#arrow from R.n to 4th box.s
+arrow from HA.e to R.c then to T3.s
+arrow from 4th box.n to S.s
+arrow from S.w + (0, -.1) left S.w.x - 3th box.n.x then to 3th box.n
+]
+
+B2: box dashed ht P2.ht + offset wid P2.wid + offset at P2
+
+box ht 0 wid B1.wid invis "HCI Main Cluster" with .sw at B1.nw + (0, .1)
+box ht 0 wid B2.wid invis "HCI PacOn Cluster" with .sw at B2.nw + (0, .1)
+
+arrow from P1.S.e + (0, .1) right P2.T1.n.x - P1.S.e.x then to P2.T1.n
+arrow from P2.S.w + (0, -.1) left P2.S.w.x - P1.T3.n.x then to P1.T3.n
+
+box wid 0 ht 0 "\s-2VxLan\s0" at 1/2 of the way between P1.S.e and P2.S.w
+]
+
+G: box dashed with .sw at X.sw + (-.1, -.1) wid X.wid + .2 ht X.ht + .5 
+box wid 0 ht 0 invis "OpenShift Cross Site Cluster" with .n at last box.n + (0, -.15)
+
+move down moveht*.5 from X.B1.s
+LTM1: box wid X.B1.wid  ht boxht/2 "LTM"
+
+move down moveht*.5 from X.B2.s
+LTM2: box wid X.B2.wid  ht boxht/2 "LTM"
+
+#arrow from 2th last box.n up X.P1.R.e.y - 2th last box.n.y then to X.P1.R.e
+#arrow from last box.n up X.P2.R.w.y - last box.n.y then to X.P2.R.w
+
+move down moveht*1.5 from last [].s
+GTM: box "GTM" wid last [].wid ht boxht/2
+#arrow from GTM.n to LTM1.s
+#arrow from GTM.n to LTM2.s
+
+arrow <- down moveht*.6 from GTM.s
+ellipse wid ellipsewid*1.5 ht ellipseht*.8 "\s-1abc.bocmacau.com\s0"
+arrow <- down moveht*.6 from last ellipse.s
+box wid 0 ht 0 "user access" at last arrow.center + (.5, 0)
+
+move to G.n
+up
+move
+DB: [
+B1: box "DB" "(primary)"
+move to last box.e
+right
+move
+move
+move
+B2: box "DB" "(secondary)"
+arrow "sync/async" above aligned from B1.e to B2.w
+]
+up
+move moveht/2
+COS: box "COS/GPFS" wid DB.wid
+
+arrow <- "write" below aligned from 1/3 <DB.B1.sw, DB.B1.se> down moveht
+arrow "read" above aligned from 2/3 <DB.B1.sw, DB.B1.se> down moveht
+arrow "read" above aligned from DB.B2.s down moveht
+arrow <- "write" ljust below aligned from 1/3 <COS.sw, COS.se> + (.2, 0) down 3/2*moveht + boxht
+arrow "read" ljust above aligned from 2/3 <COS.sw, COS.se> + (-.2, 0) down 3/2*moveht + boxht
+
+move right movewid*1.3 from G.e
+[
+down
+DEV: flow_circle("\s-2coding\s0")
+arrow arrowht hm
+box wid 0 ht 0 "\s-2push\s0" with .c at last arrow .center + (.2, 0)
+move to last arrow.end
+GIT: flow_box("\s-3GitLab\s0")
+arrow arrowht hm
+box wid 0 ht 0 "\s-3S2I\s0" with .c at last arrow .center + (.2, 0)
+move to last arrow.end
+BUD: flow_circle("\s-2build\s0")
+arrow arrowht hm
+box wid 0 ht 0 "\s-2\v'.1v'deploy" ljust "\v'-.1v'to uat\s0" ljust \
+with .c at last arrow.center + (.1, 0)
+move to last arrow.end
+UAT: flow_circle("\s-2test\s0")
+arrow arrowht hm 
+box wid 0 ht 0 "\s-2pass\s0" with .c at last arrow .center + (.2, 0)
+move to last arrow.end
+REPO: flow_box("\s-2\v'.1v'image" "\v'-.1v'repository\s0")
+arrow arrowht hm
+DEP: flow_circle("\s-2deploy\s0")
+
+#arc -> dashed cw rad arcrad*3 from DEV.e to BUD.e
+#arc -> dashed cw rad arcrad*3 from BUD.e to DEP.e
+"\s-2Developer\s0" at DEV.top + (0, .15)
+"\s-2Operations\s0" at DEP.bottom + (0, -.15)
+]
+
+line from last [].DEP.w left .2 then up G.e.y - last [].DEP.w.y
+#arrow <- from G.e to last line.end "\s-2\h'.65v'\r\ureplication" "\h'.65v'\rcontroller\s0" above aligned
+arrow <- from G.e to last line.end "\s-2\h'.65v'scheduling\s0" above aligned
+
+X1_: X.P1.KUBE.ne + (offset/2, offset/2)
+X2_: X.P1.API.se + (offset/2, -offset/2)
+dy_ = X1_.y - X2_.y
+line dashed from X1_ down dy_ then to X2_
+line from X1_ to X.B1.ne then to X2_ outline "white"
+
+X3_: X.P2.KUBE.nw + (-offset/2, offset/2)
+X4_: X.P2.API.sw + (-offset/2, -offset/2)
+dy_ = X3_.y - X4_.y
+line dashed from X3_ down dy_ then to X4_
+line from X3_ to X.B2.nw then to X4_ outline "white"
+
+X5_: X.P1.R.se + (offset/2, -offset/2)
+X6_: X.P1.T3.se + (offset/2, -offset/2)
+dy_ = X5_.y - X6_.y
+dy_ = -dy_
+line dashed from X5_ up dy_ then to X6_
+line from X5_ to X.B1.se then to X6_ outline "white"
+
+X7_: X.P2.R.sw + (-offset/2, -offset/2)
+X8_: X.P2.T1.sw + (-offset/2, -offset/2)
+dy_ = X7_.y - X8_.y
+dy_ = -dy_
+line dashed from X7_ up dy_ then to X8_
+line from X7_ to X.B2.sw then to X8_ outline "white"
+
+dltm1 = X.P1.HA.s.y - LTM1.n.y
+PLTM1: X.P1.HA.s + (0, -dltm1)
+arrow from PLTM1 to X.P1.HA.s
+arrow dashed from PLTM1 to X.P2.HA.s
+LTM1_: X.P1.HA.s + (0, -dltm1-LTM1.ht)
+arrow from GTM.n to LTM1_
+
+dltm2 = X.P2.HA.s.y - LTM2.n.y
+PLTM2: X.P2.HA.s + (0, -dltm2)
+arrow from PLTM2 to X.P2.HA.s
+arrow dashed from PLTM2 to X.P1.HA.s
+LTM2_: X.P2.HA.s + (0, -dltm2-LTM2.ht)
+arrow from GTM.n to LTM2_
+
+.PE
+
+.RS
+.NH 2
+Master node
+.PP
+The OpenShift Container Platform master is a server that performs control
+functions for the whole cluster environment. It is responsible for the creation,
+scheduling, and management of all objects specific to OpenShift. It includes
+API, controller manager, and scheduler capabilities in one OpenShift binary. It
+is also a common practice to install an etcd key-value store on OpenShift
+masters to achieve a low-latency link between etcd and OpenShift masters. It is
+recommended that you run both OpenShift masters and etcd in highly available
+environments. This can be achieved by running multiple OpenShift masters in
+conjunction with an external active-passive load balancer and the clustering
+functions of etcd. 
+
+.NH 2
+Infrastructure node
+.PP
+The OpenShift infrastructure node runs infrastructure-specific services such as
+the Docker Registry and the HAProxy router. The Docker Registry stores
+application images in the form of containers. The HAProxy router provides
+routing functions for OpenShift applications. It currently supports HTTP(S)
+traffic and TLS-enabled traffic via Server Name Indication (SNI). Additional
+applications and services can be deployed on OpenShift infrastructure nodes. 
+
+.NH 2
+Application node
+.PP
+The OpenShift application nodes run containerized applications created and
+deployed by developers. An OpenShift application node contains the OpenShift
+node components combined into a single binary, which can be used by OpenShift
+masters to schedule and control containers. 
+.RE
+
+.NH
+OpenShift network
+.PP
+.PS
+#scale = 1.2
+u = .08
+offset = .2
+ow = movewid / 3
+oh = moveht / 1
+pod = .6
+
+define pod_box {
+  box $1 ht pod wid pod
+}
+
+define host_box {
+  box $1 ht pod*.8 wid pod*.8
+}
+
+NODE1: [
+[
+P1: [
+B1_: pod_box("pod")
+move ow
+B2_: pod_box("pod")
+B1: box wid 0 ht 0 "\s-3eth0\s0" with .c at 1th box.s + (0, u)
+B2: box wid 0 ht 0 "\s-3eth0\s0" with .c at 2th box.s + (0, u)
+]
+
+move down oh from P1
+
+OVS1: box wid P1.wid ht pod "\s-1OVS br0\s0"
+
+V1_: OVS1.n + (-ow/2, 0)
+V1: 1/2 of the way between OVS1.nw and V1_
+B1: box wid 0 ht 0 "\s-3veth1\s0" at V1 + (0, -u*1.5)
+
+V2_: OVS1.n + (ow/2, 0)
+V2: 1/2 of the way between OVS1.ne and V2_
+B2: box wid 0 ht 0 "\s-3veth2\s0" at V2 + (0, -u*1.5)
+
+V3_: OVS1.s + (-ow/2, 0)
+V3: 1/2 of the way between OVS1.sw and V3_
+B3: box wid 0 ht 0 "\s-3vxlan0" "\v'-.4v'(port1)\s0" at V3 + (0, u)
+
+
+V4_: OVS1.s + (ow/2, 0)
+V4: 1/2 of the way between OVS1.se and V4_
+B4: box wid 0 ht 0 "\s-3tun0" "\v'-.4v'(port2)\s0" at V4 + (0, u)
+
+move down oh/2 from V3
+NIC: box ht boxht/2 wid boxwid*.4 "\s-3NIC\s0"
+move down oh/2 from V4
+FW: box dashed ht boxht/2 wid boxwid/2 "\s-3iptables\s0"
+
+line from P1.B1_.s to V1
+line from P1.B2_.s to V2
+line from V3 to NIC.n
+line from V4 to FW.n
+line from FW.w to NIC.e
+]
+
+NIC: last [].NIC
+
+N1: box dashed ht last [].ht + offset wid last [].wid + offset at last []
+NEX: 1/3 of the way between NIC.sw and NIC.se
+NIN: 2/3 of the way between NIC.sw and NIC.se
+move down moveht from NEX
+host_box("\s-1Host\s0")
+line from NEX to last box.n
+]
+
+move right movewid*3 from last []
+
+NODE2: [
+[
+P1: [
+B1_: pod_box("pod")
+move ow
+B2_: pod_box("pod")
+B1: box wid 0 ht 0 "\s-3eth0\s0" with .c at 1th box.s + (0, u)
+B2: box wid 0 ht 0 "\s-3eth0\s0" with .c at 2th box.s + (0, u)
+]
+
+move down oh from P1
+
+OVS1: box wid P1.wid ht pod "\s-1OVS br0\s0"
+
+V1_: OVS1.n + (-ow/2, 0)
+V1: 1/2 of the way between OVS1.nw and V1_
+B1: box wid 0 ht 0 "\s-3veth1\s0" at V1 + (0, -u*1.5)
+
+V2_: OVS1.n + (ow/2, 0)
+V2: 1/2 of the way between OVS1.ne and V2_
+B2: box wid 0 ht 0 "\s-3veth2\s0" at V2 + (0, -u*1.5)
+
+V3_: OVS1.s + (-ow/2, 0)
+V3: 1/2 of the way between OVS1.sw and V3_
+B3: box wid 0 ht 0 "\s-3tun0" "\v'-.4v'(port2)\s0" at V3 + (0, u)
+
+
+V4_: OVS1.s + (ow/2, 0)
+V4: 1/2 of the way between OVS1.se and V4_
+B4: box wid 0 ht 0 "\s-3vxlan0" "\v'-.4v'(port1)\s0" at V4 + (0, u)
+
+move down oh/2 from V4
+NIC: box ht boxht/2 wid boxwid*.4 "\s-3NIC\s0"
+move down oh/2 from V3
+FW: box dashed ht boxht/2 wid boxwid/2 "\s-3iptables\s0"
+
+line from P1.B1_.s to V1
+line from P1.B2_.s to V2
+line from V4 to NIC.n
+line from V3 to FW.n
+line from FW.e to NIC.w
+]
+
+NIC: last [].NIC
+
+N1: box dashed ht last [].ht + offset wid last [].wid + offset at last []
+NEX: 2/3 of the way between NIC.sw and NIC.se
+NIN: 1/3 of the way between NIC.sw and NIC.se
+move down moveht from NEX
+host_box("\s-1Host\s0")
+line from NEX to last box.n
+]
+
+X_: 1/2 of the way between NODE1.NIN and NODE2.NIN + (0, -moveht*1.4)
+fac = .7
+VXLAN: box invis wid boxwid*1.2 ht boxht/2 "\s-2VxLan Tunnel\s0" with .c at X_
+arc cw rad arcrad*fac from VXLAN.nw to VXLAN.sw
+arc rad arcrad*fac from VXLAN.nw to VXLAN.sw
+arc cw rad arcrad*fac from VXLAN.ne to VXLAN.se
+line from VXLAN.nw to VXLAN.ne
+line from VXLAN.sw to VXLAN.se
+T1: 2th arc.center + (-arcrad*fac, 0)
+T2: 3th arc.center + (arcrad*fac, 0)
+line from NODE1.NIN down NODE1.NIN.y - T1.y then to T1
+line from NODE2.NIN down NODE2.NIN.y - T2.y then to T2
+box wid 0 ht 0 "\rNode" with .c at NODE1.n
+box wid 0 ht 0 "\rNode" with .c at NODE2.n
+
+.PE
+
+.RS
+.PP
+In the default configuration, the cluster network is the \fB10.128.0.0/14\fP
+network, and nodes allocated \fB/23\fP subnets (i.e., 10.128.0.0/23,
+10.128.2.0/23, 10.128.4.0/23, and so on). This means that the cluster network
+has 512 subnets available to assign to nodes, and a given node is allocated 510
+addresses that it can assign to the containers running on it.
+.IP \(bu 4
+Pod to pod in the same node.
+.ft BI
+.br
+eth0 (pod) @->@ vethA @->@ br0 @->@ vethB @->@ eth0 (pod)
+.ft R
+.IP \(bu 4
+Pod to pod in the different nodes.
+.ft BI
+.br
+eth (pod) @->@ vethA @->@ br0 @->@ vxlan0 @->@ \fInetwork\fP
+@->@ vxlan0 @->@ br0 @->@ vethB @->@ eth0 (pod)
+.ft R
+.IP \(bu 4
+Pod to external host.
+.br
+.ft BI
+eth0 (pod) @->@ vethA @->@ br0 @->@ tun0 @-> pile {\f(CWSNAT above
+\v'-.3v'(MASQUERADE)\fP} ->@ eth0 (phy.) @->@ Host
+.ft R
+.KS
+.IP \(bu 4
+Pod to services (a group of pods).
+.PS
+X: [
+A: box "pod"
+move
+B: box "pod" "(12345)"
+move down from 1th box
+C: box wid boxwid*1.4 ht boxht/2 "NetworkPolicy"
+move down from 2nd box
+D: box wid boxwid*1.4 ht boxht/2 "NetworkPolicy"
+arrow -> from A.s to C.n
+arrow <- from B.s to D.n
+]
+move down moveht*1.8 from last []
+E: ellipse dashed ht ellipseht*.8 wid ellipsewid*1.4 "API service" "(8080)"
+"\v'.7v'iptables" at last ellipse.s
+arrow -> from X.C.s to E.nw
+arrow -> from E.ne to X.D.s
+.PE
+.KE
+.KS
+.IP \(bu 4
+User to frontend pod.
+.PS <./traffic_path.pic
+.KE
+.RE
+
+.NH
+VxLan
+.PP
+.PS
+NODE1: [
+copy "vm.pic"
+]
+move movewid*5
+NODE2: [
+copy "vm2.pic"
+]
+
+E1: ellipse wid .12 ht .2 with .w at NODE1.e + (.05, 0)
+"IP1" at last ellipse .n + (0.05, .1)
+
+E2: ellipse wid .12 ht .2 with .e at NODE2.w + (-.05, 0)
+"IP2" at last ellipse .n + (-0.05, .1)
+
+line from E1.n to E2.n
+line "\v'-.05v'VxLan" above aligned from E1.s to E2.s
+
+move up moveht*2 from 1st line.center
+
+ht_ = .25
+box ht ht_ wid 2
+B1: box "@MAC1~->~MAC2@" fill .2 with .nw at last box .nw ht ht_ wid 1.2
+B2: box "@IP1~->~IP2@" with .nw at last box .ne ht ht_ wid .8
+
+move to NODE1.top
+up
+move .1
+box "@MAC1~->~MAC2@" fill .2 ht ht_ wid 1.2
+arrow "@Encap@" above rjust from last box.n to B1.w
+move to NODE2.top
+up
+move .1
+box "@MAC1~->~MAC2@" fill .2 ht ht_ wid 1.2
+arrow "@Decap@" above ljust from B2.e to last box.n
+.PE
+
+.ce 1000
+Default cluster network is \fB10.128.0.0/14\fP.
+.ce 0
