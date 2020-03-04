@@ -770,7 +770,7 @@ Login http://myweb-hello.apps.myopenshift.com/ to test application.
   # Setup the configure file
   vi /var/lib/postgresql/data/postgresql.conf
 
-  # Startup PostgresSQL database
+  # Startup PostgreSQL database
   cat ~postgres/.bash_profile
   export PATH=/usr/lib/postgresql/12/bin:$PATH
 
