@@ -1,0 +1,1349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-03-04 周三 22:16 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Architecting and Operating OpenShift Cluster</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="龔存" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Architecting and Operating OpenShift Cluster</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgef75747">1. Networking</a>
+<ul>
+<li><a href="#org6533471">1.1. Overview</a></li>
+<li><a href="#orgef0e796">1.2. SDN Flows Inside Nodes</a></li>
+</ul>
+</li>
+<li><a href="#orgd36f2f8">2. Build &amp; deploy docker image</a>
+<ul>
+<li><a href="#orgd94163e">2.1. Setup the proxy</a></li>
+<li><a href="#orgc01f404">2.2. Create docker image</a></li>
+<li><a href="#org65854ee">2.3. Delete container &amp; images</a></li>
+<li><a href="#org9075c09">2.4. Push docker images to OpenShift internal registry</a></li>
+</ul>
+</li>
+<li><a href="#orgfbe20f3">3. Re-deploy the application</a></li>
+<li><a href="#org3014e00">4. Getting traffic into a cluster</a>
+<ul>
+<li><a href="#org723b962">4.1. Allow user with cluster admin role</a></li>
+<li><a href="#org91b0d79">4.2. Defining the public IP range</a></li>
+<li><a href="#org952c585">4.3. Create a Project and Service</a></li>
+</ul>
+</li>
+<li><a href="#orgb63a5a6">5. Test pod services &amp; attach NFS</a>
+<ul>
+<li><a href="#org837c91d">5.1. Configure NFS server/client</a></li>
+<li><a href="#org595709d">5.2. Configure OpenShift persistent storage (NFS)</a></li>
+</ul>
+</li>
+<li><a href="#org608383e">6. Migrate the PuzzleBrain to OpenShift</a>
+<ul>
+<li><a href="#orgf1ab7a9">6.1. Install build tools</a></li>
+<li><a href="#org76c5f81">6.2. Build PuzzleBrain</a>
+<ul>
+<li><a href="#orgccd1367">6.2.1. Install rapidjson</a></li>
+<li><a href="#orgba90dec">6.2.2. Install PuzzleBrain</a></li>
+<li><a href="#org6f48e6b">6.2.3. Build puzzle docker image</a></li>
+<li><a href="#org34c63ad">6.2.4. Testing in intra-net</a></li>
+<li><a href="#orgcb5e2f3">6.2.5. Setup pod-autoscalinag</a></li>
+<li><a href="#org872a8e2">6.2.6. Create the puzzle-master-node pod</a></li>
+<li><a href="#orgad43312">6.2.7. Create the front-end web pod</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org7ca9e88">7. Connect to the external database</a>
+<ul>
+<li><a href="#org1a57c42">7.1. Configure the PostgreSQL</a></li>
+<li><a href="#org8b6bfb3">7.2. Using <code>psycopg2</code> with PostgreSQL</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgef75747" class="outline-2">
+<h2 id="orgef75747"><span class="section-number-2">1</span> Networking</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org6533471" class="outline-3">
+<h3 id="org6533471"><span class="section-number-3">1.1</span> Overview</h3>
+<div class="outline-text-3" id="text-1-1">
+<dl class="org-dl">
+<dt>Cluster</dt><dd>The set of machines in the cluster. i.e. the Masters and the Nodes.</dd>
+
+<dt>Master</dt><dd>A controller of the OpenShift Container Platform cluster. Note that
+the master may not be a node in the cluster, and thus, may not have
+IP connectivity to the pods.</dd>
+
+<dt>Node</dt><dd>Group of containers running on a node, managed by OpenShift Container
+Platform.</dd>
+
+<dt>Service</dt><dd>Abstraction that presents a unified network interface that is
+backed by one or more pods.</dd>
+
+<dt>Router</dt><dd>A web proxy that can map various URLs and paths into OpenShift
+Container Platform services to allow external traffic to travel into
+the cluster.</dd>
+
+<dt>Node Address</dt><dd>The IP address of a node. This is assigned and managed by the
+owner of the network to which the node is attached. Must be
+reachable from any node in the cluster (master and client).</dd>
+
+<dt>Pod Address</dt><dd>The IP address of a pod. These are assigned and managed by
+OpenShift Container Platform. By default they are assigned out
+of the <b>10.128.0.0/14</b> network. Only reachable from the client
+nodes.</dd>
+
+<dt>Service Address</dt><dd>An IP address that represents the service, and is mapped to
+a pod address internally. These are assigned and managed by OpenShift
+Container Platform. By default they are assigned out of the <b>172.30.0.0/16</b>
+network. Only reachable from the client nodes.</dd>
+</dl>
+
+<p>
+The following diagram shows all of the pieces involved with external access:
+</p>
+
+<div class="figure">
+<p><img src="./traffic_path.PNG" alt="traffic_path.PNG" />
+</p>
+<p><span class="figure-number">Figure 1: </span>Traffic Path</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgef0e796" class="outline-3">
+<h3 id="orgef0e796"><span class="section-number-3">1.2</span> SDN Flows Inside Nodes</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+In the default configuration, the cluster network is the <b>10.128.0.0/14</b>
+network, and node allocated <b>/23</b> subnets (i.e., <b>10.128.0.0/23</b>,
+<b>10.128.2.0/23</b>, <b>10.128.4.0/23</b>, and so on). This means that the cluster
+network has 512 subnets available to assign to nodes, and a given node is
+allocated 510 addresses that it can assign to the containers running on it. The
+size and address range of the cluster network are configurable, as is the host
+subnet size. 
+</p>
+
+<pre class="example">
+[root@master ~]# view /etc/origin/master/master-config.yaml
+networkConfig:
+  clusterNetworks:
+  - cidr: 10.128.0.0/14
+    hostSubnetLength: 9
+  externalIPNetworkCIDRs:
+  - 0.0.0.0/0
+  networkPluginName: redhat/openshift-ovs-subnet
+  serviceNetworkCIDR: 172.30.0.0/16
+
+[root@master ~]# oc get hostsubnet
+NAME                     HOST                     HOST IP         SUBNET          EGRESS CIDRS   EGRESS IPS
+infra.myopenshift.com    infra.myopenshift.com    192.168.23.52   10.129.0.0/23   []             []
+master.myopenshift.com   master.myopenshift.com   192.168.23.31   10.128.0.0/23   []             []
+node.myopenshift.com     node.myopenshift.com     192.168.23.51   10.130.0.0/23   []             []
+node2.myopenshift.com    node2.myopenshift.com    192.168.23.32   10.128.2.0/23   []             []
+node3.myopenshift.com    node3.myopenshift.com    192.168.23.33   10.131.0.0/23   []             []
+node4.myopenshift.com    node4.myopenshift.com    192.168.23.34   10.129.2.0/23   []             []
+</pre>
+
+<p>
+OpenShift SDN creates and configures three network devices:
+</p>
+
+<dl class="org-dl">
+<dt>br0</dt><dd>the OVS bridge device that pod containers will be attached to.
+OpenShift SDN also configures a set of non-subnet-specific flow rules
+on this bridge.</dd>
+<dt>tun0</dt><dd>an OVS internal port (port 2 on <b>br0</b>). This gets assigned the cluster
+subnet gateway address, and is used for external network access.
+OpenShift SDN configures <b>netfilter</b> and routing rules to enable access
+from the cluster subnet to the external network via NAT.</dd>
+<dt>vxlan_sys_4789</dt><dd>The OVS VXLAN device (port 1 on <b>br0</b>), which provides access
+to containers on remote nodes. Referred to as <b>vxlan0</b> in the
+OVS rules.</dd>
+</dl>
+
+<p>
+For each Pod in the Node, the local OpenShift creates a <i>vethXX</i> interface and
+assign it to the OVS br0. The <i>vxlan_sys_4789</i> of <i>br0</i> is the interface that
+defines the <i>VXLAN</i> tunnels, or the overlay network, that enables the
+communication between local Pods with Pods in remote Nodes. This interface is
+known as <i>vxlan0</i> interface inside the OVS and that is the name used in the
+OpenFlow entries. The <i>tun0</i> interface gets the local cluster network subnet
+gateway address. This is the interface that provide <i>NAT</i> access from the
+cluster network subnet to the external network. In additional to the local
+cluster network subnet gateway address, on each <i>Node</i> the Kubernetes Service
+objects network is also pointed to the <i>tun0</i> interface.
+</p>
+
+
+<div class="figure">
+<p><img src="./OpenShift_network.PNG" alt="OpenShift_network.PNG" />
+</p>
+<p><span class="figure-number">Figure 2: </span>OpenShift Network &amp; VxLan</p>
+</div>
+
+
+<pre class="example">
+[root@node ~]# ifconfig tun0
+tun0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1450
+        inet 10.129.0.1  netmask 255.255.254.0  broadcast 10.129.1.255
+        ...
+
+[root@node ~]# ip route
+default via 192.168.16.1 dev ens192
+10.128.0.0/14 dev tun0 scope link                                     # This sends all pod traffic into OVS
+169.254.0.0/16 dev ens192 scope link metric 1002                      # This is for Zeroconf
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1      # Docker's private IPs... used only by things directly configured by docker; not OpenShift
+172.30.0.0/16 dev tun0                                                # To the Kubernetes Service objects network
+192.168.16.0/20 dev ens192 proto kernel scope link src 192.168.23.31  # The physical interface on the local subnet
+192.168.122.0/24 dev virbr0 proto kernel scope link src 192.168.122.1 # Linux virtual network switch (use NAT mode) for hypervisor
+
+</pre>
+
+
+<p>
+The default OpenShift Router is one or more Router Pods running on
+Infrastructure Nodes (<code>infra.myopenshift.com</code>) and is deployed as a <i>Deployment
+Config</i> (<code>deploymentconfig.apps.openshift.io/router</code>). Sharing the <i>Network
+Namespace</i> enables these <i>Router Pods</i> to receive traffic over the
+<i>host-network</i>. By default, the <i>OpenShift Router</i> listens on TCP ports 80
+(HTTP), 443 (HTTPS), and 1936 (HAProxy Stats). Once the traffic arrives to the
+Pod, it will match the corresponding Route object.
+</p>
+
+<pre class="example">
+[root@master ~]# oc get all --selector='router=router' -n default -o wide
+NAME                 READY     STATUS    RESTARTS   AGE       IP              NODE                    NOMINATED NODE
+pod/router-1-qv5f7   1/1       Running   1          5d        192.168.23.52   infra.myopenshift.com   &lt;none&gt;
+
+NAME                             DESIRED   CURRENT   READY     AGE       CONTAINERS   IMAGES                                                   SELECTOR
+replicationcontroller/router-1   1         1         1         5d        router       registry.redhat.io/openshift3/ose-haproxy-router:v3.11   deployment=router-1,deploymentconfig=router,router=router
+
+NAME             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                   AGE       SELECTOR
+service/router   ClusterIP   172.30.210.30   &lt;none&gt;        80/TCP,443/TCP,1936/TCP   5d        router=router
+
+NAME                                        REVISION   DESIRED   CURRENT   TRIGGERED BY
+deploymentconfig.apps.openshift.io/router   1          1         1         config
+</pre>
+
+
+<ul class="org-ul">
+<li><p>
+Pod to pod in the same node
+</p>
+
+<p>
+<i><b>eth0 (pod)</b></i> \(\rightarrow\) <i><b>vethA</b></i> \(\rightarrow\) <i><b>br0</b></i> \(\rightarrow\) <i><b>vethB</b></i> \(\rightarrow\) <i><b>eth0 (pod)</b></i>
+</p></li>
+
+<li><p>
+Pod to pod in the different nodes
+</p>
+
+<p>
+<i><b>eth0 (pod)</b></i> \(\rightarrow\) <i><b>vethA</b></i> \(\rightarrow\) <i><b>br0</b></i> \(\rightarrow\)
+<i><b>vxlan0</b></i> \(\rightarrow\) <i>network</i> \(\rightarrow\) <i><b>vxlan0</b></i> \(\rightarrow\)
+<i><b>br0</b></i> \(\rightarrow\) <i><b>vethB</b></i> \(\rightarrow\) <i><b>eth0 (pod)</b></i>
+</p></li>
+
+<li><p>
+Pod to external host
+</p>
+
+<p>
+<i><b>eth0 (pod)</b></i> \(\rightarrow\) <i><b>vethA</b></i> \(\rightarrow\) <i><b>br0</b></i> \(\rightarrow\)
+<i><b>tun0</b></i> \(\rightarrow\) \(\texttt{SNAT} \atop \texttt{(MASQUERADE)}\)
+\(\rightarrow\) <i><b>eth0 (phy.)</b></i> \(\rightarrow\) <i><b>Host</b></i>
+</p></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd36f2f8" class="outline-2">
+<h2 id="orgd36f2f8"><span class="section-number-2">2</span> Build &amp; deploy docker image</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-orgd94163e" class="outline-3">
+<h3 id="orgd94163e"><span class="section-number-3">2.1</span> Setup the proxy</h3>
+<div class="outline-text-3" id="text-2-1">
+<div class="org-src-container">
+<pre class="src src-sh">oc describe svc/docker-registry -n default
+...
+Type:              ClusterIP
+IP:                <span style="color: #a45bad;">172.30.151.16</span>
+
+cat ~/.docker/config.json
+...
+<span style="color: #2d9574;">"proxies"</span>: <span style="color: #4f97d7;">{</span>
+    <span style="color: #2d9574;">"default"</span>: <span style="color: #bc6ec5;">{</span>
+        <span style="color: #2d9574;">"httpProxy"</span>: <span style="color: #2d9574;">"http://proxy.myopenshift.com:8888"</span>,
+        <span style="color: #2d9574;">"httpsProxy"</span>: <span style="color: #2d9574;">"http://proxy.myopenshift.com:8888"</span>,
+        <span style="color: #2d9574;">"noProxy"</span>: <span style="color: #2d9574;">"*.bocmo.com,.bocmacau.com,.myopenshift.com,172.30.151.16"</span>
+    <span style="color: #bc6ec5;">}</span>
+<span style="color: #4f97d7;">}</span>
+
+systemctl daemon-reload
+systemctl restart docker
+
+docker login registry.redhat.io
+Username:
+Password:
+Login Succeeded
+
+docker pull registry.redhat.io/rhel7
+docker images
+registry.redhat.io/rhel7 
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Get the image path</span>
+docker info
+...
+Docker Root Dir: /var/lib/docker
+
+...
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc01f404" class="outline-3">
+<h3 id="orgc01f404"><span class="section-number-3">2.2</span> Create docker image</h3>
+<div class="outline-text-3" id="text-2-2">
+<div class="org-src-container">
+<pre class="src src-sh">mkdir -p /opt/docker/test
+<span style="color: #4f97d7;">cd</span> /opt/docker/test
+
+vi Dockerfile
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">This Dockerfile uses the rhel7 image</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Ahthor: Cun Gong</span>
+FROM rhel7:latest
+RUN yum install -y nc
+CMD /bin/sh
+
+docker build -t rhel7:v1 .
+docker ps <span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">get the container-id</span>
+docker run --rm -it &lt;container-id&gt; sh
+sh-4.2# type nc
+
+<span style="color: #ffd700; background-color: nil;">## </span><span style="color: #ffd700; background-color: nil;">Web test by ncat</span>
+<span style="color: #4f97d7;">cd</span> /opt/docker/test
+git init
+git add ./Dockerfile
+git commit -m<span style="color: #2d9574;">"rhel7:v1"</span>
+
+cat Dockerfile
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">This Dockerfile uses the rhel7 image</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Ahthor: Cun Gong</span>
+FROM rhel7:v1
+COPY ./index.http /index.http
+COPY ./ncat-web.sh /ncat-web.sh
+RUN chmod <span style="color: #a45bad;">755</span> ncat-web.sh
+EXPOSE <span style="color: #a45bad;">8080</span>
+ENTRYPOINT <span style="color: #4f97d7;">[</span><span style="color: #2d9574;">"/ncat-web.sh"</span><span style="color: #4f97d7;">]</span>
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Build</span>
+docker build -t rhel7:v2 .
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Server terminal</span>
+docker run -it --rm -P rhel7:v2
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Client terminal</span>
+docker ps
+... rhel7:v2 ... <span style="color: #a45bad;">0.0.0.0:32769-</span>&gt;<span style="color: #a45bad;">8080/tcp</span>
+curl -v -k localhost:32769
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org65854ee" class="outline-3">
+<h3 id="org65854ee"><span class="section-number-3">2.3</span> Delete container &amp; images</h3>
+<div class="outline-text-3" id="text-2-3">
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Delete containers</span>
+docker ps --all | grep rhel
+docker container kill &lt;id&gt;
+docker rm -v &lt;id&gt; &lt;id&gt; ...
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Delete images</span>
+docker images
+docker rmi rhel7:v2
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9075c09" class="outline-3">
+<h3 id="org9075c09"><span class="section-number-3">2.4</span> Push docker images to OpenShift internal registry</h3>
+<div class="outline-text-3" id="text-2-4">
+<div class="org-src-container">
+<pre class="src src-sh">oc login -u system:admin -n default
+
+oc describe svc/docker-registry -n default
+Type:              ClusterIP
+IP:                <span style="color: #a45bad;">172.30.151.202</span>
+Port:              <span style="color: #a45bad;">5000-tcp</span>  <span style="color: #a45bad;">5000/TCP</span>
+TargetPort:        <span style="color: #a45bad;">5000/TCP</span>
+
+oc adm policy add-scc-to-user anyuid -z default
+scc <span style="color: #2d9574;">"anyuid"</span> added to: <span style="color: #4f97d7;">[</span><span style="color: #2d9574;">"system:serviceaccount:hello:default"</span><span style="color: #4f97d7;">]</span>
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">check permission (no use)</span>
+oc edit scc anyuid
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Just for debug (no use)</span>
+<span style="color: #ffd700; background-color: nil;">#</span><span style="color: #ffd700; background-color: nil;">oc adm policy add-role-to-user edit system</span>
+<span style="color: #ffd700; background-color: nil;">#</span><span style="color: #ffd700; background-color: nil;">oc adm policy remove-role-from-user edit system</span>
+
+<span style="color: #ffd700; background-color: nil;">## </span><span style="color: #ffd700; background-color: nil;">Re-setup the docker proxy</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Retrieve the registry service&#8217;s IP address</span>
+oc describe svc/docker-registry -n default
+vi /etc/sysconfig/docker
+<span style="color: #7590db;">NO_PROXY</span>=...,$<span style="color: #4f97d7;">{</span><span style="color: #7590db;">docker</span>-registry.default.svc<span style="color: #4f97d7;">}</span>
+
+systemctl restart docker
+
+oc login -u system -p admin
+oc new-project hello
+docker tag rhel7:v2 <span style="color: #a45bad;">172.30.151.202:5000/hello/rhel7:v2</span>
+docker login -p <span style="color: #fa8072;">`oc whoami -t`</span> -u system <span style="color: #a45bad;">172.30.151.202:5000</span>
+docker push <span style="color: #a45bad;">172.30.151.202:5000/hello/rhel7:v2</span>
+
+oc new-app hello/rhel7:v2 --name=myapp
+
+oc expose svc/myapp
+oc get svc/myapp -o wide
+
+oc get routes
+myapp-hello.apps.myopenshift.com
+
+curl -v -k myapp-hello.apps.myopenshift.com
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfbe20f3" class="outline-2">
+<h2 id="orgfbe20f3"><span class="section-number-2">3</span> Re-deploy the application</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Create new image:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">docker run -it --rm rhel7:v1
+sh-4.2# yum install net-tools.x86_64 -y
+sh-4.2# ifconfig eth0
+sh-4.2# ifconfig eth0 | sed -n <span style="color: #2d9574;">'s/^[[:space:]]*inet \(.*\)  netmask.*/\1/p'</span>
+
+
+</pre>
+</div>
+
+<p>
+Push the new image to docker-registry:
+</p>
+<pre class="example">
+# oc login -u system -p admin
+
+# docker commit 2b8553a3eecc rhel7:v3
+sha256:72f98ecf35e5b9ee116dc157d44959cc17f1ace8a6b2ad2cf074a784f2154ea3
+
+# docker tag rhel7:v3 172.30.151.202:5000/hello/rhel7:v3
+# docker login -p `oc whoami -t` -u system 172.30.151.202:5000
+# docker push 172.30.151.202:5000/hello/rhel7:v3
+The push refers to a repository [172.30.151.202:5000/hello/rhel7]
+04a942261f21: Pushed
+4ae10724cbf6: Layer already exists
+d02565babdb9: Layer already exists
+49577de67301: Layer already exists
+v3: digest: sha256:bfbe84b4d8fa134cef339e5c690243d9d32345ad49742646cabcdebdc4d33176 size: 1163
+
+</pre>
+
+<p>
+Build new image again:
+</p>
+<pre class="example">
+[root@master test]# cat ncat-web.sh
+#!/bin/sh
+ip=`ifconfig eth0 | sed -n 's/^[[:space:]]*inet \(.*\)  netmask.*/\1/p'`
+sed -i "s/_IP_/$ip/g" /index.http
+while true; do nc -4l 8080 -c "cat /index.http"; done
+
+[root@master test]# cat Dockerfile
+# This Dockerfile uses the rhel7 image
+# Ahthor: Cun Gong
+FROM rhel7:v3
+COPY ./index.http /index.http
+COPY ./ncat-web.sh /ncat-web.sh
+RUN chmod 755 ncat-web.sh
+EXPOSE 8080
+ENTRYPOINT ["/ncat-web.sh"]
+
+
+[root@master test]# docker build -t rhel7:v4 .
+
+# docker tag rhel7:v4 172.30.151.202:5000/hello/rhel7:v4
+# docker login -p `oc whoami -t` -u system 172.30.151.202:5000
+# docker push 172.30.151.202:5000/hello/rhel7:v4
+</pre>
+
+<p>
+Delete &amp; re-create new app:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Delete app</span>
+oc delete all --selector <span style="color: #7590db;">app</span>=myapp
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Create app</span>
+oc new-app hello/rhel7:v4 --name=myapp
+
+oc expose svc/myapp
+oc get svc/myapp -o wide
+
+oc get routes
+myapp-hello.apps.myopenshift.com
+
+curl -v -k myapp-hello.apps.myopenshift.com
+</pre>
+</div>
+
+<p>
+Scaling up the application:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Get all resource objects</span>
+oc get all -o name --selector <span style="color: #7590db;">app</span>=myapp -o wide
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Scaleup deploymentconfig</span>
+oc get dc
+oc scale --replicas=<span style="color: #a45bad;">4</span> dc/myapp
+oc get dc
+
+oc get pods -o wide
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">NAME            READY     STATUS    RESTARTS   AGE       IP           NODE                    NOMINATED NODE</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">myapp-1-4p4qf   1/1       Running   0          53s       10.131.0.2   node3.myopenshift.com   &lt;none&gt;</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">myapp-1-7ds2f   1/1       Running   0          53s       10.129.2.2   node4.myopenshift.com   &lt;none&gt;</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">myapp-1-7px65   1/1       Running   0          53s       10.128.2.3   node2.myopenshift.com   &lt;none&gt;</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">myapp-1-rbgwd   1/1       Running   0          6m        10.130.0.4   node.myopenshift.com    &lt;none&gt;</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3014e00" class="outline-2">
+<h2 id="org3014e00"><span class="section-number-2">4</span> Getting traffic into a cluster</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-org723b962" class="outline-3">
+<h3 id="org723b962"><span class="section-number-3">4.1</span> Allow user with cluster admin role</h3>
+<div class="outline-text-3" id="text-4-1">
+<div class="org-src-container">
+<pre class="src src-sh">oc login -u system:admin -n hello
+oc adm policy add-cluster-role-to-user cluster-admin system
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org91b0d79" class="outline-3">
+<h3 id="org91b0d79"><span class="section-number-3">4.2</span> Defining the public IP range</h3>
+<div class="outline-text-3" id="text-4-2">
+<div class="org-src-container">
+<pre class="src src-sh">oc login -u system -p admin
+oc project hello
+
+
+</pre>
+</div>
+
+<p>
+Configure the <b>externalIPNetworkCIDRs</b> parameter in the
+<code>/etc/origin/master/master-config.yaml</code> file as shown (default is <b>0.0.0.0/0</b>):
+</p>
+
+<pre class="example">
+networkConfig:
+  externalIPNetworkCIDRs:
+  - &lt;ip_address&gt;/&lt;cidr&gt;
+
+</pre>
+
+<p>
+Restart the OpenShift Container Platform master service to apply the changes.
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">master-restart api
+master-restart controllers
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org952c585" class="outline-3">
+<h3 id="org952c585"><span class="section-number-3">4.3</span> Create a Project and Service</h3>
+<div class="outline-text-3" id="text-4-3">
+<div class="org-src-container">
+<pre class="src src-sh">docker build -t rhel7:v5 .
+docker tag rhel7:v5 <span style="color: #a45bad;">172.30.151.202:5000/hello/rhel7:v5</span>
+docker login -p <span style="color: #fa8072;">`oc whoami -t`</span> -u system <span style="color: #a45bad;">172.30.151.202:5000</span>
+docker push <span style="color: #a45bad;">172.30.151.202:5000/hello/rhel7:v5</span>
+oc new-app hello/rhel7:v5 --name=myecho
+oc get svc
+ncat &lt;cluster-ip&gt; <span style="color: #a45bad;">8080</span>
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Expose the service to crete route</span>
+oc expose svc/myecho
+oc get svc
+nc myecho-hello.apps.myopenshift.com <span style="color: #a45bad;">8080</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">failed: Ncat: No route to host.</span>
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Assigning an IP Address (infra. node ip) to the Service</span>
+oc patch svc myecho -p <span style="color: #2d9574;">'{"spec":{"externalIPs":["192.168.23.52"]}}'</span>
+oc get svc
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">NAME      TYPE        CLUSTER-IP       EXTERNAL-IP     PORT(S)    AGE</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">myecho    ClusterIP   172.30.51.131    192.168.23.52   8080/TCP   6m</span>
+
+nc <span style="color: #a45bad;">192.168.23.52</span> <span style="color: #a45bad;">8080</span>
+oc scale --replicas=<span style="color: #a45bad;">4</span> dc/myecho
+oc get dc
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb63a5a6" class="outline-2">
+<h2 id="orgb63a5a6"><span class="section-number-2">5</span> Test pod services &amp; attach NFS</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-org837c91d" class="outline-3">
+<h3 id="org837c91d"><span class="section-number-3">5.1</span> Configure NFS server/client</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+In the server:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Enable NFS service and allow iptable rules</span>
+systemctl enable nfs-server
+systemctl enable rpcbind
+systemctl enable nfs-lock
+systemctl enable nfs-idmap
+
+vi /etc/sysconfig/nfs
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">...</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">LOCKD_TCPPORT=32803</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">LOCKD_UDPPORT=32769</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">MOUNTD_PORT=892</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">STATD_PORT=662</span>
+
+grep -w -e <span style="color: #a45bad;">111</span> -e <span style="color: #a45bad;">2049</span> /etc/services
+
+systemctl restart rpcbind
+systemctl restart nfs-server
+systemctl restart nfs-lock
+systemctl restart nfs-idmap
+
+rpcinfo -p | grep -E <span style="color: #2d9574;">'(rquota|mount|nlock)'</span>
+
+iptables -I INPUT -i ens192 -p tcp -s <span style="color: #a45bad;">192.168.23.0/24</span> -m multiport --dport <span style="color: #a45bad;">111,2049,32803,32769,892,662</span> -j ACCEPT
+iptables -I INPUT -i ens192 -p udp -s <span style="color: #a45bad;">192.168.23.0/24</span> -m multiport --dport <span style="color: #a45bad;">111,2049,32803,32769,892,662</span> -j ACCEPT
+
+iptables-save
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Setup /etc/exports &amp; enable anonymity access</span>
+mkdir -p /ose/public
+setfacl -m u:nobody:rwx /ose/public
+getfacl /ose/public
+ls -lZd /ose/public
+vi /etc/exports
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">/ose/public 192.168.23.0/24(rw,all_squash,anonuid=99,anongid=99) *(ro)</span>
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Exporting the share:</span>
+exportfs -r
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">'-r' re-exports entries in /etc/exports and sync /var/lib/nfs/etab with /etc/exports.</span>
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Restart the NfS services:</span>
+systemctl restart nfs-server
+
+</pre>
+</div>
+
+<p>
+In the client:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">mount -t nfs nfs.myopenshift.com:/ose/public /mnt
+<span style="color: #4f97d7;">(</span>hostname; date<span style="color: #4f97d7;">)</span> &gt;/mnt/test.txt
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org595709d" class="outline-3">
+<h3 id="org595709d"><span class="section-number-3">5.2</span> Configure OpenShift persistent storage (NFS)</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+You must first create an object definition for the PVs (Persistent Volumes):
+</p>
+<pre class="example">
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs01 
+spec:
+  capacity:
+    storage: 30Gi 
+  accessModes:
+  - ReadWriteOnce 
+  nfs: 
+    path: /ose/public
+    server: nfs.myopenshift.com
+  persistentVolumeReclaimPolicy: Retain 
+</pre>
+
+<p>
+Create the PV:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">oc create -f ./nfs-pv.yaml
+oc get pv
+</pre>
+</div>
+
+<p>
+The next steps can be to create a PVC (persistent volume claims), to provide a
+convenient method for sharing a volume across a project:
+</p>
+<pre class="example">
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-claim01
+spec:
+  accessModes:
+    - ReadWriteOnce 
+  resources:
+    requests:
+      storage: 1Gi
+</pre>
+
+<p>
+Create the PVC:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">oc create -f ./nfs-pvc.yaml
+oc get pvc
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">NAME          STATUS    VOLUME    CAPACITY   ACCESS MODES   STORAGECLASS   AGE</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">nfs-claim01   Bound     nfs01     30Gi       RWO                           11s</span>
+
+</pre>
+</div>
+
+<p>
+Add the volume to pod in management console, OpenShift will terminate old pods
+and create new pods (rolling out).
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org608383e" class="outline-2">
+<h2 id="org608383e"><span class="section-number-2">6</span> Migrate the <a href="https://github.com/GongCun/Pentomino/tree/map">PuzzleBrain</a> to OpenShift</h2>
+<div class="outline-text-2" id="text-6">
+
+<div class="figure">
+<p><img src="./OpenShift_farm.PNG" alt="OpenShift_farm.PNG" />
+</p>
+<p><span class="figure-number">Figure 3: </span>PuzzleBrain in OpenShift</p>
+</div>
+</div>
+<div id="outline-container-orgf1ab7a9" class="outline-3">
+<h3 id="orgf1ab7a9"><span class="section-number-3">6.1</span> Install build tools</h3>
+<div class="outline-text-3" id="text-6-1">
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Install GCC and C++</span>
+yum group list
+yum group install <span style="color: #2d9574;">"Development Tools"</span> -y
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org76c5f81" class="outline-3">
+<h3 id="org76c5f81"><span class="section-number-3">6.2</span> Build PuzzleBrain</h3>
+<div class="outline-text-3" id="text-6-2">
+</div>
+<div id="outline-container-orgccd1367" class="outline-4">
+<h4 id="orgccd1367"><span class="section-number-4">6.2.1</span> Install rapidjson</h4>
+<div class="outline-text-4" id="text-6-2-1">
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #4f97d7;">cd</span> /opt
+git clone https://github.com/Tencent/rapidjson.git
+yum install -y cmake valgrind
+<span style="color: #4f97d7;">cd</span> ./rapidjson
+git submodule update --init
+mkdir build
+<span style="color: #4f97d7;">cd</span> build/
+cmake ..
+make
+make test
+make install
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgba90dec" class="outline-4">
+<h4 id="orgba90dec"><span class="section-number-4">6.2.2</span> Install PuzzleBrain</h4>
+<div class="outline-text-4" id="text-6-2-2">
+<div class="org-src-container">
+<pre class="src src-sh">mkdir -p /ose/Develop
+<span style="color: #4f97d7;">cd</span> /ose/Develop
+git clone https://github.com/GongCun/Pentomino.git
+<span style="color: #4f97d7;">cd</span> Pentomino
+git branch -a
+git checkout map
+make puzzler
+make -B -f ./Makefile.opt puzzler
+cp -p ./puzzler /opt/docker/PuzzleBrain
+sed -i <span style="color: #2d9574;">'s///g'</span> ./run2.sh
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6f48e6b" class="outline-4">
+<h4 id="org6f48e6b"><span class="section-number-4">6.2.3</span> Build puzzle docker image</h4>
+<div class="outline-text-4" id="text-6-2-3">
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #4f97d7;">cd</span> /opt/docker/PuzzleBrain
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Edit the run.sh, puzzle-entry.sh, and Dockerfile</span>
+docker build -t puzzle:v1 .
+docker tag puzzle:v1 <span style="color: #a45bad;">172.30.151.202:5000/hello/puzzle:v1</span>
+docker login -p <span style="color: #fa8072;">`oc whoami -t`</span> -u system <span style="color: #a45bad;">172.30.151.202:5000</span>
+docker push <span style="color: #a45bad;">172.30.151.202:5000/hello/puzzle:v1</span>
+oc new-app hello/puzzle:v1 --name=puzzle
+oc expose svc/puzzle
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Attach the NFS volume by web console</span>
+oc set volume dc --all
+oc rsh &lt;pod&gt;
+oc exec &lt;pod&gt; -- df -h /data
+<span style="color: #ffd700; background-color: nil;">#</span><span style="color: #ffd700; background-color: nil;">Filesystem                       Size  Used Avail Use% Mounted on</span>
+<span style="color: #ffd700; background-color: nil;">#</span><span style="color: #ffd700; background-color: nil;">nfs.myopenshift.com:/ose/public   30G   32M   30G   1% /data</span>
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Scaleup the pods</span>
+oc scale --replicas=<span style="color: #a45bad;">4</span> dc/puzzle
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Expose to external (not necessary)</span>
+oc patch svc puzzle -p <span style="color: #2d9574;">'{"spec":{"externalIPs":["192.168.23.52"]}}'</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org34c63ad" class="outline-4">
+<h4 id="org34c63ad"><span class="section-number-4">6.2.4</span> Testing in intra-net</h4>
+<div class="outline-text-4" id="text-6-2-4">
+<div class="org-src-container">
+<pre class="src src-sh">mkdir -p /opt/docker/PuzzleBrain/tmp
+<span style="color: #4f97d7;">cd</span> /opt/docker/PuzzleBrain/tmp
+../puzzler -m -b4 -s $<span style="color: #4f97d7;">{</span><span style="color: #7590db;">PUZZLE_CLUSTER</span><span style="color: #4f97d7;">}</span> -p <span style="color: #a45bad;">3001</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcb5e2f3" class="outline-4">
+<h4 id="orgcb5e2f3"><span class="section-number-4">6.2.5</span> Setup pod-autoscalinag</h4>
+<div class="outline-text-4" id="text-6-2-5">
+<p>
+<i>Should in the pod 'complete' stage, not success.</i>
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">ansible-playbook <span style="color: #2d9574;">\</span>
+    /usr/share/ansible/openshift-ansible/playbooks/metrics-server/config.yml <span style="color: #2d9574;">\</span>
+    -e <span style="color: #7590db;">openshift_metrics_server_install</span>=true <span style="color: #2d9574;">\</span>
+    -e <span style="color: #7590db;">openshift_metrics_install_metrics</span>=True
+
+oc adm top pod
+oc adm top node
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org872a8e2" class="outline-4">
+<h4 id="org872a8e2"><span class="section-number-4">6.2.6</span> Create the puzzle-master-node pod</h4>
+<div class="outline-text-4" id="text-6-2-6">
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Prepare the run-master.sh, puzzle-master-entry.sh, Dockerfile-master</span>
+docker build -t puzzle-master:v3.16 -f ./Dockerfile-master .
+docker tag puzzle-master:v3.16 <span style="color: #a45bad;">172.30.151.202:5000/hello/puzzle-master:v3.16</span>
+docker login -p <span style="color: #fa8072;">`oc whoami -t`</span> -u system <span style="color: #a45bad;">172.30.151.202:5000</span>
+docker push <span style="color: #a45bad;">172.30.151.202:5000/hello/puzzle-master:v3.16</span>
+oc new-app hello/puzzle-master:v3.16 --name=puzzle-master -e <span style="color: #7590db;">PUZZLE_CLUSTER</span>=<span style="color: #a45bad;">172.30.63.122</span>
+oc expose svc/puzzle-master
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Record the service ip</span>
+oc get svc
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgad43312" class="outline-4">
+<h4 id="orgad43312"><span class="section-number-4">6.2.7</span> Create the front-end web pod</h4>
+<div class="outline-text-4" id="text-6-2-7">
+<p>
+Download the Apache docker image
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">docker search --filter is-official=true --filter <span style="color: #7590db;">stars</span>=<span style="color: #a45bad;">3</span> apache
+docker pull docker.io/httpd
+docker images
+
+docker run --rm -dit --name apache-test -p <span style="color: #a45bad;">8080:80</span> <span style="color: #2d9574;">\</span>
+       -v /opt/docker/apache:/usr/local/apache2/htdocs:rw httpd:latest bash
+</pre>
+</div>
+
+<p>
+Test &amp; update the image. Prepare <code>/opt/docker/apache/docker.html</code>:
+</p>
+<pre class="example">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Hello Docker&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello Docker&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+</pre>
+
+<p>
+Run the apache image:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">docker run --privileged --rm -dit --name apache-test -p <span style="color: #a45bad;">8080:80</span> <span style="color: #2d9574;">\</span>
+       -v /opt/docker/apache:/usr/local/apache2/htdocs:rw httpd:latest 
+</pre>
+</div>
+
+<p>
+Test by <code>curl</code>:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">curl -k <span style="color: #a45bad;">127.0.0.1:8080/docker.html</span>
+</pre>
+</div>
+
+<p>
+Update the Apache image:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">docker exec -it &lt;container&gt; bash
+cat &gt;/etc/apt/apt.conf.d/proxy.conf &lt;&lt;\EOF
+<span style="color: #3cb371; font-weight: bold;">Acquire {</span>
+<span style="color: #3cb371; font-weight: bold;">  HTTP::proxy "http://tinyproxy@password@192.168.19.19:8888";</span>
+<span style="color: #3cb371; font-weight: bold;">  HTTPS::proxy "http://tinyproxy@password@192.168.19.19:8888";</span>
+<span style="color: #3cb371; font-weight: bold;">}</span>
+<span style="color: #3cb371; font-weight: bold;">EOF</span>
+
+apt-get update
+apt-get install -y vim
+apt-get install -y ncat
+apt-get install -y ksh
+apt-get install -y telnet
+apt-get install -y telnetd
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Edit the /usr/local/apache2/conf/httpd.conf file</span>
+/usr/local/apache2/bin/apachectl -k graceful
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Capture the container to new image</span>
+docker commit &lt;container&gt; httpd:v1
+docker tag httpd:v1 <span style="color: #a45bad;">172.30.151.202:5000/hello/httpd:v1</span>
+docker login -p <span style="color: #fa8072;">`oc whoami -t`</span> -u system <span style="color: #a45bad;">172.30.151.202:5000</span>
+docker push <span style="color: #a45bad;">172.30.151.202:5000/hello/httpd:v1</span>
+oc new-app hello/httpd:v1 --name=myweb
+oc expose svc/myweb
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Update the environment variable (puzzle-master-node ip)</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Note: will rollout update the pod.</span>
+oc set env dc/myweb <span style="color: #7590db;">PUZZLE_MASTER</span>=<span style="color: #a45bad;">172.30.218.85</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Unset the env</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Note: will rollout update the pod.</span>
+oc set env dc/myecho PUZZLE_MASTER-
+
+</pre>
+</div>
+
+<p>
+Update the pod and push image:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Get token from master node</span>
+oc login -u system -p admin
+oc whoami -t
+&lt;token&gt;
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Locate the OCP node that running the node</span>
+oc get pods -o wide
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Capture the image from running container in the OCP node</span>
+docker ps <span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">get container id</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Double confirm the container</span>
+docker exec -it &lt;container&gt; hostname
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Capture the image in the OCP node</span>
+docker commit &lt;container&gt; httpd:v2
+docker tag httpd:v2 <span style="color: #a45bad;">172.30.151.202:5000/hello/httpd:v2</span>
+docker login -p &lt;token&gt; -u system <span style="color: #a45bad;">172.30.151.202:5000</span>
+docker push <span style="color: #a45bad;">172.30.151.202:5000/hello/httpd:v2</span>
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Redeploy web-app in the master node</span>
+oc new-app hello/httpd:v2 --name=myweb2
+oc expose svc/myweb2
+</pre>
+</div>
+<p>
+Login <a href="http://myweb-hello.apps.myopenshift.com/">http://myweb-hello.apps.myopenshift.com/</a> to test application.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7ca9e88" class="outline-2">
+<h2 id="org7ca9e88"><span class="section-number-2">7</span> Connect to the external database</h2>
+<div class="outline-text-2" id="text-7">
+</div>
+<div id="outline-container-org1a57c42" class="outline-3">
+<h3 id="org1a57c42"><span class="section-number-3">7.1</span> Configure the PostgreSQL</h3>
+<div class="outline-text-3" id="text-7-1">
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Pull the docker image</span>
+docker search --filter is-official=true --filter <span style="color: #7590db;">stars</span>=<span style="color: #a45bad;">3</span> postgresql
+docker pull docker.io/postgres
+mkdir -p /opt/docker/psql/data
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Bind the network to the host's network (--network host)</span>
+docker run -it <span style="color: #2d9574;">\</span>
+       -v /ose/psql/data:/var/lib/postgresql/data <span style="color: #2d9574;">\</span>
+       -v /ose/public:/data <span style="color: #2d9574;">\</span>
+       --rm --name postgres-db --privileged <span style="color: #2d9574;">\</span>
+       --network host -e <span style="color: #7590db;">POSTGRES_PASSWORD</span>=mysecret postgres:latest bash
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Setup the configure file</span>
+vi /var/lib/postgresql/data/postgresql.conf
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Startup PostgreSQL database</span>
+cat ~postgres/.bash_profile
+<span style="color: #4f97d7;">export</span> <span style="color: #7590db;">PATH</span>=/usr/lib/postgresql/12/bin:$<span style="color: #7590db;">PATH</span>
+
+chown postgres:postgres ~postgres/.bash_profile
+
+su - postgres
+$ pg_ctl restart -D /var/lib/postgresql/data
+$ createdb mydb
+$ psql mydb
+mydb# create table puzzle <span style="color: #4f97d7;">(</span>
+    id serial primary key,
+    solution varchar<span style="color: #bc6ec5;">(</span><span style="color: #a45bad;">60</span><span style="color: #bc6ec5;">)</span> not null unique
+<span style="color: #4f97d7;">)</span>;
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Detach the running image</span>
+Press &lt;CTRL-p&gt;&lt;CTRL-q&gt; key sequence
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Save &amp; load the image to external machine</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">In souce node</span>
+docker save postgres:v3 &gt;postgres-v3.tar
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">In destinate node</span>
+docker load &lt;./pospostgres-v3.tar
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8b6bfb3" class="outline-3">
+<h3 id="org8b6bfb3"><span class="section-number-3">7.2</span> Using <code>psycopg2</code> with PostgreSQL</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+Install the module:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">apt-get install python3 python3-pip
+pip3 --proxy http://user:pass@<span style="color: #a45bad;">192.168.19.19:8888</span> install psycopg2-binary
+</pre>
+</div>
+
+<p>
+Copy &amp; query the PostgreSQL: see scripts in <a href="./web-conf">web-conf</a>.
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: 龔存</p>
+<p class="date">Created: 2020-03-04 周三 22:16</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
