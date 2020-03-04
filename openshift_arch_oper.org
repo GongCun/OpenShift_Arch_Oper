@@ -750,3 +750,56 @@ and create new pods (rolling out).
   oc expose svc/myweb2
 #+END_SRC
 Login http://myweb-hello.apps.myopenshift.com/ to test application.
+
+* Connect to the external database
+
+** Configure the PostgreSQL
+#+BEGIN_SRC sh
+  # Pull the docker image
+  docker search --filter is-official=true --filter stars=3 postgresql
+  docker pull docker.io/postgres
+  mkdir -p /opt/docker/psql/data
+
+  # Bind the network to the host's network (--network host)
+  docker run -it \
+         -v /ose/psql/data:/var/lib/postgresql/data \
+         -v /ose/public:/data \
+         --rm --name postgres-db --privileged \
+         --network host -e POSTGRES_PASSWORD=mysecret postgres:latest bash
+
+  # Setup the configure file
+  vi /var/lib/postgresql/data/postgresql.conf
+
+  # Startup PostgresSQL database
+  cat ~postgres/.bash_profile
+  export PATH=/usr/lib/postgresql/12/bin:$PATH
+
+  chown postgres:postgres ~postgres/.bash_profile
+
+  su - postgres
+  $ pg_ctl restart -D /var/lib/postgresql/data
+  $ createdb mydb
+  $ psql mydb
+  mydb# create table puzzle (
+      id serial primary key,
+      solution varchar(60) not null unique
+  );
+
+  # Detach the running image
+  Press <CTRL-p><CTRL-q> key sequence
+
+  # Save & load the image to external machine
+  # In souce node
+  docker save postgres:v3 >postgres-v3.tar
+  # In destinate node
+  docker load <./pospostgres-v3.tar
+#+END_SRC
+
+** Using =psycopg2= with PostgreSQL
+Install the module:
+#+BEGIN_SRC sh
+  apt-get install python3 python3-pip
+  pip3 --proxy http://user:pass@192.168.19.19:8888 install psycopg2-binary
+#+END_SRC
+
+Copy & query the PostgreSQL: see scripts in [[./web-conf][web-conf]].
