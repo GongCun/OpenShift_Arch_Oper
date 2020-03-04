@@ -58,9 +58,12 @@ box invis with .sw at last ellipse.w wid last ellipse.wid ht .15 fill 0
 line from N.sw to N.nw
 line from N.se to N.ne
 "\v'.5v'NFS" at N
+"PostgreSQL" at N.s + (0, -.2)
 line from last [].W1.e to N.w color "grey"
 line from last [].W2.e to N.w color "grey"
 line from last [].W3.e to N.w color "grey"
 line from last [].W4.e to N.w color "grey"
 line from last [].W5.e to N.w color "grey"
+d = N.n.x - last [].F.n.x
+line from last [].F.n up moveht*2.25 then right d then to 1st ellipse.n color "grey"
 .PE

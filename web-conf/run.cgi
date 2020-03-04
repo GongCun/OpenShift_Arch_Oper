@@ -16,9 +16,9 @@ EOF
 
 if expr "${HTTP_USER_AGENT}" : ".*Firefox.*" >/dev/null
 then
-    echo '<form action="cgi-bin/wait.cgi" method=get>'
+    echo '<form action="/cgi-bin/wait.cgi" method=get>'
 else
-    echo '<form action="cgi-bin/process.cgi" method=get>'
+    echo '<form action="/cgi-bin/process.cgi" method=get>'
 fi
 
 cat <<\EOF

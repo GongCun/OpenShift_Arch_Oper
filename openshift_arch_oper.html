@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-02-26 週三 13:12 -->
+<!-- 2020-03-04 周三 22:00 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Architecting and Operating OpenShift Cluster</title>
@@ -161,19 +161,6 @@
   .footdef  { margin-bottom: 1em; }
   .figure { padding: 1em; }
   .figure p { text-align: center; }
-  .equation-container {
-    display: table;
-    text-align: center;
-    width: 100%;
-  }
-  .equation {
-    vertical-align: middle;
-  }
-  .equation-label {
-    display: table-cell;
-    text-align: right;
-    vertical-align: middle;
-  }
   .inlinetask {
     padding: 10px;
     border: 2px solid gray;
@@ -198,7 +185,7 @@
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2019 Free Software Foundation, Inc.
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -269,59 +256,65 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org179ef69">1. Networking</a>
+<li><a href="#orga45f673">1. Networking</a>
 <ul>
-<li><a href="#org12e15b6">1.1. Overview</a></li>
-<li><a href="#orgef48567">1.2. SDN Flows Inside Nodes</a></li>
+<li><a href="#org1055254">1.1. Overview</a></li>
+<li><a href="#org882981a">1.2. SDN Flows Inside Nodes</a></li>
 </ul>
 </li>
-<li><a href="#org014a555">2. Build &amp; deploy docker image</a>
+<li><a href="#org3a142ed">2. Build &amp; deploy docker image</a>
 <ul>
-<li><a href="#org1ec6f14">2.1. Setup the proxy</a></li>
-<li><a href="#orgfb575de">2.2. Create docker image</a></li>
-<li><a href="#org2d51be3">2.3. Delete container &amp; images</a></li>
-<li><a href="#org12f5ec5">2.4. Push docker images to OpenShift internal registry</a></li>
+<li><a href="#org04dc1e4">2.1. Setup the proxy</a></li>
+<li><a href="#orgf31bb05">2.2. Create docker image</a></li>
+<li><a href="#org59152d9">2.3. Delete container &amp; images</a></li>
+<li><a href="#org6590b5c">2.4. Push docker images to OpenShift internal registry</a></li>
 </ul>
 </li>
-<li><a href="#org0b78c57">3. Re-deploy the application</a></li>
-<li><a href="#org9b8b122">4. Getting traffic into a cluster</a>
+<li><a href="#orgc0eff83">3. Re-deploy the application</a></li>
+<li><a href="#orgf149a9f">4. Getting traffic into a cluster</a>
 <ul>
-<li><a href="#org18e3877">4.1. Allow user with cluster admin role</a></li>
-<li><a href="#org6f3106e">4.2. Defining the public IP range</a></li>
-<li><a href="#org9d9498c">4.3. Create a Project and Service</a></li>
+<li><a href="#org539f19c">4.1. Allow user with cluster admin role</a></li>
+<li><a href="#org6355196">4.2. Defining the public IP range</a></li>
+<li><a href="#orgbe4de8b">4.3. Create a Project and Service</a></li>
 </ul>
 </li>
-<li><a href="#orgd13a669">5. Test pod services &amp; attach NFS</a>
+<li><a href="#orgc84d8ce">5. Test pod services &amp; attach NFS</a>
 <ul>
-<li><a href="#orgd3300c5">5.1. Configure NFS server/client</a></li>
-<li><a href="#org93f67c9">5.2. Configure OpenShift persistent storage (NFS)</a></li>
+<li><a href="#org0d85460">5.1. Configure NFS server/client</a></li>
+<li><a href="#org5d15254">5.2. Configure OpenShift persistent storage (NFS)</a></li>
 </ul>
 </li>
-<li><a href="#org8408585">6. Migrate the PuzzleBrain to OpenShift</a>
+<li><a href="#org7b8fddb">6. Migrate the PuzzleBrain to OpenShift</a>
 <ul>
-<li><a href="#org896a3e1">6.1. Install build tools</a></li>
-<li><a href="#orgfa37c90">6.2. Build PuzzleBrain</a>
+<li><a href="#org0d34c19">6.1. Install build tools</a></li>
+<li><a href="#org8420cfb">6.2. Build PuzzleBrain</a>
 <ul>
-<li><a href="#orgcea7d20">6.2.1. Install rapidjson</a></li>
-<li><a href="#org5dbc7fe">6.2.2. Install PuzzleBrain</a></li>
-<li><a href="#orgf3b29b6">6.2.3. Build puzzle docker image</a></li>
-<li><a href="#orgba26e53">6.2.4. Testing in intra-net</a></li>
-<li><a href="#orge186486">6.2.5. Setup pod-autoscalinag</a></li>
-<li><a href="#orgbaee127">6.2.6. Create the puzzle-master-node pod</a></li>
-<li><a href="#orgad3a1f5">6.2.7. Create the front-end web pod</a></li>
+<li><a href="#org485d0e6">6.2.1. Install rapidjson</a></li>
+<li><a href="#org32bc5a6">6.2.2. Install PuzzleBrain</a></li>
+<li><a href="#org7b1e2b7">6.2.3. Build puzzle docker image</a></li>
+<li><a href="#org7b53fe2">6.2.4. Testing in intra-net</a></li>
+<li><a href="#org6fa834c">6.2.5. Setup pod-autoscalinag</a></li>
+<li><a href="#org5e879f7">6.2.6. Create the puzzle-master-node pod</a></li>
+<li><a href="#orgc83c193">6.2.7. Create the front-end web pod</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a href="#org5acc688">7. Connect to the external database</a>
+<ul>
+<li><a href="#orge9fbe1d">7.1. Configure the PostgreSQL</a></li>
+<li><a href="#org57dadd9">7.2. Using <code>psycopg2</code> with PostgreSQL</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org179ef69" class="outline-2">
-<h2 id="org179ef69"><span class="section-number-2">1</span> Networking</h2>
+<div id="outline-container-orga45f673" class="outline-2">
+<h2 id="orga45f673"><span class="section-number-2">1</span> Networking</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org12e15b6" class="outline-3">
-<h3 id="org12e15b6"><span class="section-number-3">1.1</span> Overview</h3>
+<div id="outline-container-org1055254" class="outline-3">
+<h3 id="org1055254"><span class="section-number-3">1.1</span> Overview</h3>
 <div class="outline-text-3" id="text-1-1">
 <dl class="org-dl">
 <dt>Cluster</dt><dd>The set of machines in the cluster. i.e. the Masters and the Nodes.</dd>
@@ -367,8 +360,8 @@ The following diagram shows all of the pieces involved with external access:
 </div>
 </div>
 
-<div id="outline-container-orgef48567" class="outline-3">
-<h3 id="orgef48567"><span class="section-number-3">1.2</span> SDN Flows Inside Nodes</h3>
+<div id="outline-container-org882981a" class="outline-3">
+<h3 id="org882981a"><span class="section-number-3">1.2</span> SDN Flows Inside Nodes</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 In the default configuration, the cluster network is the <b>10.128.0.0/14</b>
@@ -516,12 +509,12 @@ Pod to external host
 </div>
 </div>
 
-<div id="outline-container-org014a555" class="outline-2">
-<h2 id="org014a555"><span class="section-number-2">2</span> Build &amp; deploy docker image</h2>
+<div id="outline-container-org3a142ed" class="outline-2">
+<h2 id="org3a142ed"><span class="section-number-2">2</span> Build &amp; deploy docker image</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org1ec6f14" class="outline-3">
-<h3 id="org1ec6f14"><span class="section-number-3">2.1</span> Setup the proxy</h3>
+<div id="outline-container-org04dc1e4" class="outline-3">
+<h3 id="org04dc1e4"><span class="section-number-3">2.1</span> Setup the proxy</h3>
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
 <pre class="src src-sh">oc describe svc/docker-registry -n default
@@ -551,7 +544,7 @@ docker pull registry.redhat.io/rhel7
 docker images
 registry.redhat.io/rhel7 
 
-# <span style="color: #ffd700; background-color: nil;">Get the image path</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Get the image path</span>
 docker info
 ...
 Docker Root Dir: /var/lib/docker
@@ -563,34 +556,34 @@ Docker Root Dir: /var/lib/docker
 </div>
 </div>
 
-<div id="outline-container-orgfb575de" class="outline-3">
-<h3 id="orgfb575de"><span class="section-number-3">2.2</span> Create docker image</h3>
+<div id="outline-container-orgf31bb05" class="outline-3">
+<h3 id="orgf31bb05"><span class="section-number-3">2.2</span> Create docker image</h3>
 <div class="outline-text-3" id="text-2-2">
 <div class="org-src-container">
 <pre class="src src-sh">mkdir -p /opt/docker/test
 <span style="color: #4f97d7;">cd</span> /opt/docker/test
 
 vi Dockerfile
-# <span style="color: #ffd700; background-color: nil;">This Dockerfile uses the rhel7 image</span>
-# <span style="color: #ffd700; background-color: nil;">Ahthor: Cun Gong</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">This Dockerfile uses the rhel7 image</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Ahthor: Cun Gong</span>
 FROM rhel7:latest
 RUN yum install -y nc
 CMD /bin/sh
 
 docker build -t rhel7:v1 .
-docker ps # <span style="color: #ffd700; background-color: nil;">get the container-id</span>
+docker ps <span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">get the container-id</span>
 docker run --rm -it &lt;container-id&gt; sh
 sh-4.2# type nc
 
-## <span style="color: #ffd700; background-color: nil;">Web test by ncat</span>
+<span style="color: #ffd700; background-color: nil;">## </span><span style="color: #ffd700; background-color: nil;">Web test by ncat</span>
 <span style="color: #4f97d7;">cd</span> /opt/docker/test
 git init
 git add ./Dockerfile
 git commit -m<span style="color: #2d9574;">"rhel7:v1"</span>
 
 cat Dockerfile
-# <span style="color: #ffd700; background-color: nil;">This Dockerfile uses the rhel7 image</span>
-# <span style="color: #ffd700; background-color: nil;">Ahthor: Cun Gong</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">This Dockerfile uses the rhel7 image</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Ahthor: Cun Gong</span>
 FROM rhel7:v1
 COPY ./index.http /index.http
 COPY ./ncat-web.sh /ncat-web.sh
@@ -598,12 +591,12 @@ RUN chmod <span style="color: #a45bad;">755</span> ncat-web.sh
 EXPOSE <span style="color: #a45bad;">8080</span>
 ENTRYPOINT <span style="color: #4f97d7;">[</span><span style="color: #2d9574;">"/ncat-web.sh"</span><span style="color: #4f97d7;">]</span>
 
-# <span style="color: #ffd700; background-color: nil;">Build</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Build</span>
 docker build -t rhel7:v2 .
 
-# <span style="color: #ffd700; background-color: nil;">Server terminal</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Server terminal</span>
 docker run -it --rm -P rhel7:v2
-# <span style="color: #ffd700; background-color: nil;">Client terminal</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Client terminal</span>
 docker ps
 ... rhel7:v2 ... <span style="color: #a45bad;">0.0.0.0:32769-</span>&gt;<span style="color: #a45bad;">8080/tcp</span>
 curl -v -k localhost:32769
@@ -613,16 +606,16 @@ curl -v -k localhost:32769
 </div>
 </div>
 
-<div id="outline-container-org2d51be3" class="outline-3">
-<h3 id="org2d51be3"><span class="section-number-3">2.3</span> Delete container &amp; images</h3>
+<div id="outline-container-org59152d9" class="outline-3">
+<h3 id="org59152d9"><span class="section-number-3">2.3</span> Delete container &amp; images</h3>
 <div class="outline-text-3" id="text-2-3">
 <div class="org-src-container">
-<pre class="src src-sh"># <span style="color: #ffd700; background-color: nil;">Delete containers</span>
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Delete containers</span>
 docker ps --all | grep rhel
 docker container kill &lt;id&gt;
 docker rm -v &lt;id&gt; &lt;id&gt; ...
 
-# <span style="color: #ffd700; background-color: nil;">Delete images</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Delete images</span>
 docker images
 docker rmi rhel7:v2
 </pre>
@@ -630,8 +623,8 @@ docker rmi rhel7:v2
 </div>
 </div>
 
-<div id="outline-container-org12f5ec5" class="outline-3">
-<h3 id="org12f5ec5"><span class="section-number-3">2.4</span> Push docker images to OpenShift internal registry</h3>
+<div id="outline-container-org6590b5c" class="outline-3">
+<h3 id="org6590b5c"><span class="section-number-3">2.4</span> Push docker images to OpenShift internal registry</h3>
 <div class="outline-text-3" id="text-2-4">
 <div class="org-src-container">
 <pre class="src src-sh">oc login -u system:admin -n default
@@ -645,15 +638,15 @@ TargetPort:        <span style="color: #a45bad;">5000/TCP</span>
 oc adm policy add-scc-to-user anyuid -z default
 scc <span style="color: #2d9574;">"anyuid"</span> added to: <span style="color: #4f97d7;">[</span><span style="color: #2d9574;">"system:serviceaccount:hello:default"</span><span style="color: #4f97d7;">]</span>
 
-# <span style="color: #ffd700; background-color: nil;">check permission (no use)</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">check permission (no use)</span>
 oc edit scc anyuid
 
-# <span style="color: #ffd700; background-color: nil;">Just for debug (no use)</span>
-#<span style="color: #ffd700; background-color: nil;">oc adm policy add-role-to-user edit system</span>
-#<span style="color: #ffd700; background-color: nil;">oc adm policy remove-role-from-user edit system</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Just for debug (no use)</span>
+<span style="color: #ffd700; background-color: nil;">#</span><span style="color: #ffd700; background-color: nil;">oc adm policy add-role-to-user edit system</span>
+<span style="color: #ffd700; background-color: nil;">#</span><span style="color: #ffd700; background-color: nil;">oc adm policy remove-role-from-user edit system</span>
 
-## <span style="color: #ffd700; background-color: nil;">Re-setup the docker proxy</span>
-# <span style="color: #ffd700; background-color: nil;">Retrieve the registry service&#8217;s IP address</span>
+<span style="color: #ffd700; background-color: nil;">## </span><span style="color: #ffd700; background-color: nil;">Re-setup the docker proxy</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Retrieve the registry service&#8217;s IP address</span>
 oc describe svc/docker-registry -n default
 vi /etc/sysconfig/docker
 <span style="color: #7590db;">NO_PROXY</span>=...,$<span style="color: #4f97d7;">{</span><span style="color: #7590db;">docker</span>-registry.default.svc<span style="color: #4f97d7;">}</span>
@@ -681,8 +674,8 @@ curl -v -k myapp-hello.apps.myopenshift.com
 </div>
 </div>
 
-<div id="outline-container-org0b78c57" class="outline-2">
-<h2 id="org0b78c57"><span class="section-number-2">3</span> Re-deploy the application</h2>
+<div id="outline-container-orgc0eff83" class="outline-2">
+<h2 id="orgc0eff83"><span class="section-number-2">3</span> Re-deploy the application</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Create new image:
@@ -750,10 +743,10 @@ ENTRYPOINT ["/ncat-web.sh"]
 Delete &amp; re-create new app:
 </p>
 <div class="org-src-container">
-<pre class="src src-sh"># <span style="color: #ffd700; background-color: nil;">Delete app</span>
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Delete app</span>
 oc delete all --selector <span style="color: #7590db;">app</span>=myapp
 
-# <span style="color: #ffd700; background-color: nil;">Create app</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Create app</span>
 oc new-app hello/rhel7:v4 --name=myapp
 
 oc expose svc/myapp
@@ -770,31 +763,31 @@ curl -v -k myapp-hello.apps.myopenshift.com
 Scaling up the application:
 </p>
 <div class="org-src-container">
-<pre class="src src-sh"># <span style="color: #ffd700; background-color: nil;">Get all resource objects</span>
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Get all resource objects</span>
 oc get all -o name --selector <span style="color: #7590db;">app</span>=myapp -o wide
 
-# <span style="color: #ffd700; background-color: nil;">Scaleup deploymentconfig</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Scaleup deploymentconfig</span>
 oc get dc
 oc scale --replicas=<span style="color: #a45bad;">4</span> dc/myapp
 oc get dc
 
 oc get pods -o wide
-# <span style="color: #ffd700; background-color: nil;">NAME            READY     STATUS    RESTARTS   AGE       IP           NODE                    NOMINATED NODE</span>
-# <span style="color: #ffd700; background-color: nil;">myapp-1-4p4qf   1/1       Running   0          53s       10.131.0.2   node3.myopenshift.com   &lt;none&gt;</span>
-# <span style="color: #ffd700; background-color: nil;">myapp-1-7ds2f   1/1       Running   0          53s       10.129.2.2   node4.myopenshift.com   &lt;none&gt;</span>
-# <span style="color: #ffd700; background-color: nil;">myapp-1-7px65   1/1       Running   0          53s       10.128.2.3   node2.myopenshift.com   &lt;none&gt;</span>
-# <span style="color: #ffd700; background-color: nil;">myapp-1-rbgwd   1/1       Running   0          6m        10.130.0.4   node.myopenshift.com    &lt;none&gt;</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">NAME            READY     STATUS    RESTARTS   AGE       IP           NODE                    NOMINATED NODE</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">myapp-1-4p4qf   1/1       Running   0          53s       10.131.0.2   node3.myopenshift.com   &lt;none&gt;</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">myapp-1-7ds2f   1/1       Running   0          53s       10.129.2.2   node4.myopenshift.com   &lt;none&gt;</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">myapp-1-7px65   1/1       Running   0          53s       10.128.2.3   node2.myopenshift.com   &lt;none&gt;</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">myapp-1-rbgwd   1/1       Running   0          6m        10.130.0.4   node.myopenshift.com    &lt;none&gt;</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org9b8b122" class="outline-2">
-<h2 id="org9b8b122"><span class="section-number-2">4</span> Getting traffic into a cluster</h2>
+<div id="outline-container-orgf149a9f" class="outline-2">
+<h2 id="orgf149a9f"><span class="section-number-2">4</span> Getting traffic into a cluster</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-org18e3877" class="outline-3">
-<h3 id="org18e3877"><span class="section-number-3">4.1</span> Allow user with cluster admin role</h3>
+<div id="outline-container-org539f19c" class="outline-3">
+<h3 id="org539f19c"><span class="section-number-3">4.1</span> Allow user with cluster admin role</h3>
 <div class="outline-text-3" id="text-4-1">
 <div class="org-src-container">
 <pre class="src src-sh">oc login -u system:admin -n hello
@@ -804,8 +797,8 @@ oc adm policy add-cluster-role-to-user cluster-admin system
 </div>
 </div>
 
-<div id="outline-container-org6f3106e" class="outline-3">
-<h3 id="org6f3106e"><span class="section-number-3">4.2</span> Defining the public IP range</h3>
+<div id="outline-container-org6355196" class="outline-3">
+<h3 id="org6355196"><span class="section-number-3">4.2</span> Defining the public IP range</h3>
 <div class="outline-text-3" id="text-4-2">
 <div class="org-src-container">
 <pre class="src src-sh">oc login -u system -p admin
@@ -838,8 +831,8 @@ master-restart controllers
 </div>
 </div>
 
-<div id="outline-container-org9d9498c" class="outline-3">
-<h3 id="org9d9498c"><span class="section-number-3">4.3</span> Create a Project and Service</h3>
+<div id="outline-container-orgbe4de8b" class="outline-3">
+<h3 id="orgbe4de8b"><span class="section-number-3">4.3</span> Create a Project and Service</h3>
 <div class="outline-text-3" id="text-4-3">
 <div class="org-src-container">
 <pre class="src src-sh">docker build -t rhel7:v5 .
@@ -850,17 +843,17 @@ oc new-app hello/rhel7:v5 --name=myecho
 oc get svc
 ncat &lt;cluster-ip&gt; <span style="color: #a45bad;">8080</span>
 
-# <span style="color: #ffd700; background-color: nil;">Expose the service to crete route</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Expose the service to crete route</span>
 oc expose svc/myecho
 oc get svc
 nc myecho-hello.apps.myopenshift.com <span style="color: #a45bad;">8080</span>
-# <span style="color: #ffd700; background-color: nil;">failed: Ncat: No route to host.</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">failed: Ncat: No route to host.</span>
 
-# <span style="color: #ffd700; background-color: nil;">Assigning an IP Address (infra. node ip) to the Service</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Assigning an IP Address (infra. node ip) to the Service</span>
 oc patch svc myecho -p <span style="color: #2d9574;">'{"spec":{"externalIPs":["192.168.23.52"]}}'</span>
 oc get svc
-# <span style="color: #ffd700; background-color: nil;">NAME      TYPE        CLUSTER-IP       EXTERNAL-IP     PORT(S)    AGE</span>
-# <span style="color: #ffd700; background-color: nil;">myecho    ClusterIP   172.30.51.131    192.168.23.52   8080/TCP   6m</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">NAME      TYPE        CLUSTER-IP       EXTERNAL-IP     PORT(S)    AGE</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">myecho    ClusterIP   172.30.51.131    192.168.23.52   8080/TCP   6m</span>
 
 nc <span style="color: #a45bad;">192.168.23.52</span> <span style="color: #a45bad;">8080</span>
 oc scale --replicas=<span style="color: #a45bad;">4</span> dc/myecho
@@ -871,29 +864,29 @@ oc get dc
 </div>
 </div>
 
-<div id="outline-container-orgd13a669" class="outline-2">
-<h2 id="orgd13a669"><span class="section-number-2">5</span> Test pod services &amp; attach NFS</h2>
+<div id="outline-container-orgc84d8ce" class="outline-2">
+<h2 id="orgc84d8ce"><span class="section-number-2">5</span> Test pod services &amp; attach NFS</h2>
 <div class="outline-text-2" id="text-5">
 </div>
-<div id="outline-container-orgd3300c5" class="outline-3">
-<h3 id="orgd3300c5"><span class="section-number-3">5.1</span> Configure NFS server/client</h3>
+<div id="outline-container-org0d85460" class="outline-3">
+<h3 id="org0d85460"><span class="section-number-3">5.1</span> Configure NFS server/client</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 In the server:
 </p>
 <div class="org-src-container">
-<pre class="src src-sh"># <span style="color: #ffd700; background-color: nil;">Enable NFS service and allow iptable rules</span>
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Enable NFS service and allow iptable rules</span>
 systemctl enable nfs-server
 systemctl enable rpcbind
 systemctl enable nfs-lock
 systemctl enable nfs-idmap
 
 vi /etc/sysconfig/nfs
-# <span style="color: #ffd700; background-color: nil;">...</span>
-# <span style="color: #ffd700; background-color: nil;">LOCKD_TCPPORT=32803</span>
-# <span style="color: #ffd700; background-color: nil;">LOCKD_UDPPORT=32769</span>
-# <span style="color: #ffd700; background-color: nil;">MOUNTD_PORT=892</span>
-# <span style="color: #ffd700; background-color: nil;">STATD_PORT=662</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">...</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">LOCKD_TCPPORT=32803</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">LOCKD_UDPPORT=32769</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">MOUNTD_PORT=892</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">STATD_PORT=662</span>
 
 grep -w -e <span style="color: #a45bad;">111</span> -e <span style="color: #a45bad;">2049</span> /etc/services
 
@@ -909,19 +902,19 @@ iptables -I INPUT -i ens192 -p udp -s <span style="color: #a45bad;">192.168.23.0
 
 iptables-save
 
-# <span style="color: #ffd700; background-color: nil;">Setup /etc/exports &amp; enable anonymity access</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Setup /etc/exports &amp; enable anonymity access</span>
 mkdir -p /ose/public
 setfacl -m u:nobody:rwx /ose/public
 getfacl /ose/public
 ls -lZd /ose/public
 vi /etc/exports
-# <span style="color: #ffd700; background-color: nil;">/ose/public 192.168.23.0/24(rw,all_squash,anonuid=99,anongid=99) *(ro)</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">/ose/public 192.168.23.0/24(rw,all_squash,anonuid=99,anongid=99) *(ro)</span>
 
-# <span style="color: #ffd700; background-color: nil;">Exporting the share:</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Exporting the share:</span>
 exportfs -r
-# <span style="color: #ffd700; background-color: nil;">'-r' re-exports entries in /etc/exports and sync /var/lib/nfs/etab with /etc/exports.</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">'-r' re-exports entries in /etc/exports and sync /var/lib/nfs/etab with /etc/exports.</span>
 
-# <span style="color: #ffd700; background-color: nil;">Restart the NfS services:</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Restart the NfS services:</span>
 systemctl restart nfs-server
 
 </pre>
@@ -939,8 +932,8 @@ In the client:
 </div>
 </div>
 
-<div id="outline-container-org93f67c9" class="outline-3">
-<h3 id="org93f67c9"><span class="section-number-3">5.2</span> Configure OpenShift persistent storage (NFS)</h3>
+<div id="outline-container-org5d15254" class="outline-3">
+<h3 id="org5d15254"><span class="section-number-3">5.2</span> Configure OpenShift persistent storage (NFS)</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 You must first create an object definition for the PVs (Persistent Volumes):
@@ -993,8 +986,8 @@ Create the PVC:
 <div class="org-src-container">
 <pre class="src src-sh">oc create -f ./nfs-pvc.yaml
 oc get pvc
-# <span style="color: #ffd700; background-color: nil;">NAME          STATUS    VOLUME    CAPACITY   ACCESS MODES   STORAGECLASS   AGE</span>
-# <span style="color: #ffd700; background-color: nil;">nfs-claim01   Bound     nfs01     30Gi       RWO                           11s</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">NAME          STATUS    VOLUME    CAPACITY   ACCESS MODES   STORAGECLASS   AGE</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">nfs-claim01   Bound     nfs01     30Gi       RWO                           11s</span>
 
 </pre>
 </div>
@@ -1007,8 +1000,8 @@ and create new pods (rolling out).
 </div>
 </div>
 
-<div id="outline-container-org8408585" class="outline-2">
-<h2 id="org8408585"><span class="section-number-2">6</span> Migrate the <a href="https://github.com/GongCun/Pentomino/tree/map">PuzzleBrain</a> to OpenShift</h2>
+<div id="outline-container-org7b8fddb" class="outline-2">
+<h2 id="org7b8fddb"><span class="section-number-2">6</span> Migrate the <a href="https://github.com/GongCun/Pentomino/tree/map">PuzzleBrain</a> to OpenShift</h2>
 <div class="outline-text-2" id="text-6">
 
 <div class="figure">
@@ -1017,11 +1010,11 @@ and create new pods (rolling out).
 <p><span class="figure-number">Figure 3: </span>PuzzleBrain in OpenShift</p>
 </div>
 </div>
-<div id="outline-container-org896a3e1" class="outline-3">
-<h3 id="org896a3e1"><span class="section-number-3">6.1</span> Install build tools</h3>
+<div id="outline-container-org0d34c19" class="outline-3">
+<h3 id="org0d34c19"><span class="section-number-3">6.1</span> Install build tools</h3>
 <div class="outline-text-3" id="text-6-1">
 <div class="org-src-container">
-<pre class="src src-sh"># <span style="color: #ffd700; background-color: nil;">Install GCC and C++</span>
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Install GCC and C++</span>
 yum group list
 yum group install <span style="color: #2d9574;">"Development Tools"</span> -y
 </pre>
@@ -1029,12 +1022,12 @@ yum group install <span style="color: #2d9574;">"Development Tools"</span> -y
 </div>
 </div>
 
-<div id="outline-container-orgfa37c90" class="outline-3">
-<h3 id="orgfa37c90"><span class="section-number-3">6.2</span> Build PuzzleBrain</h3>
+<div id="outline-container-org8420cfb" class="outline-3">
+<h3 id="org8420cfb"><span class="section-number-3">6.2</span> Build PuzzleBrain</h3>
 <div class="outline-text-3" id="text-6-2">
 </div>
-<div id="outline-container-orgcea7d20" class="outline-4">
-<h4 id="orgcea7d20"><span class="section-number-4">6.2.1</span> Install rapidjson</h4>
+<div id="outline-container-org485d0e6" class="outline-4">
+<h4 id="org485d0e6"><span class="section-number-4">6.2.1</span> Install rapidjson</h4>
 <div class="outline-text-4" id="text-6-2-1">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #4f97d7;">cd</span> /opt
@@ -1053,8 +1046,8 @@ make install
 </div>
 </div>
 
-<div id="outline-container-org5dbc7fe" class="outline-4">
-<h4 id="org5dbc7fe"><span class="section-number-4">6.2.2</span> Install PuzzleBrain</h4>
+<div id="outline-container-org32bc5a6" class="outline-4">
+<h4 id="org32bc5a6"><span class="section-number-4">6.2.2</span> Install PuzzleBrain</h4>
 <div class="outline-text-4" id="text-6-2-2">
 <div class="org-src-container">
 <pre class="src src-sh">mkdir -p /ose/Develop
@@ -1072,36 +1065,36 @@ sed -i <span style="color: #2d9574;">'s///g'</span> ./run2.sh
 </div>
 </div>
 
-<div id="outline-container-orgf3b29b6" class="outline-4">
-<h4 id="orgf3b29b6"><span class="section-number-4">6.2.3</span> Build puzzle docker image</h4>
+<div id="outline-container-org7b1e2b7" class="outline-4">
+<h4 id="org7b1e2b7"><span class="section-number-4">6.2.3</span> Build puzzle docker image</h4>
 <div class="outline-text-4" id="text-6-2-3">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #4f97d7;">cd</span> /opt/docker/PuzzleBrain
-# <span style="color: #ffd700; background-color: nil;">Edit the run.sh, puzzle-entry.sh, and Dockerfile</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Edit the run.sh, puzzle-entry.sh, and Dockerfile</span>
 docker build -t puzzle:v1 .
 docker tag puzzle:v1 <span style="color: #a45bad;">172.30.151.202:5000/hello/puzzle:v1</span>
 docker login -p <span style="color: #fa8072;">`oc whoami -t`</span> -u system <span style="color: #a45bad;">172.30.151.202:5000</span>
 docker push <span style="color: #a45bad;">172.30.151.202:5000/hello/puzzle:v1</span>
 oc new-app hello/puzzle:v1 --name=puzzle
 oc expose svc/puzzle
-# <span style="color: #ffd700; background-color: nil;">Attach the NFS volume by web console</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Attach the NFS volume by web console</span>
 oc set volume dc --all
 oc rsh &lt;pod&gt;
 oc exec &lt;pod&gt; -- df -h /data
-#<span style="color: #ffd700; background-color: nil;">Filesystem                       Size  Used Avail Use% Mounted on</span>
-#<span style="color: #ffd700; background-color: nil;">nfs.myopenshift.com:/ose/public   30G   32M   30G   1% /data</span>
+<span style="color: #ffd700; background-color: nil;">#</span><span style="color: #ffd700; background-color: nil;">Filesystem                       Size  Used Avail Use% Mounted on</span>
+<span style="color: #ffd700; background-color: nil;">#</span><span style="color: #ffd700; background-color: nil;">nfs.myopenshift.com:/ose/public   30G   32M   30G   1% /data</span>
 
-# <span style="color: #ffd700; background-color: nil;">Scaleup the pods</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Scaleup the pods</span>
 oc scale --replicas=<span style="color: #a45bad;">4</span> dc/puzzle
-# <span style="color: #ffd700; background-color: nil;">Expose to external (not necessary)</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Expose to external (not necessary)</span>
 oc patch svc puzzle -p <span style="color: #2d9574;">'{"spec":{"externalIPs":["192.168.23.52"]}}'</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgba26e53" class="outline-4">
-<h4 id="orgba26e53"><span class="section-number-4">6.2.4</span> Testing in intra-net</h4>
+<div id="outline-container-org7b53fe2" class="outline-4">
+<h4 id="org7b53fe2"><span class="section-number-4">6.2.4</span> Testing in intra-net</h4>
 <div class="outline-text-4" id="text-6-2-4">
 <div class="org-src-container">
 <pre class="src src-sh">mkdir -p /opt/docker/PuzzleBrain/tmp
@@ -1112,8 +1105,8 @@ oc patch svc puzzle -p <span style="color: #2d9574;">'{"spec":{"externalIPs":["1
 </div>
 </div>
 
-<div id="outline-container-orge186486" class="outline-4">
-<h4 id="orge186486"><span class="section-number-4">6.2.5</span> Setup pod-autoscalinag</h4>
+<div id="outline-container-org6fa834c" class="outline-4">
+<h4 id="org6fa834c"><span class="section-number-4">6.2.5</span> Setup pod-autoscalinag</h4>
 <div class="outline-text-4" id="text-6-2-5">
 <p>
 <i>Should in the pod 'complete' stage, not success.</i>
@@ -1132,11 +1125,11 @@ oc adm top node
 </div>
 </div>
 
-<div id="outline-container-orgbaee127" class="outline-4">
-<h4 id="orgbaee127"><span class="section-number-4">6.2.6</span> Create the puzzle-master-node pod</h4>
+<div id="outline-container-org5e879f7" class="outline-4">
+<h4 id="org5e879f7"><span class="section-number-4">6.2.6</span> Create the puzzle-master-node pod</h4>
 <div class="outline-text-4" id="text-6-2-6">
 <div class="org-src-container">
-<pre class="src src-sh"># <span style="color: #ffd700; background-color: nil;">Prepare the run-master.sh, puzzle-master-entry.sh, Dockerfile-master</span>
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Prepare the run-master.sh, puzzle-master-entry.sh, Dockerfile-master</span>
 docker build -t puzzle-master:v3.16 -f ./Dockerfile-master .
 docker tag puzzle-master:v3.16 <span style="color: #a45bad;">172.30.151.202:5000/hello/puzzle-master:v3.16</span>
 docker login -p <span style="color: #fa8072;">`oc whoami -t`</span> -u system <span style="color: #a45bad;">172.30.151.202:5000</span>
@@ -1144,15 +1137,15 @@ docker push <span style="color: #a45bad;">172.30.151.202:5000/hello/puzzle-maste
 oc new-app hello/puzzle-master:v3.16 --name=puzzle-master -e <span style="color: #7590db;">PUZZLE_CLUSTER</span>=<span style="color: #a45bad;">172.30.63.122</span>
 oc expose svc/puzzle-master
 
-# <span style="color: #ffd700; background-color: nil;">Record the service ip</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Record the service ip</span>
 oc get svc
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgad3a1f5" class="outline-4">
-<h4 id="orgad3a1f5"><span class="section-number-4">6.2.7</span> Create the front-end web pod</h4>
+<div id="outline-container-orgc83c193" class="outline-4">
+<h4 id="orgc83c193"><span class="section-number-4">6.2.7</span> Create the front-end web pod</h4>
 <div class="outline-text-4" id="text-6-2-7">
 <p>
 Download the Apache docker image
@@ -1207,11 +1200,11 @@ Update the Apache image:
 <div class="org-src-container">
 <pre class="src src-sh">docker exec -it &lt;container&gt; bash
 cat &gt;/etc/apt/apt.conf.d/proxy.conf &lt;&lt;\EOF
-<span style="color: #00ff00; font-weight: bold;">Acquire {</span>
-<span style="color: #00ff00; font-weight: bold;">  HTTP::proxy "http://tinyproxy@password@192.168.19.19:8888";</span>
-<span style="color: #00ff00; font-weight: bold;">  HTTPS::proxy "http://tinyproxy@password@192.168.19.19:8888";</span>
-<span style="color: #00ff00; font-weight: bold;">}</span>
-<span style="color: #00ff00; font-weight: bold;">EOF</span>
+<span style="color: #3cb371; font-weight: bold;">Acquire {</span>
+<span style="color: #3cb371; font-weight: bold;">  HTTP::proxy "http://tinyproxy@password@192.168.19.19:8888";</span>
+<span style="color: #3cb371; font-weight: bold;">  HTTPS::proxy "http://tinyproxy@password@192.168.19.19:8888";</span>
+<span style="color: #3cb371; font-weight: bold;">}</span>
+<span style="color: #3cb371; font-weight: bold;">EOF</span>
 
 apt-get update
 apt-get install -y vim
@@ -1220,10 +1213,10 @@ apt-get install -y ksh
 apt-get install -y telnet
 apt-get install -y telnetd
 
-# <span style="color: #ffd700; background-color: nil;">Edit the /usr/local/apache2/conf/httpd.conf file</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Edit the /usr/local/apache2/conf/httpd.conf file</span>
 /usr/local/apache2/bin/apachectl -k graceful
 
-# <span style="color: #ffd700; background-color: nil;">Capture the container to new image</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Capture the container to new image</span>
 docker commit &lt;container&gt; httpd:v1
 docker tag httpd:v1 <span style="color: #a45bad;">172.30.151.202:5000/hello/httpd:v1</span>
 docker login -p <span style="color: #fa8072;">`oc whoami -t`</span> -u system <span style="color: #a45bad;">172.30.151.202:5000</span>
@@ -1231,11 +1224,11 @@ docker push <span style="color: #a45bad;">172.30.151.202:5000/hello/httpd:v1</sp
 oc new-app hello/httpd:v1 --name=myweb
 oc expose svc/myweb
 
-# <span style="color: #ffd700; background-color: nil;">Update the environment variable (puzzle-master-node ip)</span>
-# <span style="color: #ffd700; background-color: nil;">Note: will rollout update the pod.</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Update the environment variable (puzzle-master-node ip)</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Note: will rollout update the pod.</span>
 oc set env dc/myweb <span style="color: #7590db;">PUZZLE_MASTER</span>=<span style="color: #a45bad;">172.30.218.85</span>
-# <span style="color: #ffd700; background-color: nil;">Unset the env</span>
-# <span style="color: #ffd700; background-color: nil;">Note: will rollout update the pod.</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Unset the env</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Note: will rollout update the pod.</span>
 oc set env dc/myecho PUZZLE_MASTER-
 
 </pre>
@@ -1245,26 +1238,26 @@ oc set env dc/myecho PUZZLE_MASTER-
 Update the pod and push image:
 </p>
 <div class="org-src-container">
-<pre class="src src-sh"># <span style="color: #ffd700; background-color: nil;">Get token from master node</span>
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Get token from master node</span>
 oc login -u system -p admin
 oc whoami -t
 &lt;token&gt;
 
-# <span style="color: #ffd700; background-color: nil;">Locate the OCP node that running the node</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Locate the OCP node that running the node</span>
 oc get pods -o wide
 
-# <span style="color: #ffd700; background-color: nil;">Capture the image from running container in the OCP node</span>
-docker ps # <span style="color: #ffd700; background-color: nil;">get container id</span>
-# <span style="color: #ffd700; background-color: nil;">Double confirm the container</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Capture the image from running container in the OCP node</span>
+docker ps <span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">get container id</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Double confirm the container</span>
 docker exec -it &lt;container&gt; hostname
 
-# <span style="color: #ffd700; background-color: nil;">Capture the image in the OCP node</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Capture the image in the OCP node</span>
 docker commit &lt;container&gt; httpd:v2
 docker tag httpd:v2 <span style="color: #a45bad;">172.30.151.202:5000/hello/httpd:v2</span>
 docker login -p &lt;token&gt; -u system <span style="color: #a45bad;">172.30.151.202:5000</span>
 docker push <span style="color: #a45bad;">172.30.151.202:5000/hello/httpd:v2</span>
 
-# <span style="color: #ffd700; background-color: nil;">Redeploy web-app in the master node</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Redeploy web-app in the master node</span>
 oc new-app hello/httpd:v2 --name=myweb2
 oc expose svc/myweb2
 </pre>
@@ -1276,10 +1269,80 @@ Login <a href="http://myweb-hello.apps.myopenshift.com/">http://myweb-hello.apps
 </div>
 </div>
 </div>
+
+<div id="outline-container-org5acc688" class="outline-2">
+<h2 id="org5acc688"><span class="section-number-2">7</span> Connect to the external database</h2>
+<div class="outline-text-2" id="text-7">
+</div>
+<div id="outline-container-orge9fbe1d" class="outline-3">
+<h3 id="orge9fbe1d"><span class="section-number-3">7.1</span> Configure the PostgreSQL</h3>
+<div class="outline-text-3" id="text-7-1">
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Pull the docker image</span>
+docker search --filter is-official=true --filter <span style="color: #7590db;">stars</span>=<span style="color: #a45bad;">3</span> postgresql
+docker pull docker.io/postgres
+mkdir -p /opt/docker/psql/data
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Bind the network to the host's network (--network host)</span>
+docker run -it <span style="color: #2d9574;">\</span>
+       -v /ose/psql/data:/var/lib/postgresql/data <span style="color: #2d9574;">\</span>
+       -v /ose/public:/data <span style="color: #2d9574;">\</span>
+       --rm --name postgres-db --privileged <span style="color: #2d9574;">\</span>
+       --network host -e <span style="color: #7590db;">POSTGRES_PASSWORD</span>=mysecret postgres:latest bash
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Setup the configure file</span>
+vi /var/lib/postgresql/data/postgresql.conf
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Startup PostgresSQL database</span>
+cat ~postgres/.bash_profile
+<span style="color: #4f97d7;">export</span> <span style="color: #7590db;">PATH</span>=/usr/lib/postgresql/12/bin:$<span style="color: #7590db;">PATH</span>
+
+chown postgres:postgres ~postgres/.bash_profile
+
+su - postgres
+$ pg_ctl restart -D /var/lib/postgresql/data
+$ createdb mydb
+$ psql mydb
+mydb# create table puzzle <span style="color: #4f97d7;">(</span>
+    id serial primary key,
+    solution varchar<span style="color: #bc6ec5;">(</span><span style="color: #a45bad;">60</span><span style="color: #bc6ec5;">)</span> not null unique
+<span style="color: #4f97d7;">)</span>;
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Detach the running image</span>
+Press &lt;CTRL-p&gt;&lt;CTRL-q&gt; key sequence
+
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Save &amp; load the image to external machine</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">In souce node</span>
+docker save postgres:v3 &gt;postgres-v3.tar
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">In destinate node</span>
+docker load &lt;./pospostgres-v3.tar
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org57dadd9" class="outline-3">
+<h3 id="org57dadd9"><span class="section-number-3">7.2</span> Using <code>psycopg2</code> with PostgreSQL</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+Install the module:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">apt-get install python3 python3-pip
+pip3 --proxy http://user:pass@<span style="color: #a45bad;">192.168.19.19:8888</span> install psycopg2-binary
+</pre>
+</div>
+
+<p>
+Copy &amp; query the PostgreSQL: see scripts in <a href="./web-conf">web-conf</a>.
+</p>
+</div>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: 龔存</p>
-<p class="date">Created: 2020-02-26 週三 13:12</p>
+<p class="date">Created: 2020-03-04 周三 22:00</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

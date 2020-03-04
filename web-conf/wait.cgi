@@ -5,7 +5,7 @@ dir=`(cd $dir; pwd -P)`
 cd $dir
 
 f() {
-    ./process.cgi >/tmp/process.txt
+    ./process.cgi >/tmp/process.txt 2>&1
     kill -TERM $1
 }
 
