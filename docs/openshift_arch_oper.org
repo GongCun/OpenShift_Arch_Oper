@@ -34,7 +34,7 @@
 
 The following diagram shows all of the pieces involved with external access:
 	 #+CAPTION: Traffic Path
-	 [[./traffic_path.PNG]]
+	 [[./traffic_path.png]]
 
 ** SDN Flows Inside Nodes
 
@@ -92,7 +92,7 @@ The following diagram shows all of the pieces involved with external access:
  objects network is also pointed to the /tun0/ interface.
 
  #+CAPTION: OpenShift Network & VxLan
- [[./OpenShift_network.PNG]]
+ [[./openshift_network.png]]
 
 
  #+BEGIN_EXAMPLE
@@ -554,7 +554,7 @@ and create new pods (rolling out).
 
 * Migrate the [[https://github.com/GongCun/Pentomino/tree/map][PuzzleBrain]] to OpenShift
 	 #+CAPTION: PuzzleBrain in OpenShift
-	 [[./OpenShift_farm.PNG]]
+	 [[./openshift_farm.png]]
 ** Install build tools
    #+begin_src sh
      # Install GCC and C++
