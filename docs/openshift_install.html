@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-02-26 周三 14:12 -->
+<!-- 2020-03-05 周四 21:54 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>OpenShift Installation Guide</title>
@@ -234,23 +234,23 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org5803c0a">1. Setup Hostname &amp; NIC</a></li>
-<li><a href="#org942fd85">2. <del>Add Application User</del></a></li>
-<li><a href="#org7fbc82a">3. System Requirements</a>
+<li><a href="#org733f85b">1. Setup Hostname &amp; NIC</a></li>
+<li><a href="#org6b78058">2. <del>Add Application User</del></a></li>
+<li><a href="#org6733759">3. System Requirements</a>
 <ul>
-<li><a href="#org21568ec">3.1. Configure DNS server</a></li>
-<li><a href="#org5b011de">3.2. Backup the configuration</a></li>
+<li><a href="#orgfc5f1a8">3.1. Configure DNS server</a></li>
+<li><a href="#org7f243ad">3.2. Backup the configuration</a></li>
 </ul>
 </li>
-<li><a href="#org0e60b04">4. Attach OpenShift Container Platform Subscription</a></li>
-<li><a href="#org356d3ef">5. Set Up Repositories</a></li>
-<li><a href="#org36c0e47">6. Install the OpenShift Container Platform Package</a></li>
-<li><a href="#org95f5ed2">7. Proxy Setup</a></li>
-<li><a href="#orgc63a03b">8. Set up Password-less SSH Access</a></li>
-<li><a href="#orgdf37fac">9. Run the Installation Playbooks</a></li>
-<li><a href="#orgcf7c93d">10. Interact with OpenShift Container Platform</a></li>
-<li><a href="#org0ad7a1c">11. Understand Roles and Authentication</a></li>
-<li><a href="#org5f51c75">12. Adding hosts to existing cluster</a></li>
+<li><a href="#org3484b7b">4. Attach OpenShift Container Platform Subscription</a></li>
+<li><a href="#org2f42afb">5. Set Up Repositories</a></li>
+<li><a href="#org5e849eb">6. Install the OpenShift Container Platform Package</a></li>
+<li><a href="#org38fd01e">7. Proxy Setup</a></li>
+<li><a href="#org0cd2f3a">8. Set up Password-less SSH Access</a></li>
+<li><a href="#org0d5780a">9. Run the Installation Playbooks</a></li>
+<li><a href="#org585d6d4">10. Interact with OpenShift Container Platform</a></li>
+<li><a href="#org1a2c97e">11. Understand Roles and Authentication</a></li>
+<li><a href="#org66cb5e8">12. Adding hosts to existing cluster</a></li>
 </ul>
 </div>
 </div>
@@ -258,8 +258,8 @@ for the JavaScript code in this tag.
 Reference<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
 </p>
 
-<div id="outline-container-org5803c0a" class="outline-2">
-<h2 id="org5803c0a"><span class="section-number-2">1</span> Setup Hostname &amp; NIC</h2>
+<div id="outline-container-org733f85b" class="outline-2">
+<h2 id="org733f85b"><span class="section-number-2">1</span> Setup Hostname &amp; NIC</h2>
 <div class="outline-text-2" id="text-1">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">cd</span> /tmp; dsmc inc -su=no /etc/hosts<span style="color: #4f97d7;">)</span>
@@ -324,8 +324,8 @@ ip r | grep default
 </div>
 </div>
 
-<div id="outline-container-org942fd85" class="outline-2">
-<h2 id="org942fd85"><span class="section-number-2">2</span> <del>Add Application User</del></h2>
+<div id="outline-container-org6b78058" class="outline-2">
+<h2 id="org6b78058"><span class="section-number-2">2</span> <del>Add Application User</del></h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
 <pre class="src src-sh">useradd cungong
@@ -342,8 +342,8 @@ cungong <span style="color: #7590db;">ALL</span>=<span style="color: #4f97d7;">(
 </div>
 
 
-<div id="outline-container-org7fbc82a" class="outline-2">
-<h2 id="org7fbc82a"><span class="section-number-2">3</span> System Requirements</h2>
+<div id="outline-container-org6733759" class="outline-2">
+<h2 id="org6733759"><span class="section-number-2">3</span> System Requirements</h2>
 <div class="outline-text-2" id="text-3">
 <ul class="org-ul">
 <li>At least two physical or virtual RHEL 7+ machines, with fully qualified domain
@@ -399,8 +399,8 @@ docker-storage-setup</li>
 </ul>
 </div>
 
-<div id="outline-container-org21568ec" class="outline-3">
-<h3 id="org21568ec"><span class="section-number-3">3.1</span> Configure DNS server</h3>
+<div id="outline-container-orgfc5f1a8" class="outline-3">
+<h3 id="orgfc5f1a8"><span class="section-number-3">3.1</span> Configure DNS server</h3>
 <div class="outline-text-3" id="text-3-1">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Install bind</span>
@@ -541,8 +541,8 @@ dig @<span style="color: #a45bad;">192.168.23.53</span> -x <span style="color: #
 </div>
 </div>
 
-<div id="outline-container-org5b011de" class="outline-3">
-<h3 id="org5b011de"><span class="section-number-3">3.2</span> Backup the configuration</h3>
+<div id="outline-container-org7f243ad" class="outline-3">
+<h3 id="org7f243ad"><span class="section-number-3">3.2</span> Backup the configuration</h3>
 <div class="outline-text-3" id="text-3-2">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #ffd700; background-color: nil;">## </span><span style="color: #ffd700; background-color: nil;">Setup in x86 TSM server.</span>
@@ -582,8 +582,8 @@ dsmc q f
 </div>
 </div>
 </div>
-<div id="outline-container-org0e60b04" class="outline-2">
-<h2 id="org0e60b04"><span class="section-number-2">4</span> Attach OpenShift Container Platform Subscription</h2>
+<div id="outline-container-org3484b7b" class="outline-2">
+<h2 id="org3484b7b"><span class="section-number-2">4</span> Attach OpenShift Container Platform Subscription</h2>
 <div class="outline-text-2" id="text-4">
 <ol class="org-ol">
 <li><p>
@@ -639,8 +639,8 @@ provides OpenShift Container Platform.
 </div>
 </div>
 
-<div id="outline-container-org356d3ef" class="outline-2">
-<h2 id="org356d3ef"><span class="section-number-2">5</span> Set Up Repositories</h2>
+<div id="outline-container-org2f42afb" class="outline-2">
+<h2 id="org2f42afb"><span class="section-number-2">5</span> Set Up Repositories</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 On both master and node, use <code>subscription-manager</code> to enable the repositories
@@ -661,8 +661,8 @@ yum repolist all
 </div>
 </div>
 
-<div id="outline-container-org36c0e47" class="outline-2">
-<h2 id="org36c0e47"><span class="section-number-2">6</span> Install the OpenShift Container Platform Package</h2>
+<div id="outline-container-org5e849eb" class="outline-2">
+<h2 id="org5e849eb"><span class="section-number-2">6</span> Install the OpenShift Container Platform Package</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 The installer for OpenShift Container Platform is provided by the
@@ -690,8 +690,8 @@ shutdown -h now
 </div>
 </div>
 
-<div id="outline-container-org95f5ed2" class="outline-2">
-<h2 id="org95f5ed2"><span class="section-number-2">7</span> Proxy Setup</h2>
+<div id="outline-container-org38fd01e" class="outline-2">
+<h2 id="org38fd01e"><span class="section-number-2">7</span> Proxy Setup</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 Allow the client IP in firewall in proxy.myopenshift.com:
@@ -778,8 +778,8 @@ Login Succeeded
 </div>
 </div>
 </div>
-<div id="outline-container-orgc63a03b" class="outline-2">
-<h2 id="orgc63a03b"><span class="section-number-2">8</span> Set up Password-less SSH Access</h2>
+<div id="outline-container-org0cd2f3a" class="outline-2">
+<h2 id="org0cd2f3a"><span class="section-number-2">8</span> Set up Password-less SSH Access</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 Before running the installer on the master, set up password-less SSH access as
@@ -826,8 +826,8 @@ sudo systemctl restart sshd.serivce
 </div>
 </div>
 
-<div id="outline-container-orgdf37fac" class="outline-2">
-<h2 id="orgdf37fac"><span class="section-number-2">9</span> Run the Installation Playbooks</h2>
+<div id="outline-container-org0d5780a" class="outline-2">
+<h2 id="org0d5780a"><span class="section-number-2">9</span> Run the Installation Playbooks</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 See <a href="https://docs.openshift.com/container-platform/3.11/install/example_inventories.html#install-config-example-inventories">Example Inventory Files</a> and select the example that most closely matches the
@@ -1011,8 +1011,8 @@ basic authentication, user access, and routes.
 </div>
 </div>
 
-<div id="outline-container-orgcf7c93d" class="outline-2">
-<h2 id="orgcf7c93d"><span class="section-number-2">10</span> Interact with OpenShift Container Platform</h2>
+<div id="outline-container-org585d6d4" class="outline-2">
+<h2 id="org585d6d4"><span class="section-number-2">10</span> Interact with OpenShift Container Platform</h2>
 <div class="outline-text-2" id="text-10">
 <p>
 OpenShift Container Platform provides two command line utilities to interact
@@ -1037,8 +1037,8 @@ section, you will see how to create user accounts for accessing the console.
 </div>
 </div>
 
-<div id="outline-container-org0ad7a1c" class="outline-2">
-<h2 id="org0ad7a1c"><span class="section-number-2">11</span> Understand Roles and Authentication</h2>
+<div id="outline-container-org1a2c97e" class="outline-2">
+<h2 id="org1a2c97e"><span class="section-number-2">11</span> Understand Roles and Authentication</h2>
 <div class="outline-text-2" id="text-11">
 <p>
 By default, when installed for the first time, there are no roles or user
@@ -1083,8 +1083,8 @@ node, in the Ready status.
 </div>
 </div>
 
-<div id="outline-container-org5f51c75" class="outline-2">
-<h2 id="org5f51c75"><span class="section-number-2">12</span> Adding hosts to existing cluster</h2>
+<div id="outline-container-org66cb5e8" class="outline-2">
+<h2 id="org66cb5e8"><span class="section-number-2">12</span> Adding hosts to existing cluster</h2>
 <div class="outline-text-2" id="text-12">
 <p>
 Add the new nodes to DNS record, setup password-less ssh access to new nodes.
@@ -1282,7 +1282,7 @@ The reference link is:
 </div></div>
 <div id="postamble" class="status">
 <p class="author">Author: 龔存</p>
-<p class="date">Created: 2020-02-26 周三 14:12</p>
+<p class="date">Created: 2020-03-05 周四 21:54</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

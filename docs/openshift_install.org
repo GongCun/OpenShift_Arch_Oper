@@ -1,0 +1,782 @@
+#+TITLE: OpenShift Installation Guide
+#+AUTHOR: 龔存
+
+Reference[fn:1]
+
+* Setup Hostname & NIC
+  #+begin_src sh
+    (cd /tmp; dsmc inc -su=no /etc/hosts)
+    # Delete any hostname except 127.0.0.1
+    sudo vi /etc/hosts
+    # Set the hostname to FQDN
+    sudo vi /etc/hostname
+    hostnamectl set-hostname <FQDN hostname>
+
+    cat /etc/resolv.conf
+    search myopenshift.com
+    nameserver 192.168.23.53
+
+
+    # Add below properties in /etc/sysconfig/network-scripts/ifcfg-<interface_name>
+    cd /etc/sysconfig/network-scripts
+    mv ./ifcfg-ens224 /tmp 2>/dev/null
+
+    # Fix upstream DNS
+    nmcli con mod ens192 ipv4.dns 192.168.23.53
+    # systemctl restart NetworkManager
+    # systemctl restart dnsmasq
+    # cat /etc/dnsmasq.d/origin-upstream-dns.conf
+    # cat /etc/resolv.conf
+
+    vi /etc/sysconfig/network-scripts/ifcfg-ens192
+    NM_CONTROLLED=yes
+    PEERDNS=yes
+
+    # Add the persistent route
+    cd /etc/sysconfig/network-scripts
+    cat >./route-ens192 <<\EOF
+    ADDRESS0=0.0.0.0
+    NETMASK0=0.0.0.0
+    GATEWAY0=192.168.16.1
+    EOF
+
+    # Ensure the tsm backup is valid
+    cat /opt/tivoli/tsm/client/ba/bin/dsm.sys
+    SERVERNAME tsm
+    PASSWORDACCESS GENERATE
+    NODENAME master
+    TCPSERVERADDRESS pptsmsvr
+
+    cat /opt/tivoli/tsm/client/ba/bin/dsm.opt
+    SERVERNAME TSM
+
+    # Reboot then check the default route and DNS conf
+    reboot
+    cat /etc/resolv.conf
+    ip r
+    dsmc q f
+    cd /etc/sysconfig/network-scripts
+    cat ./route-ens192
+    vi /etc/sysconfig/network-scripts/ifcfg-ens192
+    reboot
+
+    # Check the default gateway after reboot
+    ip r | grep default
+  #+end_src
+
+* +Add Application User+
+  #+begin_src sh
+    useradd cungong
+    passwd cungong
+
+    ssh-copy-id cungong@<host>
+
+    visudo
+    Defaults timestamp_timeout=120
+    cungong ALL=(ALL) ALL
+  #+end_src
+
+
+* System Requirements 
+
+
+
+- At least two physical or virtual RHEL 7+ machines, with fully qualified domain
+  names (either real world or within a network) and password-less SSH access to
+  each other. This guide uses *master.openshift.poc.bocmo.com* and
+  *node{/n/}.openshift.poc.bocmo.com*. These machines must be able to ping each
+  other using these domain names.
+
+- A valid Red Hat subscription.
+
+- Wildcard DNS resolution that resolves your domain to the IP of the node. So,
+  an entry like the following in your DNS server:
+  #+begin_example
+    master.myopenshift.com.   IN  A      <master_ip>
+    node.myopenshift.com.     IN  A      <worker_node_ip>
+    infra.myopenshift.com.    IN  A      <infra_node_ip>
+    *.apps.myopenshift..com.  IN  CNAME  infra.myopenshift.com.
+  #+end_example
+
+  /Why the apps in your domain name for the wildcard entry?/
+
+  When using OpenShift Container Platform to deploy applications, an internal
+  router needs to proxy incoming requests to the corresponding application pod.
+  By using *apps* as part of the application domains, the application traffic is
+  accurately marked to the right pod.
+
+
+Master:
+- 2 vCPU
+- Minimum 8 GB RAM
+- Minimum 30 GB hard disk space
+
+Nodes:
+- 1 vCPU
+- Minimum 8 GB RAM
+- Minimum 15 GB hard disk space
+- An additional minimum 15 GB unallocated space to be configured using
+  docker-storage-setup
+
+** Configure DNS server
+   #+begin_src sh
+     # Install bind
+     subscription-manager clean
+     rpm -Uvh http://qlsatsv1/pub/katello-ca-consumer-latest.noarch.rpm
+     subscription-manager register --org="Bank_of_China_Macau_Branch" --activationkey="UATKEY"
+     subscription-manager refresh
+     subscription-manager list --available
+     subscription-manager attach --pool=40285d696ef9a19d016fc5d73e593dd5
+     yum install -y bind
+     yum install -y bind-utils
+
+     # Make named daemon listen on interface.
+     vi /etc/named.conf
+     listen-on port 53 { 127.0.0.1; 192.168.23.53; };
+
+     service named start
+     service named status
+
+     netstat -ant | grep -w 53
+     # '-t' means tcp protocol
+
+     # Firewall setting
+     firewall-cmd --get-active-zones
+     firewall-cmd --zone=public --add-port=53/tcp --permanent
+     firewall-cmd --zone=public --add-port=53/udp --permanent
+     # Or
+     iptables -I INPUT  -i ens192 -p tcp --dport 53 -j ACCEPT
+     iptables -I INPUT  -i ens192 -p udp --dport 53 -j ACCEPT
+
+     # Configure in Name Server
+     cat /etc/hosts
+     127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+     127.0.1.1   ns.myopenshift.com dloseds1
+
+     vi /etc/named.myopenshift.com
+     ;
+     ; BIND data file for openshift.com
+     ;
+     $TTL    3H
+     @       IN      SOA     ns.myopenshift.com. root.ns.myopenshift.com.  ( 1 3H 1H 1W 1H )
+     ;
+
+     @                         IN      NS      ns.myopenshift.com.
+     ns.myopenshift.com.       IN      A       192.168.23.53
+
+     dlosema1                  IN      A       192.168.23.31
+     dlosein1                  IN      A       192.168.23.51
+     proxy.myopenshift.com.    IN      A       192.168.19.19
+     master.myopenshift.com.   IN      A       192.168.23.31
+     node.myopenshift.com.     IN      A       192.168.23.51
+     ,*.apps.myopenshift.com.   300     IN      A       192.168.23.32
+     ,*.apps.myopenshift.com.   300     IN      A       192.168.23.33
+     ,*.apps.myopenshift.com.   300     IN      A       192.168.23.34
+
+     vi named.23.168.192.in-addr.arpa
+     [root@dloseds1 etc]# cat named.23.168.192.in-addr.arpa
+     ;
+     ; BIND data file for myopenshift.com
+     ;
+     $TTL    3H
+     @       IN      SOA     ns.myopenshift.com. root.ns.myopenshift.com.  ( 1 3H 1H 1W 1H )
+     ;
+
+     @                       IN      NS      ns.myopenshift.com.
+     31                      IN      PTR     master.myopenshift.com.
+     51                      IN      PTR     node.myopenshift.com.
+     32                      300     IN      PTR     apps.myopenshift.com.
+     33                      300     IN      PTR     apps.myopenshift.com.
+     34                      300     IN      PTR     apps.myopenshift.com.
+
+
+     vi named.rfc1912.zones
+     ...
+     zone "myopenshift.com" IN {
+         type master;
+         file "/etc/named.myopenshift.com";
+     };
+
+     zone "23.168.192.in-addr.arpa" IN {
+         type master;
+         file "/etc/named.23.168.192.in-addr.arpa";
+     };
+
+
+     chmod 644 /etc/named.myopenshift.com
+
+     vi /etc/named.conf
+         ...
+         rrset-order {
+             class IN type A name "*.apps.myopenshift.com" order random;
+         };
+     # fixed:  Always returns matching records in the same order (BIND 9.3.2 doesn't yes support)
+     # random: Returns matching records in random order
+     # cyclic: Returns matching records in cyclic (round-robin) order
+
+     service named restart
+     # Make sure DNS server starts after we reboot our RHEL7 linux server:
+     systemctl enable named
+
+     vi /etc/sysconfig/named
+     OPTIONS="-4"
+     DISABLE_ZONE_CHECKING="yes"
+
+     # Fix RHEL 7.6 bug:
+     # setroubleshoot: SELinux is preventing /usr/sbin/named from search access on
+     # the directory net.
+     vi /etc/selinux/config
+     Set the line SELINUX=enforcing to SELINUX=disabled
+
+     reboot
+
+     # debug
+     tail -f /var/log/messages
+
+     ## Client
+     cat /etc/resolv.conf
+     search myopenshift.com
+     nameserver 192.168.23.53
+
+     vi /etc/nsswitch.conf
+     hosts:      files dns myhostname
+
+     ## Test
+     # A type
+     dig @192.168.23.53 master.myopenshift.com
+     dig @192.168.23.53 node.apps.myopenshift.com
+     dig @192.168.23.53 node.infra.myopenshift.com
+     # PTR type (reverse lookup)
+     dig @192.168.23.53 -x 192.168.23.31
+     dig @192.168.23.53 -x 192.168.23.32
+     dig @192.168.23.53 -x 192.168.23.33
+     dig @192.168.23.53 -x 192.168.23.34
+     dig @192.168.23.53 -x 192.168.23.51
+     dig @192.168.23.53 -x 192.168.23.52
+   #+end_src
+
+[fn:1] The reference link is:
+https://docs.openshift.com/container-platform/3.11/getting_started/install_openshift.html 
+
+** Backup the configuration
+
+   #+begin_src sh
+     ## Setup in x86 TSM server.
+     https://pptsmsvr.bocmo.com:11090/oc
+     admin/admin
+     right-up corner -> command line
+     reg node <node-name> <password> do=development-files passexp=0 maxnummp=4
+     # node[234] password is accept
+     update admin <node-name> forcepwreset=no passexp=0
+     # UPDate Node <node-name> <password> PASSExp=0
+
+     ## Setup in client.
+     mount qunimsvr:/install /mnt -o vers=3
+     cd /mnt/tsmclient8161_linuxx86
+
+     rpm -ivh gskcrypt64-8.0.55.2.linux.x86_64.rpm \
+         gskssl64-8.0.55.2.linux.x86_64.rpm \
+         TIVsm-BA.x86_64.rpm TIVsm-API64.x86_64.rpm
+
+     cat >>/opt/tivoli/tsm/client/ba/bin/dsm.sys <<\EOF
+     SERVERNAME tsm
+     PASSWORDACCESS GENERATE
+     NODENAME         <node-name>
+     TCPSERVERADDRESS pptsmsvr
+     EOF
+
+     cat >>/opt/tivoli/tsm/client/ba/bin/dsm.opt <<\EOF
+     SERVERNAME TSM
+     EOF
+
+     cd /tmp
+     dsmc
+     dsmc inc /etc/named.*
+     dsmc q f
+   #+end_src
+* Attach OpenShift Container Platform Subscription
+
+1. As root on the target machines (both master and node), use
+   =subscription-manager= to register the systems with Red Hat.
+
+   #+begin_src sh
+     vi /etc/hosts
+     192.168.22.233  qlsatsv1.bocmo.com qlsatsv1
+
+     subscription-manager clean
+     rpm -Uvh http://qlsatsv1/pub/katello-ca-consumer-latest.noarch.rpm
+     subscription-manager register --org="Bank_of_China_Macau_Branch" --activationkey="UATKEY,OpenShift_Key" --force
+
+     ## Fix "HTTP error (422 - Unknown): The DMI UUID of this host...matches other registered hosts"
+     [root@client ~]# vi /etc/rhsm/facts/uuid.facts
+     {"dmi.system.uuid": "customuuid"}
+
+     * customuuid = hostname which is unique for every machine, i.e. master.myopenshift.com
+
+   #+end_src
+
+2. Pull the latest subscription data from Red Hat Subscription Manager (RHSM):
+   #+begin_src sh
+     subscription-manager refresh
+   #+end_src
+
+3. List the available subscriptions.
+
+   #+begin_src sh
+     subscription-manager list --available --matches "*openshift*"
+   #+end_src
+
+4. Find the pool ID that provides OpenShift Container Platform subscription and
+   attach it. Replace the string *<pool_id>* with the pool ID of the pool that
+   provides OpenShift Container Platform. 
+
+   #+begin_src sh
+     subscription-manager attach --pool=<pool_id>
+   #+end_src
+
+* Set Up Repositories
+
+On both master and node, use =subscription-manager= to enable the repositories
+that are necessary in order to install OpenShift Container Platform. You may
+have already enabled the first two repositories in this example. 
+
+#+begin_src sh
+  subscription-manager repos --list
+  subscription-manager repos --disable="*"
+  subscription-manager repos --enable="rhel-7-server-rpms" \
+                       --enable="rhel-7-server-extras-rpms" \
+                       --enable="rhel-7-server-ose-3.11-rpms" \
+                       --enable="rhel-7-server-ansible-2.6-rpms"
+  yum repolist all
+#+end_src
+
+* Install the OpenShift Container Platform Package
+
+The installer for OpenShift Container Platform is provided by the
+openshift-ansible package. Install it using yum on the master after running yum
+update. 
+#+begin_src sh
+  yum -y install wget git net-tools bind-utils iptables-services bridge-utils \
+      bash-completion kexec-tools sos psacct telnet
+
+  yum -y install openshift-ansible
+#+end_src
+
+Now install a container engine:
+#+begin_src sh
+  yum -y install cri-o
+  yum -y install docker
+  shutdown -h now
+  # take snapshot
+#+end_src
+
+* Proxy Setup
+Allow the client IP in firewall in proxy.myopenshift.com:
+#+begin_src sh
+  iptables -I INPUT <id> -s <ClientIP>/32 -i ethX -p tcp -m tcp --dport 8888 -j ACCEPT
+#+end_src
+
+Allow the client IP in tinyproxy configure:
+#+begin_src sh
+  vi /etc/tinyproxy/tinyproxy.conf
+  Allow <Client IP>
+
+  /etc/init.d/tinyproxy restart
+#+end_src
+
+Setup the git proxy in client:
+#+begin_src sh
+  cat >~/.gitconfig
+  # This is Git's per-user configuration file.
+  [user]
+  # Please adapt and uncomment the following lines:
+  #       name = unknown
+  #       email = mo140333@mo.ad.boc-ap.com
+  [core]
+  autocrlf = true
+  editor = vi
+  [user]
+  name = Cun Gong
+  email = gongcunjust@gmail.com
+  [http]
+  proxy = 192.168.19.19:8888
+  [color]
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  ui = true
+  pager = true
+#+end_src
+
+Setup the docker proxy in client:
+#+begin_src sh
+  # Configure Docker to use a proxy server on master & node
+  mkdir -p ~/.docker
+  cat > ~/.docker/config.json <<\EOF
+  {
+      "proxies":
+      {
+          "default":
+          {
+              "httpProxy": "http://proxy.myopenshift.com:8888",
+              "httpsProxy": "http://proxy.myopenshift.com:8888",
+              "noProxy": "*.bocmo.com,.bocmacau.com,.myopenshift.com"
+          }
+      }
+  }
+  EOF
+
+  mkdir -p /etc/systemd/system/docker.service.d
+  cat >/etc/systemd/system/docker.service.d/https-proxy.conf <<\EOF
+  [Service]
+  Environment="HTTP_PROXY=http://proxy.myopenshift.com:8888/" "NO_PROXY=localhost,127.0.0.1,.bocmo.com,.bocmacau.com,.myopenshift.com"
+  EOF
+
+  systemctl daemon-reload
+  systemctl restart docker
+  systemctl show --property=Environment docker
+  docker login https://registry.redhat.io/v2/
+  Username: user
+  Password: password
+  Login Succeeded
+
+#+end_src
+* Set up Password-less SSH Access
+Before running the installer on the master, set up password-less SSH access as
+this is required by the installer to gain access to the machines. On the master,
+run the following command.
+#+begin_src sh
+  #ssh-keygen
+  ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+
+#+end_src
+
+Distribute your SSH keys using a =bash= loop:
+#+begin_src sh
+  # Disable the iptable in all nodes. (no need)
+  # systemctl status firewalld
+  # systemctl stop firewalld
+
+  while read host; do
+      ssh-copy-id -i ~/.ssh/id_rsa.pub $host
+  done <<EOF
+  master.myopenshift.com
+  infra.myopenshift.com
+  node.myopenshift.com
+  EOF
+
+  # If cipher or ssh login error, update the /etc/ssh/sshd_config or
+  # /etc/pam.d/sshd, then restart sshd after fixing the sshd_config
+  sudo systemctl restart sshd.serivce
+
+  # Check
+  while read host; do
+      ssh -n $host hostname
+  done <<EOF
+  master.myopenshift.com
+  infra.myopenshift.com
+  node.myopenshift.com
+  EOF
+#+end_src
+
+* Run the Installation Playbooks 
+
+See [[https://docs.openshift.com/container-platform/3.11/install/example_inventories.html#install-config-example-inventories][Example Inventory Files]] and select the example that most closely matches the
+desired cluster configurations. 
+
++------------------------+------------------------------+
+| Host Name              | Component/Role(s) to Install |
++------------------------+------------------------------+
+| master.myopenshift.com | Master, etcd, and node       |
++------------------------+------------------------------+
+| node.myopenshift.com   | Computer node                |
++------------------------+------------------------------+
+| infra.myopenshift.com  | Infra.   node                |
++------------------------+------------------------------+
+
+You can see these example hosts present in the *[master]*, *[etcd]* and
+*[nodes]* sections of the following example inventory files.
+#+begin_src sh
+  cd /etc/ansible
+  cp /usr/share/doc/openshift-ansible-docs-3.11.*/docs/example-inventories/hosts.example .
+  cp hosts hosts.bk
+  vi hosts
+#+end_src
+
+Change the =/etc/ansible/hosts=:
+#+begin_example
+  # Create an OSEv3 group that contains the masters and nodes groups
+  [OSEv3:children]
+  masters
+  nodes
+  etcd
+
+  [masters]
+  master.myopenshift.com
+
+  [etcd]
+  master.myopenshift.com
+
+  [nodes]
+  master.myopenshift.com openshift_node_group_name='node-config-master'
+  node.myopenshift.com openshift_node_group_name='node-config-compute'
+  infra.myopenshift.com openshift_node_group_name='node-config-infra'
+
+  [OSEv3:vars]
+  ansible_user=root
+
+  # Specify the deployment type. Valid values are origin and openshift-enterprise.
+  #openshift_deployment_type=origin
+  openshift_deployment_type=openshift-enterprise
+
+
+  ###############################################################################
+  # Additional configuration variables follow                                   #
+  ###############################################################################
+
+  # Debug level for all OpenShift components (Defaults to 2)
+  debug_level=2
+
+  # htpasswd auth
+  # uncomment the following to enable htpasswd authentication; defaults to DenyAllPasswordIdentityProvider
+  openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
+
+  # Allow all auth
+  openshift_master_identity_providers=[{'name': 'allow_all', 'login': 'true', 'challenge': 'true', 'kind': 'AllowAllPasswordIdentityProvider'}]
+
+
+  openshift_docker_additional_registries=hub.docker.com
+  openshift_master_default_subdomain=apps.myopenshift.com
+  openshift_disable_check=memory_availability
+
+
+  oreg_auth_user=user
+  oreg_auth_password=password
+
+  openshift_http_proxy=http://tinyproxy:password@proxy.myopenshift.com:8888
+  openshift_https_proxy=http://tinyproxy:password@proxy.myopenshift.com:8888
+  openshift_no_proxy='localhost,127.0.0.1,.bocmo.com,.bocmacau.com,.myopenshift.com'
+#+end_example
+
+Change to the playbook directory and run the prerequisites.yml playbook using
+your inventory file: 
+#+begin_src sh
+  # Install OpenShift
+  cd /usr/share/ansible/openshift-ansible
+  ansible-playbook -i /etc/ansible/hosts playbooks/prerequisites.yml
+  ...
+  Initialization  : Complete (0:01:13)
+
+  ansible-playbook -i /etc/ansible/hosts playbooks/deploy_cluster.yml
+
+  # Monitor
+  tail -f /var/log/messages
+
+  ### Increase the /var space if necessary
+  # I. Increase the /var space
+  export LC_ALL=C
+  lsblk
+  fdisk /dev/sda
+    n(ew) -> p(rimary) -> 3 (partition#) -> default value -> w
+  reboot
+  lsblk
+  vgextend rootvg /dev/sda3
+  lvextend -L +15G /dev/rootvg/var
+  xfs_growfs /var
+
+  # II. Increase the /var space with additional disk
+  # 1) Add the new hdisk in vCenter
+  # 2) Scan the new hdisk
+  echo "- - -" >/sys/class/scsi_host/host0/scan
+  ls /dev/sd*
+  # 3) Extend rootvg
+  vgextend rootvg /dev/sdc
+  # 4) Resize the lv of /var
+  lvresize -L +50G /dev/mapper/rootvg-var
+  # 5) Extend the FS
+  xfs_growfs /dev/mapper/rootvg-var
+
+  # Shutdown the VM then increase the memory in vCenter.
+
+  # Re-execute the check & deploy, reboot the nodes if any problem. Make sure the
+  # network card is configured correctly
+  cd /usr/share/ansible/openshift-ansible
+  ansible-playbook -i /etc/ansible/hosts playbooks/prerequisites.yml
+
+  ansible-playbook -i /etc/ansible/hosts playbooks/deploy_cluster.yml
+  # Error: failed to run Kubelet: failed to initialize client certificate
+  # Resolve:
+  systemctl status atomic-openshift-node.service
+
+  journalctl -xe
+  ...
+  Loading cert/key pair from "/etc/origin/node/certificates kubelet-client-current.pem"
+  failed to run Kubelet: failed to initialize client certificate manager
+
+  cd /etc/origin/node/certificates
+  \rm kubelet-client-current.pem
+  systemctl restart atomic-openshift-node.service
+  systemctl status atomic-openshift-node.service
+
+#+end_src
+
+After a successful install, but before you add a new project, you must set up
+basic authentication, user access, and routes. 
+
+* Interact with OpenShift Container Platform
+
+OpenShift Container Platform provides two command line utilities to interact
+with it.
+- oc ::  for normal project and application management
+- oc adm :: for administrative tasks. When running oc adm commands, you should
+            run them only from the first master listed in the Ansible host
+            inventory file, by default =/etc/ansible/hosts=. 
+
+Use =oc --help= and =oc adm --help= to view all available options.
+
+In addition, you can use the web console to manage projects and applications.
+The web console is available at https://<master_fqdn>:8443/console. In the next
+section, you will see how to create user accounts for accessing the console. 
+
+* Understand Roles and Authentication
+By default, when installed for the first time, there are no roles or user
+accounts created in OpenShift Container Platform, so you need to create them.
+You have the option to either create new roles or define a policy that allows
+anyone to log in (to start you off). 
+
+Before you do anything else, log in at least one time with the default
+system:admin user. On the master, run the following command: 
+#+begin_src sh
+  oc login -u system:admin
+#+end_src
+            
+/All commands from now on should be executed on the master, unless otherwise
+indicated./
+
+By logging in at least one time with this account, you will create the
+*system:admin* user’s configuration file, which will allow you to log in
+subsequently. 
+
+There is no password for this system account.
+
+Run the following command to verify that OpenShift Container Platform was
+installed and started successfully. You will get a listing of the master and
+node, in the Ready status. 
+#+begin_src sh
+  oc get nodes
+#+end_src
+
+* Adding hosts to existing cluster
+Add the new nodes to DNS record, setup password-less ssh access to new nodes.
+
+Backup the =/etc/ansible/hosts= file:
+#+begin_src sh
+  dsmc inc -su=no /etc/ansible/hosts
+  cp -p hosts hosts.2020Feb20
+#+end_src
+
+Edit your =/etc/ansible/hosts= file and add new_<host_type> to the
+*[OSEv3:children]* section, then create the *[new_<host_type>]* section:
+#+begin_src diff
+
+  --- hosts.2020Feb20     2020-02-19 17:41:56.249433828 +0800
+  +++ hosts       2020-02-20 10:05:18.742465648 +0800
+  @@ -3,6 +3,7 @@
+   masters
+   nodes
+   etcd
+  +new_nodes
+
+   [masters]
+   master.myopenshift.com
+  @@ -15,6 +16,12 @@
+   node.myopenshift.com openshift_node_group_name='node-config-compute'
+   infra.myopenshift.com openshift_node_group_name='node-config-infra'
+
+  +[new_nodes]
+  +node2.myopenshift.com openshift_node_group_name='node-config-compute'
+  +node3.myopenshift.com openshift_node_group_name='node-config-compute'
+  +node4.myopenshift.com openshift_node_group_name='node-config-compute'
+  +
+  +
+   [OSEv3:vars]
+   ansible_user=root
+
+#+end_src
+
+Detail can see [[https://docs.openshift.com/container-platform/3.11/install_config/adding_hosts_to_existing_cluster.html][here]].
+
+Get the internal docker-registry IP:
+#+begin_src sh
+  oc describe svc/docker-registry -n default
+#+end_src
+
+Setup the proxy in new nodes, add the /docker-registry-ip/ in [noProxy] section:
+
+#+begin_example
+  vi ~/.docker/config.json
+  {
+          ...
+
+          "proxies":
+          {
+              "default":
+              {
+                  "httpProxy": "http://proxy.myopenshift.com:8888",
+                  "httpsProxy": "http://proxy.myopenshift.com:8888",
+                  "noProxy": "*.bocmo.com,.bocmacau.com,.myopenshift.com,172.30.151.202"
+              }
+          }
+  }
+
+  vi /etc/sysconfig/docker
+  ...
+  NO_PROXY='...,172.30.151.202'
+
+  vi /etc/systemd/system/docker.service.d/https-proxy.conf
+  ...
+  "NO_PROXY=...,172.30.151.202"
+#+end_example
+
+Restart docker service and test login:
+#+begin_src sh
+  systemctl daemon-reload
+  systemctl restart docker
+  systemctl show --property=Environment docker
+  docker login https://registry.redhat.io/v2/
+  Username: user
+  Password: password
+
+#+end_src
+
+Run the following command:
+#+begin_src sh
+  cd /usr/share/ansible/openshift-ansible
+  ansible-playbook -i /etc/ansible/hosts playbooks/openshift-node/scaleup.yml
+#+end_src
+
+The final components:
+
+#+begin_src sh
+  # Login in master node
+  oc login -u system:admin
+  oc get nodes
+
+#+end_src
+
++------------------------+------------------------------+
+| Host Name              | Component/Role(s) to Install |
++------------------------+------------------------------+
+| master.myopenshift.com | Master, etcd, and node       |
++------------------------+------------------------------+
+| node.myopenshift.com   | Computer node                |
++------------------------+------------------------------+
+| node2.myopenshift.com  | Computer node                |
++------------------------+------------------------------+
+| node3.myopenshift.com  | Computer node                |
++------------------------+------------------------------+
+| node4.myopenshift.com  | Computer node                |
++------------------------+------------------------------+
+| infra.myopenshift.com  | Infra.   node                |
++------------------------+------------------------------+
