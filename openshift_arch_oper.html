@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-03-04 周三 22:00 -->
+<!-- 2020-03-05 周四 09:24 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Architecting and Operating OpenShift Cluster</title>
@@ -256,65 +256,65 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orga45f673">1. Networking</a>
+<li><a href="#org6f858e4">1. Networking</a>
 <ul>
-<li><a href="#org1055254">1.1. Overview</a></li>
-<li><a href="#org882981a">1.2. SDN Flows Inside Nodes</a></li>
+<li><a href="#org91123ee">1.1. Overview</a></li>
+<li><a href="#orgb69acf9">1.2. SDN Flows Inside Nodes</a></li>
 </ul>
 </li>
-<li><a href="#org3a142ed">2. Build &amp; deploy docker image</a>
+<li><a href="#org5f7ad41">2. Build &amp; deploy docker image</a>
 <ul>
-<li><a href="#org04dc1e4">2.1. Setup the proxy</a></li>
-<li><a href="#orgf31bb05">2.2. Create docker image</a></li>
-<li><a href="#org59152d9">2.3. Delete container &amp; images</a></li>
-<li><a href="#org6590b5c">2.4. Push docker images to OpenShift internal registry</a></li>
+<li><a href="#org8a0b427">2.1. Setup the proxy</a></li>
+<li><a href="#orgbe36d68">2.2. Create docker image</a></li>
+<li><a href="#org212e4e4">2.3. Delete container &amp; images</a></li>
+<li><a href="#org7dc2d1b">2.4. Push docker images to OpenShift internal registry</a></li>
 </ul>
 </li>
-<li><a href="#orgc0eff83">3. Re-deploy the application</a></li>
-<li><a href="#orgf149a9f">4. Getting traffic into a cluster</a>
+<li><a href="#orgcb155d0">3. Re-deploy the application</a></li>
+<li><a href="#org990f448">4. Getting traffic into a cluster</a>
 <ul>
-<li><a href="#org539f19c">4.1. Allow user with cluster admin role</a></li>
-<li><a href="#org6355196">4.2. Defining the public IP range</a></li>
-<li><a href="#orgbe4de8b">4.3. Create a Project and Service</a></li>
+<li><a href="#org3a741f0">4.1. Allow user with cluster admin role</a></li>
+<li><a href="#org03f7e62">4.2. Defining the public IP range</a></li>
+<li><a href="#org67dc1cc">4.3. Create a Project and Service</a></li>
 </ul>
 </li>
-<li><a href="#orgc84d8ce">5. Test pod services &amp; attach NFS</a>
+<li><a href="#org8a22762">5. Test pod services &amp; attach NFS</a>
 <ul>
-<li><a href="#org0d85460">5.1. Configure NFS server/client</a></li>
-<li><a href="#org5d15254">5.2. Configure OpenShift persistent storage (NFS)</a></li>
+<li><a href="#orgfb343b5">5.1. Configure NFS server/client</a></li>
+<li><a href="#orgf95f5d3">5.2. Configure OpenShift persistent storage (NFS)</a></li>
 </ul>
 </li>
-<li><a href="#org7b8fddb">6. Migrate the PuzzleBrain to OpenShift</a>
+<li><a href="#org9b8a70f">6. Migrate the PuzzleBrain to OpenShift</a>
 <ul>
-<li><a href="#org0d34c19">6.1. Install build tools</a></li>
-<li><a href="#org8420cfb">6.2. Build PuzzleBrain</a>
+<li><a href="#org55289b1">6.1. Install build tools</a></li>
+<li><a href="#org7c97e62">6.2. Build PuzzleBrain</a>
 <ul>
-<li><a href="#org485d0e6">6.2.1. Install rapidjson</a></li>
-<li><a href="#org32bc5a6">6.2.2. Install PuzzleBrain</a></li>
-<li><a href="#org7b1e2b7">6.2.3. Build puzzle docker image</a></li>
-<li><a href="#org7b53fe2">6.2.4. Testing in intra-net</a></li>
-<li><a href="#org6fa834c">6.2.5. Setup pod-autoscalinag</a></li>
-<li><a href="#org5e879f7">6.2.6. Create the puzzle-master-node pod</a></li>
-<li><a href="#orgc83c193">6.2.7. Create the front-end web pod</a></li>
+<li><a href="#org78d2787">6.2.1. Install rapidjson</a></li>
+<li><a href="#org87c0773">6.2.2. Install PuzzleBrain</a></li>
+<li><a href="#orgcf63b3f">6.2.3. Build puzzle docker image</a></li>
+<li><a href="#org3448496">6.2.4. Testing in intra-net</a></li>
+<li><a href="#orga0dae6d">6.2.5. Setup pod-autoscalinag</a></li>
+<li><a href="#org57bda92">6.2.6. Create the puzzle-master-node pod</a></li>
+<li><a href="#org0b91e86">6.2.7. Create the front-end web pod</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org5acc688">7. Connect to the external database</a>
+<li><a href="#org07141c2">7. Connect to the external database</a>
 <ul>
-<li><a href="#orge9fbe1d">7.1. Configure the PostgreSQL</a></li>
-<li><a href="#org57dadd9">7.2. Using <code>psycopg2</code> with PostgreSQL</a></li>
+<li><a href="#org222f220">7.1. Configure the PostgreSQL</a></li>
+<li><a href="#org615a62e">7.2. Using <code>psycopg2</code> with PostgreSQL</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orga45f673" class="outline-2">
-<h2 id="orga45f673"><span class="section-number-2">1</span> Networking</h2>
+<div id="outline-container-org6f858e4" class="outline-2">
+<h2 id="org6f858e4"><span class="section-number-2">1</span> Networking</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org1055254" class="outline-3">
-<h3 id="org1055254"><span class="section-number-3">1.1</span> Overview</h3>
+<div id="outline-container-org91123ee" class="outline-3">
+<h3 id="org91123ee"><span class="section-number-3">1.1</span> Overview</h3>
 <div class="outline-text-3" id="text-1-1">
 <dl class="org-dl">
 <dt>Cluster</dt><dd>The set of machines in the cluster. i.e. the Masters and the Nodes.</dd>
@@ -360,8 +360,8 @@ The following diagram shows all of the pieces involved with external access:
 </div>
 </div>
 
-<div id="outline-container-org882981a" class="outline-3">
-<h3 id="org882981a"><span class="section-number-3">1.2</span> SDN Flows Inside Nodes</h3>
+<div id="outline-container-orgb69acf9" class="outline-3">
+<h3 id="orgb69acf9"><span class="section-number-3">1.2</span> SDN Flows Inside Nodes</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 In the default configuration, the cluster network is the <b>10.128.0.0/14</b>
@@ -509,12 +509,12 @@ Pod to external host
 </div>
 </div>
 
-<div id="outline-container-org3a142ed" class="outline-2">
-<h2 id="org3a142ed"><span class="section-number-2">2</span> Build &amp; deploy docker image</h2>
+<div id="outline-container-org5f7ad41" class="outline-2">
+<h2 id="org5f7ad41"><span class="section-number-2">2</span> Build &amp; deploy docker image</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org04dc1e4" class="outline-3">
-<h3 id="org04dc1e4"><span class="section-number-3">2.1</span> Setup the proxy</h3>
+<div id="outline-container-org8a0b427" class="outline-3">
+<h3 id="org8a0b427"><span class="section-number-3">2.1</span> Setup the proxy</h3>
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
 <pre class="src src-sh">oc describe svc/docker-registry -n default
@@ -556,8 +556,8 @@ Docker Root Dir: /var/lib/docker
 </div>
 </div>
 
-<div id="outline-container-orgf31bb05" class="outline-3">
-<h3 id="orgf31bb05"><span class="section-number-3">2.2</span> Create docker image</h3>
+<div id="outline-container-orgbe36d68" class="outline-3">
+<h3 id="orgbe36d68"><span class="section-number-3">2.2</span> Create docker image</h3>
 <div class="outline-text-3" id="text-2-2">
 <div class="org-src-container">
 <pre class="src src-sh">mkdir -p /opt/docker/test
@@ -606,8 +606,8 @@ curl -v -k localhost:32769
 </div>
 </div>
 
-<div id="outline-container-org59152d9" class="outline-3">
-<h3 id="org59152d9"><span class="section-number-3">2.3</span> Delete container &amp; images</h3>
+<div id="outline-container-org212e4e4" class="outline-3">
+<h3 id="org212e4e4"><span class="section-number-3">2.3</span> Delete container &amp; images</h3>
 <div class="outline-text-3" id="text-2-3">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Delete containers</span>
@@ -623,8 +623,8 @@ docker rmi rhel7:v2
 </div>
 </div>
 
-<div id="outline-container-org6590b5c" class="outline-3">
-<h3 id="org6590b5c"><span class="section-number-3">2.4</span> Push docker images to OpenShift internal registry</h3>
+<div id="outline-container-org7dc2d1b" class="outline-3">
+<h3 id="org7dc2d1b"><span class="section-number-3">2.4</span> Push docker images to OpenShift internal registry</h3>
 <div class="outline-text-3" id="text-2-4">
 <div class="org-src-container">
 <pre class="src src-sh">oc login -u system:admin -n default
@@ -674,8 +674,8 @@ curl -v -k myapp-hello.apps.myopenshift.com
 </div>
 </div>
 
-<div id="outline-container-orgc0eff83" class="outline-2">
-<h2 id="orgc0eff83"><span class="section-number-2">3</span> Re-deploy the application</h2>
+<div id="outline-container-orgcb155d0" class="outline-2">
+<h2 id="orgcb155d0"><span class="section-number-2">3</span> Re-deploy the application</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Create new image:
@@ -782,12 +782,12 @@ oc get pods -o wide
 </div>
 </div>
 
-<div id="outline-container-orgf149a9f" class="outline-2">
-<h2 id="orgf149a9f"><span class="section-number-2">4</span> Getting traffic into a cluster</h2>
+<div id="outline-container-org990f448" class="outline-2">
+<h2 id="org990f448"><span class="section-number-2">4</span> Getting traffic into a cluster</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-org539f19c" class="outline-3">
-<h3 id="org539f19c"><span class="section-number-3">4.1</span> Allow user with cluster admin role</h3>
+<div id="outline-container-org3a741f0" class="outline-3">
+<h3 id="org3a741f0"><span class="section-number-3">4.1</span> Allow user with cluster admin role</h3>
 <div class="outline-text-3" id="text-4-1">
 <div class="org-src-container">
 <pre class="src src-sh">oc login -u system:admin -n hello
@@ -797,8 +797,8 @@ oc adm policy add-cluster-role-to-user cluster-admin system
 </div>
 </div>
 
-<div id="outline-container-org6355196" class="outline-3">
-<h3 id="org6355196"><span class="section-number-3">4.2</span> Defining the public IP range</h3>
+<div id="outline-container-org03f7e62" class="outline-3">
+<h3 id="org03f7e62"><span class="section-number-3">4.2</span> Defining the public IP range</h3>
 <div class="outline-text-3" id="text-4-2">
 <div class="org-src-container">
 <pre class="src src-sh">oc login -u system -p admin
@@ -831,8 +831,8 @@ master-restart controllers
 </div>
 </div>
 
-<div id="outline-container-orgbe4de8b" class="outline-3">
-<h3 id="orgbe4de8b"><span class="section-number-3">4.3</span> Create a Project and Service</h3>
+<div id="outline-container-org67dc1cc" class="outline-3">
+<h3 id="org67dc1cc"><span class="section-number-3">4.3</span> Create a Project and Service</h3>
 <div class="outline-text-3" id="text-4-3">
 <div class="org-src-container">
 <pre class="src src-sh">docker build -t rhel7:v5 .
@@ -864,12 +864,12 @@ oc get dc
 </div>
 </div>
 
-<div id="outline-container-orgc84d8ce" class="outline-2">
-<h2 id="orgc84d8ce"><span class="section-number-2">5</span> Test pod services &amp; attach NFS</h2>
+<div id="outline-container-org8a22762" class="outline-2">
+<h2 id="org8a22762"><span class="section-number-2">5</span> Test pod services &amp; attach NFS</h2>
 <div class="outline-text-2" id="text-5">
 </div>
-<div id="outline-container-org0d85460" class="outline-3">
-<h3 id="org0d85460"><span class="section-number-3">5.1</span> Configure NFS server/client</h3>
+<div id="outline-container-orgfb343b5" class="outline-3">
+<h3 id="orgfb343b5"><span class="section-number-3">5.1</span> Configure NFS server/client</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 In the server:
@@ -932,8 +932,8 @@ In the client:
 </div>
 </div>
 
-<div id="outline-container-org5d15254" class="outline-3">
-<h3 id="org5d15254"><span class="section-number-3">5.2</span> Configure OpenShift persistent storage (NFS)</h3>
+<div id="outline-container-orgf95f5d3" class="outline-3">
+<h3 id="orgf95f5d3"><span class="section-number-3">5.2</span> Configure OpenShift persistent storage (NFS)</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 You must first create an object definition for the PVs (Persistent Volumes):
@@ -1000,8 +1000,8 @@ and create new pods (rolling out).
 </div>
 </div>
 
-<div id="outline-container-org7b8fddb" class="outline-2">
-<h2 id="org7b8fddb"><span class="section-number-2">6</span> Migrate the <a href="https://github.com/GongCun/Pentomino/tree/map">PuzzleBrain</a> to OpenShift</h2>
+<div id="outline-container-org9b8a70f" class="outline-2">
+<h2 id="org9b8a70f"><span class="section-number-2">6</span> Migrate the <a href="https://github.com/GongCun/Pentomino/tree/map">PuzzleBrain</a> to OpenShift</h2>
 <div class="outline-text-2" id="text-6">
 
 <div class="figure">
@@ -1010,8 +1010,8 @@ and create new pods (rolling out).
 <p><span class="figure-number">Figure 3: </span>PuzzleBrain in OpenShift</p>
 </div>
 </div>
-<div id="outline-container-org0d34c19" class="outline-3">
-<h3 id="org0d34c19"><span class="section-number-3">6.1</span> Install build tools</h3>
+<div id="outline-container-org55289b1" class="outline-3">
+<h3 id="org55289b1"><span class="section-number-3">6.1</span> Install build tools</h3>
 <div class="outline-text-3" id="text-6-1">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Install GCC and C++</span>
@@ -1022,12 +1022,12 @@ yum group install <span style="color: #2d9574;">"Development Tools"</span> -y
 </div>
 </div>
 
-<div id="outline-container-org8420cfb" class="outline-3">
-<h3 id="org8420cfb"><span class="section-number-3">6.2</span> Build PuzzleBrain</h3>
+<div id="outline-container-org7c97e62" class="outline-3">
+<h3 id="org7c97e62"><span class="section-number-3">6.2</span> Build PuzzleBrain</h3>
 <div class="outline-text-3" id="text-6-2">
 </div>
-<div id="outline-container-org485d0e6" class="outline-4">
-<h4 id="org485d0e6"><span class="section-number-4">6.2.1</span> Install rapidjson</h4>
+<div id="outline-container-org78d2787" class="outline-4">
+<h4 id="org78d2787"><span class="section-number-4">6.2.1</span> Install rapidjson</h4>
 <div class="outline-text-4" id="text-6-2-1">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #4f97d7;">cd</span> /opt
@@ -1046,8 +1046,8 @@ make install
 </div>
 </div>
 
-<div id="outline-container-org32bc5a6" class="outline-4">
-<h4 id="org32bc5a6"><span class="section-number-4">6.2.2</span> Install PuzzleBrain</h4>
+<div id="outline-container-org87c0773" class="outline-4">
+<h4 id="org87c0773"><span class="section-number-4">6.2.2</span> Install PuzzleBrain</h4>
 <div class="outline-text-4" id="text-6-2-2">
 <div class="org-src-container">
 <pre class="src src-sh">mkdir -p /ose/Develop
@@ -1065,8 +1065,8 @@ sed -i <span style="color: #2d9574;">'s///g'</span> ./run2.sh
 </div>
 </div>
 
-<div id="outline-container-org7b1e2b7" class="outline-4">
-<h4 id="org7b1e2b7"><span class="section-number-4">6.2.3</span> Build puzzle docker image</h4>
+<div id="outline-container-orgcf63b3f" class="outline-4">
+<h4 id="orgcf63b3f"><span class="section-number-4">6.2.3</span> Build puzzle docker image</h4>
 <div class="outline-text-4" id="text-6-2-3">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #4f97d7;">cd</span> /opt/docker/PuzzleBrain
@@ -1093,8 +1093,8 @@ oc patch svc puzzle -p <span style="color: #2d9574;">'{"spec":{"externalIPs":["1
 </div>
 </div>
 
-<div id="outline-container-org7b53fe2" class="outline-4">
-<h4 id="org7b53fe2"><span class="section-number-4">6.2.4</span> Testing in intra-net</h4>
+<div id="outline-container-org3448496" class="outline-4">
+<h4 id="org3448496"><span class="section-number-4">6.2.4</span> Testing in intra-net</h4>
 <div class="outline-text-4" id="text-6-2-4">
 <div class="org-src-container">
 <pre class="src src-sh">mkdir -p /opt/docker/PuzzleBrain/tmp
@@ -1105,8 +1105,8 @@ oc patch svc puzzle -p <span style="color: #2d9574;">'{"spec":{"externalIPs":["1
 </div>
 </div>
 
-<div id="outline-container-org6fa834c" class="outline-4">
-<h4 id="org6fa834c"><span class="section-number-4">6.2.5</span> Setup pod-autoscalinag</h4>
+<div id="outline-container-orga0dae6d" class="outline-4">
+<h4 id="orga0dae6d"><span class="section-number-4">6.2.5</span> Setup pod-autoscalinag</h4>
 <div class="outline-text-4" id="text-6-2-5">
 <p>
 <i>Should in the pod 'complete' stage, not success.</i>
@@ -1125,8 +1125,8 @@ oc adm top node
 </div>
 </div>
 
-<div id="outline-container-org5e879f7" class="outline-4">
-<h4 id="org5e879f7"><span class="section-number-4">6.2.6</span> Create the puzzle-master-node pod</h4>
+<div id="outline-container-org57bda92" class="outline-4">
+<h4 id="org57bda92"><span class="section-number-4">6.2.6</span> Create the puzzle-master-node pod</h4>
 <div class="outline-text-4" id="text-6-2-6">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Prepare the run-master.sh, puzzle-master-entry.sh, Dockerfile-master</span>
@@ -1144,8 +1144,8 @@ oc get svc
 </div>
 </div>
 
-<div id="outline-container-orgc83c193" class="outline-4">
-<h4 id="orgc83c193"><span class="section-number-4">6.2.7</span> Create the front-end web pod</h4>
+<div id="outline-container-org0b91e86" class="outline-4">
+<h4 id="org0b91e86"><span class="section-number-4">6.2.7</span> Create the front-end web pod</h4>
 <div class="outline-text-4" id="text-6-2-7">
 <p>
 Download the Apache docker image
@@ -1270,12 +1270,12 @@ Login <a href="http://myweb-hello.apps.myopenshift.com/">http://myweb-hello.apps
 </div>
 </div>
 
-<div id="outline-container-org5acc688" class="outline-2">
-<h2 id="org5acc688"><span class="section-number-2">7</span> Connect to the external database</h2>
+<div id="outline-container-org07141c2" class="outline-2">
+<h2 id="org07141c2"><span class="section-number-2">7</span> Connect to the external database</h2>
 <div class="outline-text-2" id="text-7">
 </div>
-<div id="outline-container-orge9fbe1d" class="outline-3">
-<h3 id="orge9fbe1d"><span class="section-number-3">7.1</span> Configure the PostgreSQL</h3>
+<div id="outline-container-org222f220" class="outline-3">
+<h3 id="org222f220"><span class="section-number-3">7.1</span> Configure the PostgreSQL</h3>
 <div class="outline-text-3" id="text-7-1">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Pull the docker image</span>
@@ -1293,7 +1293,7 @@ docker run -it <span style="color: #2d9574;">\</span>
 <span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Setup the configure file</span>
 vi /var/lib/postgresql/data/postgresql.conf
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Startup PostgresSQL database</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Startup PostgreSQL database</span>
 cat ~postgres/.bash_profile
 <span style="color: #4f97d7;">export</span> <span style="color: #7590db;">PATH</span>=/usr/lib/postgresql/12/bin:$<span style="color: #7590db;">PATH</span>
 
@@ -1321,8 +1321,8 @@ docker load &lt;./pospostgres-v3.tar
 </div>
 </div>
 
-<div id="outline-container-org57dadd9" class="outline-3">
-<h3 id="org57dadd9"><span class="section-number-3">7.2</span> Using <code>psycopg2</code> with PostgreSQL</h3>
+<div id="outline-container-org615a62e" class="outline-3">
+<h3 id="org615a62e"><span class="section-number-3">7.2</span> Using <code>psycopg2</code> with PostgreSQL</h3>
 <div class="outline-text-3" id="text-7-2">
 <p>
 Install the module:
@@ -1342,7 +1342,7 @@ Copy &amp; query the PostgreSQL: see scripts in <a href="./web-conf">web-conf</a
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: 龔存</p>
-<p class="date">Created: 2020-03-04 周三 22:00</p>
+<p class="date">Created: 2020-03-05 周四 09:24</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
