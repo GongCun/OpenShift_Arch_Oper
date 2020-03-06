@@ -780,3 +780,78 @@ The final components:
 +------------------------+------------------------------+
 | infra.myopenshift.com  | Infra.   node                |
 +------------------------+------------------------------+
+
+* Backup the OpenShift cluster with =REAR=
+
+** Backup
+ Check if the multipath is enabled:
+ #+BEGIN_SRC sh
+   systemctl status multipathd
+   # or
+   multipath -l
+ #+END_SRC
+
+ Prepare the NFS server for store the ISO file
+ #+begin_example
+   # vi /etc/exports
+   /export/rear -ro=@{vmhost.range}/23,rw,root=@{openshift.host}/24
+
+   # vi /etc/hosts
+   <add the ESXi host record>
+
+   # Add the ESXi host ip to the inbound rules of IPsec
+
+   # exportfs -a
+   # exportfs
+
+   # Test in ESXi host
+   # mkdir -p /mnt/iso
+   # mount -o vers=3 ${nfs-server}:/export/rear /mnt/iso
+ #+end_example
+
+ Edit the =/etc/rear/local.conf=
+ #+BEGIN_EXAMPLE
+   OUTPUT=ISO
+   OUTPUT_URL=file:///mnt/rescue_system/
+   BACKUP=TSM
+   AUTOEXCLUDE_MULTIPATH=n # if multipath is enabled
+ #+END_EXAMPLE
+
+ Backup
+ #+BEGIN_SRC sh
+   mount -o vers=3 $nfs:/export/rear /mnt/rescue_system
+   rear -d -v mkbackup
+ #+END_SRC
+
+
+** Recovery
+Boot from ISO, select "recovery system". 
+#+begin_example
+  RESCUE nfs:~ # ip addr
+  RESCUE nfs:~ # ip addr delete {old-ip}/20 dev ens192
+  RESCUE nfs:~ # ip addr add {new-ip}/20 dev ens192
+  RESCUE nfs:~ # ip link set ens192 up
+  RESCUE nfs:~ # ifconfig ens192
+  RESCUE nfs:~ # rear -d -v recover
+  <choose default option>
+  RESCUE nfs:~ # reboot
+
+  # Observe the backup progress
+  # ssh {new-ip}
+  RESCUE nfs:~ # tail -f /var/lib/rear/restore/TSM.\:.<id>.<restore>.log
+
+#+end_example
+
+*FIXME*: ReaR don't backup the overlay filesystem of
+/var/lib/docker/overlay2/<uid>/merged (not make sense), but error occurred
+when execute 'docker run' command after restore the whole operating system, even
+backup/restore the <uid> files manually, should rebuild the docker root
+directory (/var/lib/docker). I have no idea to fix the problem.
+
+
+* Backup docker container 
+  #+begin_src sh
+    docker commit -p <id> postgres:v3
+    docker save postgres:v3 >postgres-v3.tar
+    docker load <./pospostgres-v3.tar
+  #+end_src

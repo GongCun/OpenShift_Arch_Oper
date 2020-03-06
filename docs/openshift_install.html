@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-03-05 周四 21:54 -->
+<!-- 2020-03-06 週五 19:10 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>OpenShift Installation Guide</title>
@@ -161,6 +161,19 @@
   .footdef  { margin-bottom: 1em; }
   .figure { padding: 1em; }
   .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
   .inlinetask {
     padding: 10px;
     border: 2px solid gray;
@@ -185,7 +198,7 @@
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2018 Free Software Foundation, Inc.
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -234,23 +247,30 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org733f85b">1. Setup Hostname &amp; NIC</a></li>
-<li><a href="#org6b78058">2. <del>Add Application User</del></a></li>
-<li><a href="#org6733759">3. System Requirements</a>
+<li><a href="#org865a12c">1. Setup Hostname &amp; NIC</a></li>
+<li><a href="#orgde3d113">2. <del>Add Application User</del></a></li>
+<li><a href="#org8385267">3. System Requirements</a>
 <ul>
-<li><a href="#orgfc5f1a8">3.1. Configure DNS server</a></li>
-<li><a href="#org7f243ad">3.2. Backup the configuration</a></li>
+<li><a href="#orgc31c904">3.1. Configure DNS server</a></li>
+<li><a href="#org4f45c80">3.2. Backup the configuration</a></li>
 </ul>
 </li>
-<li><a href="#org3484b7b">4. Attach OpenShift Container Platform Subscription</a></li>
-<li><a href="#org2f42afb">5. Set Up Repositories</a></li>
-<li><a href="#org5e849eb">6. Install the OpenShift Container Platform Package</a></li>
-<li><a href="#org38fd01e">7. Proxy Setup</a></li>
-<li><a href="#org0cd2f3a">8. Set up Password-less SSH Access</a></li>
-<li><a href="#org0d5780a">9. Run the Installation Playbooks</a></li>
-<li><a href="#org585d6d4">10. Interact with OpenShift Container Platform</a></li>
-<li><a href="#org1a2c97e">11. Understand Roles and Authentication</a></li>
-<li><a href="#org66cb5e8">12. Adding hosts to existing cluster</a></li>
+<li><a href="#orgae4dec9">4. Attach OpenShift Container Platform Subscription</a></li>
+<li><a href="#org5a886bb">5. Set Up Repositories</a></li>
+<li><a href="#org3ad0e5e">6. Install the OpenShift Container Platform Package</a></li>
+<li><a href="#orga4e9e19">7. Proxy Setup</a></li>
+<li><a href="#orgac3fc7e">8. Set up Password-less SSH Access</a></li>
+<li><a href="#orgec3b6e0">9. Run the Installation Playbooks</a></li>
+<li><a href="#orgf373d6e">10. Interact with OpenShift Container Platform</a></li>
+<li><a href="#orgb7a2a2d">11. Understand Roles and Authentication</a></li>
+<li><a href="#orgaa71543">12. Adding hosts to existing cluster</a></li>
+<li><a href="#orgb03ad73">13. Backup the OpenShift cluster with <code>REAR</code></a>
+<ul>
+<li><a href="#orgfeeb0ca">13.1. Backup</a></li>
+<li><a href="#orgf29adea">13.2. Recovery</a></li>
+</ul>
+</li>
+<li><a href="#orgdca54f1">14. Backup docker container</a></li>
 </ul>
 </div>
 </div>
@@ -258,14 +278,14 @@ for the JavaScript code in this tag.
 Reference<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
 </p>
 
-<div id="outline-container-org733f85b" class="outline-2">
-<h2 id="org733f85b"><span class="section-number-2">1</span> Setup Hostname &amp; NIC</h2>
+<div id="outline-container-org865a12c" class="outline-2">
+<h2 id="org865a12c"><span class="section-number-2">1</span> Setup Hostname &amp; NIC</h2>
 <div class="outline-text-2" id="text-1">
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">cd</span> /tmp; dsmc inc -su=no /etc/hosts<span style="color: #4f97d7;">)</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Delete any hostname except 127.0.0.1</span>
+# <span style="color: #ffd700; background-color: nil;">Delete any hostname except 127.0.0.1</span>
 sudo vi /etc/hosts
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Set the hostname to FQDN</span>
+# <span style="color: #ffd700; background-color: nil;">Set the hostname to FQDN</span>
 sudo vi /etc/hostname
 hostnamectl set-hostname &lt;FQDN hostname&gt;
 
@@ -274,30 +294,30 @@ search myopenshift.com
 nameserver <span style="color: #a45bad;">192.168.23.53</span>
 
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Add below properties in /etc/sysconfig/network-scripts/ifcfg-&lt;interface_name&gt;</span>
+# <span style="color: #ffd700; background-color: nil;">Add below properties in /etc/sysconfig/network-scripts/ifcfg-&lt;interface_name&gt;</span>
 <span style="color: #4f97d7;">cd</span> /etc/sysconfig/network-scripts
 mv ./ifcfg-ens224 /tmp <span style="color: #a45bad;">2</span>&gt;/dev/null
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Fix upstream DNS</span>
+# <span style="color: #ffd700; background-color: nil;">Fix upstream DNS</span>
 nmcli con mod ens192 ipv4.dns <span style="color: #a45bad;">192.168.23.53</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">systemctl restart NetworkManager</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">systemctl restart dnsmasq</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">cat /etc/dnsmasq.d/origin-upstream-dns.conf</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">cat /etc/resolv.conf</span>
+# <span style="color: #ffd700; background-color: nil;">systemctl restart NetworkManager</span>
+# <span style="color: #ffd700; background-color: nil;">systemctl restart dnsmasq</span>
+# <span style="color: #ffd700; background-color: nil;">cat /etc/dnsmasq.d/origin-upstream-dns.conf</span>
+# <span style="color: #ffd700; background-color: nil;">cat /etc/resolv.conf</span>
 
 vi /etc/sysconfig/network-scripts/ifcfg-ens192
 <span style="color: #7590db;">NM_CONTROLLED</span>=yes
 <span style="color: #7590db;">PEERDNS</span>=yes
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Add the persistent route</span>
+# <span style="color: #ffd700; background-color: nil;">Add the persistent route</span>
 <span style="color: #4f97d7;">cd</span> /etc/sysconfig/network-scripts
 cat &gt;./route-ens192 &lt;&lt;\EOF
-<span style="color: #3cb371; font-weight: bold;">ADDRESS0=0.0.0.0</span>
-<span style="color: #3cb371; font-weight: bold;">NETMASK0=0.0.0.0</span>
-<span style="color: #3cb371; font-weight: bold;">GATEWAY0=192.168.16.1</span>
-<span style="color: #3cb371; font-weight: bold;">EOF</span>
+<span style="color: #00ff00; font-weight: bold;">ADDRESS0=0.0.0.0</span>
+<span style="color: #00ff00; font-weight: bold;">NETMASK0=0.0.0.0</span>
+<span style="color: #00ff00; font-weight: bold;">GATEWAY0=192.168.16.1</span>
+<span style="color: #00ff00; font-weight: bold;">EOF</span>
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Ensure the tsm backup is valid</span>
+# <span style="color: #ffd700; background-color: nil;">Ensure the tsm backup is valid</span>
 cat /opt/tivoli/tsm/client/ba/bin/dsm.sys
 SERVERNAME tsm
 PASSWORDACCESS GENERATE
@@ -307,7 +327,7 @@ TCPSERVERADDRESS pptsmsvr
 cat /opt/tivoli/tsm/client/ba/bin/dsm.opt
 SERVERNAME TSM
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Reboot then check the default route and DNS conf</span>
+# <span style="color: #ffd700; background-color: nil;">Reboot then check the default route and DNS conf</span>
 reboot
 cat /etc/resolv.conf
 ip r
@@ -317,15 +337,15 @@ cat ./route-ens192
 vi /etc/sysconfig/network-scripts/ifcfg-ens192
 reboot
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Check the default gateway after reboot</span>
+# <span style="color: #ffd700; background-color: nil;">Check the default gateway after reboot</span>
 ip r | grep default
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org6b78058" class="outline-2">
-<h2 id="org6b78058"><span class="section-number-2">2</span> <del>Add Application User</del></h2>
+<div id="outline-container-orgde3d113" class="outline-2">
+<h2 id="orgde3d113"><span class="section-number-2">2</span> <del>Add Application User</del></h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
 <pre class="src src-sh">useradd cungong
@@ -342,8 +362,8 @@ cungong <span style="color: #7590db;">ALL</span>=<span style="color: #4f97d7;">(
 </div>
 
 
-<div id="outline-container-org6733759" class="outline-2">
-<h2 id="org6733759"><span class="section-number-2">3</span> System Requirements</h2>
+<div id="outline-container-org8385267" class="outline-2">
+<h2 id="org8385267"><span class="section-number-2">3</span> System Requirements</h2>
 <div class="outline-text-2" id="text-3">
 <ul class="org-ul">
 <li>At least two physical or virtual RHEL 7+ machines, with fully qualified domain
@@ -399,11 +419,11 @@ docker-storage-setup</li>
 </ul>
 </div>
 
-<div id="outline-container-orgfc5f1a8" class="outline-3">
-<h3 id="orgfc5f1a8"><span class="section-number-3">3.1</span> Configure DNS server</h3>
+<div id="outline-container-orgc31c904" class="outline-3">
+<h3 id="orgc31c904"><span class="section-number-3">3.1</span> Configure DNS server</h3>
 <div class="outline-text-3" id="text-3-1">
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Install bind</span>
+<pre class="src src-sh"># <span style="color: #ffd700; background-color: nil;">Install bind</span>
 subscription-manager clean
 rpm -Uvh http://qlsatsv1/pub/katello-ca-consumer-latest.noarch.rpm
 subscription-manager register --org=<span style="color: #2d9574;">"Bank_of_China_Macau_Branch"</span> --activationkey=<span style="color: #2d9574;">"UATKEY"</span>
@@ -413,7 +433,7 @@ subscription-manager attach --pool=<span style="color: #a45bad;">40285d696ef9a19
 yum install -y bind
 yum install -y bind-utils
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Make named daemon listen on interface.</span>
+# <span style="color: #ffd700; background-color: nil;">Make named daemon listen on interface.</span>
 vi /etc/named.conf
 listen-on port <span style="color: #a45bad;">53</span> <span style="color: #4f97d7;">{</span> <span style="color: #a45bad;">127.0.0.1</span>; <span style="color: #a45bad;">192.168.23.53</span>; <span style="color: #4f97d7;">}</span>;
 
@@ -421,17 +441,17 @@ service named start
 service named status
 
 netstat -ant | grep -w <span style="color: #a45bad;">53</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">'-t' means tcp protocol</span>
+# <span style="color: #ffd700; background-color: nil;">'-t' means tcp protocol</span>
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Firewall setting</span>
+# <span style="color: #ffd700; background-color: nil;">Firewall setting</span>
 firewall-cmd --get-active-zones
 firewall-cmd --zone=public --add-port=<span style="color: #a45bad;">53/tcp</span> --permanent
 firewall-cmd --zone=public --add-port=<span style="color: #a45bad;">53/udp</span> --permanent
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Or</span>
+# <span style="color: #ffd700; background-color: nil;">Or</span>
 iptables -I INPUT  -i ens192 -p tcp --dport <span style="color: #a45bad;">53</span> -j ACCEPT
 iptables -I INPUT  -i ens192 -p udp --dport <span style="color: #a45bad;">53</span> -j ACCEPT
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Configure in Name Server</span>
+# <span style="color: #ffd700; background-color: nil;">Configure in Name Server</span>
 cat /etc/hosts
 <span style="color: #a45bad;">127.0.0.1</span>   localhost localhost.localdomain localhost4 localhost4.localdomain4
 <span style="color: #a45bad;">127.0.1.1</span>   ns.myopenshift.com dloseds1
@@ -493,30 +513,30 @@ vi /etc/named.conf
     rrset-order <span style="color: #4f97d7;">{</span>
         class IN type A name <span style="color: #2d9574;">"*.apps.myopenshift.com"</span> order random;
     <span style="color: #4f97d7;">}</span>;
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">fixed:  Always returns matching records in the same order (BIND 9.3.2 doesn't yes support)</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">random: Returns matching records in random order</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">cyclic: Returns matching records in cyclic (round-robin) order</span>
+# <span style="color: #ffd700; background-color: nil;">fixed:  Always returns matching records in the same order (BIND 9.3.2 doesn't yes support)</span>
+# <span style="color: #ffd700; background-color: nil;">random: Returns matching records in random order</span>
+# <span style="color: #ffd700; background-color: nil;">cyclic: Returns matching records in cyclic (round-robin) order</span>
 
 service named restart
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Make sure DNS server starts after we reboot our RHEL7 linux server:</span>
+# <span style="color: #ffd700; background-color: nil;">Make sure DNS server starts after we reboot our RHEL7 linux server:</span>
 systemctl enable named
 
 vi /etc/sysconfig/named
 <span style="color: #7590db;">OPTIONS</span>=<span style="color: #2d9574;">"-4"</span>
 <span style="color: #7590db;">DISABLE_ZONE_CHECKING</span>=<span style="color: #2d9574;">"yes"</span>
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Fix RHEL 7.6 bug:</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">setroubleshoot: SELinux is preventing /usr/sbin/named from search access on</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">the directory net.</span>
+# <span style="color: #ffd700; background-color: nil;">Fix RHEL 7.6 bug:</span>
+# <span style="color: #ffd700; background-color: nil;">setroubleshoot: SELinux is preventing /usr/sbin/named from search access on</span>
+# <span style="color: #ffd700; background-color: nil;">the directory net.</span>
 vi /etc/selinux/config
 Set the line <span style="color: #7590db;">SELINUX</span>=enforcing to <span style="color: #7590db;">SELINUX</span>=disabled
 
 reboot
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">debug</span>
+# <span style="color: #ffd700; background-color: nil;">debug</span>
 tail -f /var/log/messages
 
-<span style="color: #ffd700; background-color: nil;">## </span><span style="color: #ffd700; background-color: nil;">Client</span>
+## <span style="color: #ffd700; background-color: nil;">Client</span>
 cat /etc/resolv.conf
 search myopenshift.com
 nameserver <span style="color: #a45bad;">192.168.23.53</span>
@@ -524,12 +544,12 @@ nameserver <span style="color: #a45bad;">192.168.23.53</span>
 vi /etc/nsswitch.conf
 hosts:      files dns myhostname
 
-<span style="color: #ffd700; background-color: nil;">## </span><span style="color: #ffd700; background-color: nil;">Test</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">A type</span>
+## <span style="color: #ffd700; background-color: nil;">Test</span>
+# <span style="color: #ffd700; background-color: nil;">A type</span>
 dig @<span style="color: #a45bad;">192.168.23.53</span> master.myopenshift.com
 dig @<span style="color: #a45bad;">192.168.23.53</span> node.apps.myopenshift.com
 dig @<span style="color: #a45bad;">192.168.23.53</span> node.infra.myopenshift.com
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">PTR type (reverse lookup)</span>
+# <span style="color: #ffd700; background-color: nil;">PTR type (reverse lookup)</span>
 dig @<span style="color: #a45bad;">192.168.23.53</span> -x <span style="color: #a45bad;">192.168.23.31</span>
 dig @<span style="color: #a45bad;">192.168.23.53</span> -x <span style="color: #a45bad;">192.168.23.32</span>
 dig @<span style="color: #a45bad;">192.168.23.53</span> -x <span style="color: #a45bad;">192.168.23.33</span>
@@ -541,20 +561,20 @@ dig @<span style="color: #a45bad;">192.168.23.53</span> -x <span style="color: #
 </div>
 </div>
 
-<div id="outline-container-org7f243ad" class="outline-3">
-<h3 id="org7f243ad"><span class="section-number-3">3.2</span> Backup the configuration</h3>
+<div id="outline-container-org4f45c80" class="outline-3">
+<h3 id="org4f45c80"><span class="section-number-3">3.2</span> Backup the configuration</h3>
 <div class="outline-text-3" id="text-3-2">
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;">## </span><span style="color: #ffd700; background-color: nil;">Setup in x86 TSM server.</span>
+<pre class="src src-sh">## <span style="color: #ffd700; background-color: nil;">Setup in x86 TSM server.</span>
 https://pptsmsvr.bocmo.com:11090/oc
 admin/admin
 right-up corner -&gt; command line
 reg node &lt;node-name&gt; &lt;password&gt; <span style="color: #7590db;">do</span>=development-files <span style="color: #7590db;">passexp</span>=<span style="color: #a45bad;">0</span> <span style="color: #7590db;">maxnummp</span>=<span style="color: #a45bad;">4</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">node[234] password is accept</span>
+# <span style="color: #ffd700; background-color: nil;">node[234] password is accept</span>
 update admin &lt;node-name&gt; <span style="color: #7590db;">forcepwreset</span>=no <span style="color: #7590db;">passexp</span>=<span style="color: #a45bad;">0</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">UPDate Node &lt;node-name&gt; &lt;password&gt; PASSExp=0</span>
+# <span style="color: #ffd700; background-color: nil;">UPDate Node &lt;node-name&gt; &lt;password&gt; PASSExp=0</span>
 
-<span style="color: #ffd700; background-color: nil;">## </span><span style="color: #ffd700; background-color: nil;">Setup in client.</span>
+## <span style="color: #ffd700; background-color: nil;">Setup in client.</span>
 mount qunimsvr:/install /mnt -o <span style="color: #7590db;">vers</span>=<span style="color: #a45bad;">3</span>
 <span style="color: #4f97d7;">cd</span> /mnt/tsmclient8161_linuxx86
 
@@ -563,15 +583,15 @@ rpm -ivh gskcrypt64-8.0.55.2.linux.x86_64.rpm <span style="color: #2d9574;">\</s
     TIVsm-BA.x86_64.rpm TIVsm-API64.x86_64.rpm
 
 cat &gt;&gt;/opt/tivoli/tsm/client/ba/bin/dsm.sys &lt;&lt;\EOF
-<span style="color: #3cb371; font-weight: bold;">SERVERNAME tsm</span>
-<span style="color: #3cb371; font-weight: bold;">PASSWORDACCESS GENERATE</span>
-<span style="color: #3cb371; font-weight: bold;">NODENAME         &lt;node-name&gt;</span>
-<span style="color: #3cb371; font-weight: bold;">TCPSERVERADDRESS pptsmsvr</span>
-<span style="color: #3cb371; font-weight: bold;">EOF</span>
+<span style="color: #00ff00; font-weight: bold;">SERVERNAME tsm</span>
+<span style="color: #00ff00; font-weight: bold;">PASSWORDACCESS GENERATE</span>
+<span style="color: #00ff00; font-weight: bold;">NODENAME         &lt;node-name&gt;</span>
+<span style="color: #00ff00; font-weight: bold;">TCPSERVERADDRESS pptsmsvr</span>
+<span style="color: #00ff00; font-weight: bold;">EOF</span>
 
 cat &gt;&gt;/opt/tivoli/tsm/client/ba/bin/dsm.opt &lt;&lt;\EOF
-<span style="color: #3cb371; font-weight: bold;">SERVERNAME TSM</span>
-<span style="color: #3cb371; font-weight: bold;">EOF</span>
+<span style="color: #00ff00; font-weight: bold;">SERVERNAME TSM</span>
+<span style="color: #00ff00; font-weight: bold;">EOF</span>
 
 <span style="color: #4f97d7;">cd</span> /tmp
 dsmc
@@ -582,8 +602,8 @@ dsmc q f
 </div>
 </div>
 </div>
-<div id="outline-container-org3484b7b" class="outline-2">
-<h2 id="org3484b7b"><span class="section-number-2">4</span> Attach OpenShift Container Platform Subscription</h2>
+<div id="outline-container-orgae4dec9" class="outline-2">
+<h2 id="orgae4dec9"><span class="section-number-2">4</span> Attach OpenShift Container Platform Subscription</h2>
 <div class="outline-text-2" id="text-4">
 <ol class="org-ol">
 <li><p>
@@ -599,7 +619,7 @@ subscription-manager clean
 rpm -Uvh http://qlsatsv1/pub/katello-ca-consumer-latest.noarch.rpm
 subscription-manager register --org=<span style="color: #2d9574;">"Bank_of_China_Macau_Branch"</span> --activationkey=<span style="color: #2d9574;">"UATKEY,OpenShift_Key"</span> --force
 
-<span style="color: #ffd700; background-color: nil;">## </span><span style="color: #ffd700; background-color: nil;">Fix "HTTP error (422 - Unknown): The DMI UUID of this host...matches other registered hosts"</span>
+## <span style="color: #ffd700; background-color: nil;">Fix "HTTP error (422 - Unknown): The DMI UUID of this host...matches other registered hosts"</span>
 <span style="color: #4f97d7;">[</span>root@client ~<span style="color: #4f97d7;">]</span># vi /etc/rhsm/facts/uuid.facts
 <span style="color: #4f97d7;">{</span><span style="color: #2d9574;">"dmi.system.uuid"</span>: <span style="color: #2d9574;">"customuuid"</span><span style="color: #4f97d7;">}</span>
 
@@ -639,8 +659,8 @@ provides OpenShift Container Platform.
 </div>
 </div>
 
-<div id="outline-container-org2f42afb" class="outline-2">
-<h2 id="org2f42afb"><span class="section-number-2">5</span> Set Up Repositories</h2>
+<div id="outline-container-org5a886bb" class="outline-2">
+<h2 id="org5a886bb"><span class="section-number-2">5</span> Set Up Repositories</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 On both master and node, use <code>subscription-manager</code> to enable the repositories
@@ -661,8 +681,8 @@ yum repolist all
 </div>
 </div>
 
-<div id="outline-container-org5e849eb" class="outline-2">
-<h2 id="org5e849eb"><span class="section-number-2">6</span> Install the OpenShift Container Platform Package</h2>
+<div id="outline-container-org3ad0e5e" class="outline-2">
+<h2 id="org3ad0e5e"><span class="section-number-2">6</span> Install the OpenShift Container Platform Package</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 The installer for OpenShift Container Platform is provided by the
@@ -684,14 +704,14 @@ Now install a container engine:
 <pre class="src src-sh">yum -y install cri-o
 yum -y install docker
 shutdown -h now
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">take snapshot</span>
+# <span style="color: #ffd700; background-color: nil;">take snapshot</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org38fd01e" class="outline-2">
-<h2 id="org38fd01e"><span class="section-number-2">7</span> Proxy Setup</h2>
+<div id="outline-container-orga4e9e19" class="outline-2">
+<h2 id="orga4e9e19"><span class="section-number-2">7</span> Proxy Setup</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 Allow the client IP in firewall in proxy.myopenshift.com:
@@ -717,11 +737,11 @@ Setup the git proxy in client:
 </p>
 <div class="org-src-container">
 <pre class="src src-sh">cat &gt;~/.gitconfig
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">This is Git's per-user configuration file.</span>
+# <span style="color: #ffd700; background-color: nil;">This is Git's per-user configuration file.</span>
 <span style="color: #4f97d7;">[</span>user<span style="color: #4f97d7;">]</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Please adapt and uncomment the following lines:</span>
-<span style="color: #ffd700; background-color: nil;">#       </span><span style="color: #ffd700; background-color: nil;">name = unknown</span>
-<span style="color: #ffd700; background-color: nil;">#       </span><span style="color: #ffd700; background-color: nil;">email = mo140333@mo.ad.boc-ap.com</span>
+# <span style="color: #ffd700; background-color: nil;">Please adapt and uncomment the following lines:</span>
+#       <span style="color: #ffd700; background-color: nil;">name = unknown</span>
+#       <span style="color: #ffd700; background-color: nil;">email = mo140333@mo.ad.boc-ap.com</span>
 <span style="color: #4f97d7;">[</span>core<span style="color: #4f97d7;">]</span>
 autocrlf = true
 editor = vi
@@ -744,27 +764,27 @@ pager = true
 Setup the docker proxy in client:
 </p>
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Configure Docker to use a proxy server on master &amp; node</span>
+<pre class="src src-sh"># <span style="color: #ffd700; background-color: nil;">Configure Docker to use a proxy server on master &amp; node</span>
 mkdir -p ~/.docker
 cat &gt; ~/.docker/config.json &lt;&lt;\EOF
-<span style="color: #3cb371; font-weight: bold;">{</span>
-<span style="color: #3cb371; font-weight: bold;">    "proxies":</span>
-<span style="color: #3cb371; font-weight: bold;">    {</span>
-<span style="color: #3cb371; font-weight: bold;">        "default":</span>
-<span style="color: #3cb371; font-weight: bold;">        {</span>
-<span style="color: #3cb371; font-weight: bold;">            "httpProxy": "http://proxy.myopenshift.com:8888",</span>
-<span style="color: #3cb371; font-weight: bold;">            "httpsProxy": "http://proxy.myopenshift.com:8888",</span>
-<span style="color: #3cb371; font-weight: bold;">            "noProxy": "*.bocmo.com,.bocmacau.com,.myopenshift.com"</span>
-<span style="color: #3cb371; font-weight: bold;">        }</span>
-<span style="color: #3cb371; font-weight: bold;">    }</span>
-<span style="color: #3cb371; font-weight: bold;">}</span>
-<span style="color: #3cb371; font-weight: bold;">EOF</span>
+<span style="color: #00ff00; font-weight: bold;">{</span>
+<span style="color: #00ff00; font-weight: bold;">    "proxies":</span>
+<span style="color: #00ff00; font-weight: bold;">    {</span>
+<span style="color: #00ff00; font-weight: bold;">        "default":</span>
+<span style="color: #00ff00; font-weight: bold;">        {</span>
+<span style="color: #00ff00; font-weight: bold;">            "httpProxy": "http://proxy.myopenshift.com:8888",</span>
+<span style="color: #00ff00; font-weight: bold;">            "httpsProxy": "http://proxy.myopenshift.com:8888",</span>
+<span style="color: #00ff00; font-weight: bold;">            "noProxy": "*.bocmo.com,.bocmacau.com,.myopenshift.com"</span>
+<span style="color: #00ff00; font-weight: bold;">        }</span>
+<span style="color: #00ff00; font-weight: bold;">    }</span>
+<span style="color: #00ff00; font-weight: bold;">}</span>
+<span style="color: #00ff00; font-weight: bold;">EOF</span>
 
 mkdir -p /etc/systemd/system/docker.service.d
 cat &gt;/etc/systemd/system/docker.service.d/https-proxy.conf &lt;&lt;\EOF
-<span style="color: #3cb371; font-weight: bold;">[Service]</span>
-<span style="color: #3cb371; font-weight: bold;">Environment="HTTP_PROXY=http://proxy.myopenshift.com:8888/" "NO_PROXY=localhost,127.0.0.1,.bocmo.com,.bocmacau.com,.myopenshift.com"</span>
-<span style="color: #3cb371; font-weight: bold;">EOF</span>
+<span style="color: #00ff00; font-weight: bold;">[Service]</span>
+<span style="color: #00ff00; font-weight: bold;">Environment="HTTP_PROXY=http://proxy.myopenshift.com:8888/" "NO_PROXY=localhost,127.0.0.1,.bocmo.com,.bocmacau.com,.myopenshift.com"</span>
+<span style="color: #00ff00; font-weight: bold;">EOF</span>
 
 systemctl daemon-reload
 systemctl restart docker
@@ -778,8 +798,8 @@ Login Succeeded
 </div>
 </div>
 </div>
-<div id="outline-container-org0cd2f3a" class="outline-2">
-<h2 id="org0cd2f3a"><span class="section-number-2">8</span> Set up Password-less SSH Access</h2>
+<div id="outline-container-orgac3fc7e" class="outline-2">
+<h2 id="orgac3fc7e"><span class="section-number-2">8</span> Set up Password-less SSH Access</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 Before running the installer on the master, set up password-less SSH access as
@@ -787,7 +807,7 @@ this is required by the installer to gain access to the machines. On the master,
 run the following command.
 </p>
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;">#</span><span style="color: #ffd700; background-color: nil;">ssh-keygen</span>
+<pre class="src src-sh">#<span style="color: #ffd700; background-color: nil;">ssh-keygen</span>
 ssh-keygen -t rsa -N <span style="color: #2d9574;">""</span> -f ~/.ssh/id_rsa
 
 </pre>
@@ -797,37 +817,37 @@ ssh-keygen -t rsa -N <span style="color: #2d9574;">""</span> -f ~/.ssh/id_rsa
 Distribute your SSH keys using a <code>bash</code> loop:
 </p>
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Disable the iptable in all nodes. (no need)</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">systemctl status firewalld</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">systemctl stop firewalld</span>
+<pre class="src src-sh"># <span style="color: #ffd700; background-color: nil;">Disable the iptable in all nodes. (no need)</span>
+# <span style="color: #ffd700; background-color: nil;">systemctl status firewalld</span>
+# <span style="color: #ffd700; background-color: nil;">systemctl stop firewalld</span>
 
 <span style="color: #4f97d7; font-weight: bold;">while </span><span style="color: #4f97d7;">read</span> host; <span style="color: #4f97d7; font-weight: bold;">do</span>
     ssh-copy-id -i ~/.ssh/id_rsa.pub $<span style="color: #7590db;">host</span>
 <span style="color: #4f97d7; font-weight: bold;">done</span> &lt;&lt;EOF
-<span style="color: #3cb371; font-weight: bold;">master.myopenshift.com</span>
-<span style="color: #3cb371; font-weight: bold;">infra.myopenshift.com</span>
-<span style="color: #3cb371; font-weight: bold;">node.myopenshift.com</span>
-<span style="color: #3cb371; font-weight: bold;">EOF</span>
+<span style="color: #00ff00; font-weight: bold;">master.myopenshift.com</span>
+<span style="color: #00ff00; font-weight: bold;">infra.myopenshift.com</span>
+<span style="color: #00ff00; font-weight: bold;">node.myopenshift.com</span>
+<span style="color: #00ff00; font-weight: bold;">EOF</span>
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">If cipher or ssh login error, update the /etc/ssh/sshd_config or</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">/etc/pam.d/sshd, then restart sshd after fixing the sshd_config</span>
+# <span style="color: #ffd700; background-color: nil;">If cipher or ssh login error, update the /etc/ssh/sshd_config or</span>
+# <span style="color: #ffd700; background-color: nil;">/etc/pam.d/sshd, then restart sshd after fixing the sshd_config</span>
 sudo systemctl restart sshd.serivce
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Check</span>
+# <span style="color: #ffd700; background-color: nil;">Check</span>
 <span style="color: #4f97d7; font-weight: bold;">while </span><span style="color: #4f97d7;">read</span> host; <span style="color: #4f97d7; font-weight: bold;">do</span>
     ssh -n $<span style="color: #7590db;">host</span> hostname
 <span style="color: #4f97d7; font-weight: bold;">done</span> &lt;&lt;EOF
-<span style="color: #3cb371; font-weight: bold;">master.myopenshift.com</span>
-<span style="color: #3cb371; font-weight: bold;">infra.myopenshift.com</span>
-<span style="color: #3cb371; font-weight: bold;">node.myopenshift.com</span>
-<span style="color: #3cb371; font-weight: bold;">EOF</span>
+<span style="color: #00ff00; font-weight: bold;">master.myopenshift.com</span>
+<span style="color: #00ff00; font-weight: bold;">infra.myopenshift.com</span>
+<span style="color: #00ff00; font-weight: bold;">node.myopenshift.com</span>
+<span style="color: #00ff00; font-weight: bold;">EOF</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org0d5780a" class="outline-2">
-<h2 id="org0d5780a"><span class="section-number-2">9</span> Run the Installation Playbooks</h2>
+<div id="outline-container-orgec3b6e0" class="outline-2">
+<h2 id="orgec3b6e0"><span class="section-number-2">9</span> Run the Installation Playbooks</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 See <a href="https://docs.openshift.com/container-platform/3.11/install/example_inventories.html#install-config-example-inventories">Example Inventory Files</a> and select the example that most closely matches the
@@ -944,7 +964,7 @@ Change to the playbook directory and run the prerequisites.yml playbook using
 your inventory file: 
 </p>
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Install OpenShift</span>
+<pre class="src src-sh"># <span style="color: #ffd700; background-color: nil;">Install OpenShift</span>
 <span style="color: #4f97d7;">cd</span> /usr/share/ansible/openshift-ansible
 ansible-playbook -i /etc/ansible/hosts playbooks/prerequisites.yml
 ...
@@ -952,11 +972,11 @@ Initialization  : Complete <span style="color: #4f97d7;">(</span><span style="co
 
 ansible-playbook -i /etc/ansible/hosts playbooks/deploy_cluster.yml
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Monitor</span>
+# <span style="color: #ffd700; background-color: nil;">Monitor</span>
 tail -f /var/log/messages
 
-<span style="color: #ffd700; background-color: nil;">### </span><span style="color: #ffd700; background-color: nil;">Increase the /var space if necessary</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">I. Increase the /var space</span>
+### <span style="color: #ffd700; background-color: nil;">Increase the /var space if necessary</span>
+# <span style="color: #ffd700; background-color: nil;">I. Increase the /var space</span>
 <span style="color: #4f97d7;">export</span> <span style="color: #7590db;">LC_ALL</span>=C
 lsblk
 fdisk /dev/sda
@@ -967,28 +987,28 @@ vgextend rootvg /dev/sda3
 lvextend -L +15G /dev/rootvg/var
 xfs_growfs /var
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">II. Increase the /var space with additional disk</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">1) Add the new hdisk in vCenter</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">2) Scan the new hdisk</span>
+# <span style="color: #ffd700; background-color: nil;">II. Increase the /var space with additional disk</span>
+# <span style="color: #ffd700; background-color: nil;">1) Add the new hdisk in vCenter</span>
+# <span style="color: #ffd700; background-color: nil;">2) Scan the new hdisk</span>
 <span style="color: #4f97d7;">echo</span> <span style="color: #2d9574;">"- - -"</span> &gt;/sys/class/scsi_host/host0/scan
 ls /dev/sd*
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">3) Extend rootvg</span>
+# <span style="color: #ffd700; background-color: nil;">3) Extend rootvg</span>
 vgextend rootvg /dev/sdc
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">4) Resize the lv of /var</span>
+# <span style="color: #ffd700; background-color: nil;">4) Resize the lv of /var</span>
 lvresize -L +50G /dev/mapper/rootvg-var
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">5) Extend the FS</span>
+# <span style="color: #ffd700; background-color: nil;">5) Extend the FS</span>
 xfs_growfs /dev/mapper/rootvg-var
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Shutdown the VM then increase the memory in vCenter.</span>
+# <span style="color: #ffd700; background-color: nil;">Shutdown the VM then increase the memory in vCenter.</span>
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Re-execute the check &amp; deploy, reboot the nodes if any problem. Make sure the</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">network card is configured correctly</span>
+# <span style="color: #ffd700; background-color: nil;">Re-execute the check &amp; deploy, reboot the nodes if any problem. Make sure the</span>
+# <span style="color: #ffd700; background-color: nil;">network card is configured correctly</span>
 <span style="color: #4f97d7;">cd</span> /usr/share/ansible/openshift-ansible
 ansible-playbook -i /etc/ansible/hosts playbooks/prerequisites.yml
 
 ansible-playbook -i /etc/ansible/hosts playbooks/deploy_cluster.yml
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Error: failed to run Kubelet: failed to initialize client certificate</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Resolve:</span>
+# <span style="color: #ffd700; background-color: nil;">Error: failed to run Kubelet: failed to initialize client certificate</span>
+# <span style="color: #ffd700; background-color: nil;">Resolve:</span>
 systemctl status atomic-openshift-node.service
 
 journalctl -xe
@@ -1011,8 +1031,8 @@ basic authentication, user access, and routes.
 </div>
 </div>
 
-<div id="outline-container-org585d6d4" class="outline-2">
-<h2 id="org585d6d4"><span class="section-number-2">10</span> Interact with OpenShift Container Platform</h2>
+<div id="outline-container-orgf373d6e" class="outline-2">
+<h2 id="orgf373d6e"><span class="section-number-2">10</span> Interact with OpenShift Container Platform</h2>
 <div class="outline-text-2" id="text-10">
 <p>
 OpenShift Container Platform provides two command line utilities to interact
@@ -1037,8 +1057,8 @@ section, you will see how to create user accounts for accessing the console.
 </div>
 </div>
 
-<div id="outline-container-org1a2c97e" class="outline-2">
-<h2 id="org1a2c97e"><span class="section-number-2">11</span> Understand Roles and Authentication</h2>
+<div id="outline-container-orgb7a2a2d" class="outline-2">
+<h2 id="orgb7a2a2d"><span class="section-number-2">11</span> Understand Roles and Authentication</h2>
 <div class="outline-text-2" id="text-11">
 <p>
 By default, when installed for the first time, there are no roles or user
@@ -1083,8 +1103,8 @@ node, in the Ready status.
 </div>
 </div>
 
-<div id="outline-container-org66cb5e8" class="outline-2">
-<h2 id="org66cb5e8"><span class="section-number-2">12</span> Adding hosts to existing cluster</h2>
+<div id="outline-container-orgaa71543" class="outline-2">
+<h2 id="orgaa71543"><span class="section-number-2">12</span> Adding hosts to existing cluster</h2>
 <div class="outline-text-2" id="text-12">
 <p>
 Add the new nodes to DNS record, setup password-less ssh access to new nodes.
@@ -1200,7 +1220,7 @@ The final components:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Login in master node</span>
+<pre class="src src-sh"># <span style="color: #ffd700; background-color: nil;">Login in master node</span>
 oc login -u system:admin
 oc get nodes
 
@@ -1268,6 +1288,111 @@ oc get nodes
 </table>
 </div>
 </div>
+
+<div id="outline-container-orgb03ad73" class="outline-2">
+<h2 id="orgb03ad73"><span class="section-number-2">13</span> Backup the OpenShift cluster with <code>REAR</code></h2>
+<div class="outline-text-2" id="text-13">
+</div>
+<div id="outline-container-orgfeeb0ca" class="outline-3">
+<h3 id="orgfeeb0ca"><span class="section-number-3">13.1</span> Backup</h3>
+<div class="outline-text-3" id="text-13-1">
+<p>
+Check if the multipath is enabled:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">systemctl status multipathd
+# <span style="color: #ffd700; background-color: nil;">or</span>
+multipath -l
+</pre>
+</div>
+
+<p>
+Prepare the NFS server for store the ISO file
+</p>
+<pre class="example">
+# vi /etc/exports
+/export/rear -ro=@{vmhost.range}/23,rw,root=@{openshift.host}/24
+
+# vi /etc/hosts
+&lt;add the ESXi host record&gt;
+
+# Add the ESXi host ip to the inbound rules of IPsec
+
+# exportfs -a
+# exportfs
+
+# Test in ESXi host
+# mkdir -p /mnt/iso
+# mount -o vers=3 ${nfs-server}:/export/rear /mnt/iso
+</pre>
+
+<p>
+Edit the <code>/etc/rear/local.conf</code>
+</p>
+<pre class="example">
+OUTPUT=ISO
+OUTPUT_URL=file:///mnt/rescue_system/
+BACKUP=TSM
+AUTOEXCLUDE_MULTIPATH=n # if multipath is enabled
+</pre>
+
+<p>
+Backup
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">mount -o <span style="color: #7590db;">vers</span>=<span style="color: #a45bad;">3</span> $<span style="color: #7590db;">nfs</span>:/export/rear /mnt/rescue_system
+rear -d -v mkbackup
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgf29adea" class="outline-3">
+<h3 id="orgf29adea"><span class="section-number-3">13.2</span> Recovery</h3>
+<div class="outline-text-3" id="text-13-2">
+<p>
+Boot from ISO, select "recovery system". 
+</p>
+<pre class="example">
+RESCUE nfs:~ # ip addr
+RESCUE nfs:~ # ip addr delete {old-ip}/20 dev ens192
+RESCUE nfs:~ # ip addr add {new-ip}/20 dev ens192
+RESCUE nfs:~ # ip link set ens192 up
+RESCUE nfs:~ # ifconfig ens192
+RESCUE nfs:~ # rear -d -v recover
+&lt;choose default option&gt;
+RESCUE nfs:~ # reboot
+
+# Observe the backup progress
+# ssh {new-ip}
+RESCUE nfs:~ # tail -f /var/lib/rear/restore/TSM.\:.&lt;id&gt;.&lt;restore&gt;.log
+
+</pre>
+
+<p>
+<b>FIXME</b>: ReaR don't backup the overlay filesystem of
+/var/lib/docker/overlay2/&lt;uid&gt;/merged (not make sense), but error occurred
+when execute 'docker run' command after restore the whole operating system, even
+backup/restore the &lt;uid&gt; files manually, should rebuild the docker root
+directory (/var/lib/docker). I have no idea to fix the problem.
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgdca54f1" class="outline-2">
+<h2 id="orgdca54f1"><span class="section-number-2">14</span> Backup docker container</h2>
+<div class="outline-text-2" id="text-14">
+<div class="org-src-container">
+<pre class="src src-sh">docker commit -p &lt;id&gt; postgres:v3
+docker save postgres:v3 &gt;postgres-v3.tar
+docker load &lt;./pospostgres-v3.tar
+</pre>
+</div>
+</div>
+</div>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
@@ -1282,7 +1407,7 @@ The reference link is:
 </div></div>
 <div id="postamble" class="status">
 <p class="author">Author: 龔存</p>
-<p class="date">Created: 2020-03-05 周四 21:54</p>
+<p class="date">Created: 2020-03-06 週五 19:10</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
