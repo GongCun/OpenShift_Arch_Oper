@@ -624,16 +624,275 @@ and create new pods (rolling out).
 #+END_SRC
 
 *** Setup pod-autoscalinag 
-/Should in the pod 'complete' stage, not success./
+In OpenShift 3.11 heapster, and the other metrics components, have been
+deprecated in favor of Prometheus (for metrics and monitoring) and the
+metrics-server component for providing metrics data to the Horizontal Pod
+Autoscaler and =oc adm top= command. 
+
+Add the following option in ansible hosts to install the metrics-server:
+#+begin_example
+  # vi /etc/ansible/hosts
+  ...
+  openshift_metrics_server_install=true
+  openshift_metrics_install_metrics=true
+
+#+end_example
+
+Install the OpenShift Metrics Service:
 #+BEGIN_SRC sh
+  # Switch to the openshift-infra project
+  oc project openshift-infra
+
+  # Run playbook in master-node as follows:
+  cd /usr/share/ansible/openshift-ansible
   ansible-playbook \
-      /usr/share/ansible/openshift-ansible/playbooks/metrics-server/config.yml \
-      -e openshift_metrics_server_install=true \
+      -i /etc/ansible/hosts playbooks/openshift-metrics/config.yml \
+      -e openshift_metrics_server_install=True \
       -e openshift_metrics_install_metrics=True
 
+  # Use 'watch' to check the status of pods every two seconds
+  watch oc get pods -n openshift-infra
+
+  # Check if the openshift metrics server is installed
+  oc get pods -n  openshift-metrics-server
+
+  # Check the top of pod & node
   oc adm top pod
   oc adm top node
 
+#+END_SRC
+
+In OpenShift, a resource request is a threshold you can set that affects
+scheduling and quality of service. It essentially provides the minimum amount of
+resources guarantee to the pod. CPU is measured in units called /millicores/
+(one-thousandth of a core). By default, pods don't get individual cores; they
+get time-slices of CPU, sharing the cores on the node with other pods. If a
+particular node has four CPUs assigned to it, then 4000 millicores are available
+to all the running pods on that node:
+
+#+BEGIN_SRC sh
+  cat /proc/cpuinfo | grep -wc '^processor'
+#+END_SRC
+
+Resource requests also can be combined with a resource /limit/, which is similar
+to a request but sets the maximum amount of resources guaranteed to the pod.
+Setting requests and limits also allows the user to set a quality of service
+level by default:
+
+- BestEffort :: Neither a resource nor a limit is specified. This is for
+                low-priority applications that can live with very low amounts of
+                CPU and memory.  
+- Burstable :: Provided when a request is specified that is less than an
+               optionally specified limit.
+- Guaranteed :: A request and a limit are both set to the same number. This is
+                for the highest-priority applications that need the most
+                consistent amount of computing power.  
+
+Setting a lower quality of service gives the scheduler more flexibility by
+allowing it to place more pods in the cluster. Setting a higher quality of
+service limits flexibility but gives applications more consistent resources.
+Because choosing the quality of service is about finding reasonable defaults,
+most applications should fall into the =Burstable= tier.  
+                
+
+Define the resource limits:
+#+BEGIN_SRC sh
+  oc set resources dc/puzzle-autoscale \
+     --requests=cpu=200m,memory=256Mi \
+     --limits=cpu=2000m,memory=4096Mi
+#+END_SRC
+
+Check the resources limits:
+#+BEGIN_SRC sh
+  oc describe dc/puzzle-autoscale
+#+END_SRC
+
+If want to define the horizontal pod autoscaler HPA, /must/ define the resource
+request first. Define the HPA:
+#+BEGIN_SRC sh
+  oc autoscale dc/puzzle-autoscale --min 1 --max 8 --cpu-percent=75
+#+END_SRC 
+
+Observe the HPA:
+#+BEGIN_EXAMPLE
+  # oc get hpa/puzzle-autoscale --watch
+  NAME               REFERENCE                           TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+  puzzle-autoscale   DeploymentConfig/puzzle-autoscale   0%/75%    1         8         2          55s
+
+  # watch oc describe hpa/puzzle-autoscale
+
+  Name:                                                  puzzle-autoscale
+  Namespace:                                             openshift-infra
+  Labels:                                                <none>
+  Annotations:                                           <none>
+  CreationTimestamp:                                     Mon, 09 Mar 2020 22:16:26 +0800
+  Reference:                                             DeploymentConfig/puzzle-autoscale
+  Metrics:                                               ( current / target )
+    resource cpu on pods  (as a percentage of request):  245% (490m) / 75%
+  Min replicas:                                          1
+  Max replicas:                                          8
+  DeploymentConfig pods:                                 4 current / 8 desired
+  Conditions:
+    Type            Status  Reason            Message
+    ----            ------  ------            -------
+    AbleToScale     True    SucceededRescale  the HPA controller was able to update the target scale to 8
+    ScalingActive   True    ValidMetricFound  the HPA was able to successfully calculate a replica count from cpu resource utilization (percentage of request)
+    ScalingLimited  True    TooManyReplicas   the desired replica count is more than the maximum replica count
+  Events:
+    Type    Reason             Age   From                       Message
+    ----    ------             ----  ----                       -------
+    Normal  SuccessfulRescale  8m    horizontal-pod-autoscaler  New size: 1; reason: All metrics below target
+    Normal  SuccessfulRescale  3m    horizontal-pod-autoscaler  New size: 4; reason: cpu resource utilization (percentage of request) above target
+    Normal  SuccessfulRescale  19s   horizontal-pod-autoscaler  New size: 8; reason: cpu resource utilization (percentage of request) above target
+
+
+#+END_EXAMPLE
+
+Do the benchmark in client:
+#+BEGIN_EXAMPLE
+  cd /opt/docker/PuzzleBrain/test
+  ../puzzler -m -b8 -s 172.30.255.172 -p 3001 &
+  ../puzzler -m -b8 -s 172.30.255.172 -p 3001 &
+  ../puzzler -m -b8 -s 172.30.255.172 -p 3001 &
+  ../puzzler -m -b8 -s 172.30.255.172 -p 3001 &
+  ../puzzler -m -b8 -s 172.30.255.172 -p 3001
+#+END_EXAMPLE
+
+Observe the status:
+#+BEGIN_EXAMPLE
+  # watch oc get pods -l app=puzzle-autoscale
+
+  NAME                       READY     STATUS             RESTARTS   AGE
+  puzzle-autoscale-5-cgcrg   1/1       Running            0          5m
+  puzzle-autoscale-5-cmzcp   1/1       Running            0          1m
+  puzzle-autoscale-5-jmbm5   1/1       Running            0          10m
+  puzzle-autoscale-5-ktt7v   0/1       ImagePullBackOff   0          1m
+  puzzle-autoscale-5-mtpzz   1/1       Running            0          1m
+  puzzle-autoscale-5-rt9f6   0/1       ImagePullBackOff   0          1m
+  puzzle-autoscale-5-sqdv2   1/1       Running            0          5m
+  puzzle-autoscale-5-v6p5l   1/1       Running            0          5m
+
+#+END_EXAMPLE
+
+/PHP Welcome Page benchmark test/
+
+#+begin_src sh
+  oc new-app openshift/php~https://github.com/christianh814/welcome-php
+#+end_src
+ - =openshift/php= - This tells OSEv3 to use the PHP images stream provided by OPENSHIFT.
+ - Provide the git URL for the project, syntax is "/imagestream~source/"
+
+Once you created the app, start your build:
+#+begin_src sh
+  oc start-build welcome-php
+#+end_src
+
+Track the build progress:
+#+BEGIN_SRC sh
+  oc logs -f bc/welcome-php
+#+END_SRC
+
+Once the build completes, expose the route:
+#+begin_src sh
+  oc get svc
+  oc expose svc/welcome-php --hostname=welcome-php.apps.myopenshift.com
+  curl -v -k http://welcome-php.apps.myopenshift.com
+#+end_src
+
+Define the resource limits:
+#+begin_src sh
+  oc set resources dc/welcome-php --requests=cpu=200m,memory=256Mi
+#+end_src
+
+Set up the HPA:
+#+begin_src sh
+  oc autoscale dc/welcome-php --min 2 --max 6 --cpu-percent=75
+#+end_src
+
+Observe the HPA status:
+#+begin_src sh
+  watch oc get pod -l app=welcome-php
+  watch oc describe hpa/welcome-php
+#+end_src
+
+Use the Apache benchmark (the =ab= command):
+#+begin_src sh
+ab -n 5000000 -c 500 http://welcome-php.apps.myopenshift.com
+# -n: the total number of HTTP requests
+# -c: the number of concurrent requests
+
+# Observe
+watch oc get pod -l app=welcome-php 
+watch oc adm top pod -l app=welcome-php
+
+#+end_src
+
+Observe the status by Prometheus grafana
+#+BEGIN_EXAMPLE
+# oc get route -n openshift-monitoring
+...
+grafana             grafana-openshift-monitoring.apps.myopenshift.com 
+#+END_EXAMPLE
+Visit the page of https://grafana-openshift-monitoring.apps.myopenshift.com to
+observe the performance.
+
+Or use the =docker stats= command to view the resource consumption of the
+containers:
+#+BEGIN_SRC sh
+  # Locate the node which the pod is running on:
+  oc -n hello get pods -o wide
+
+  # Connect to the node:
+  ssh node.myopenshift.com
+
+  # Locate the Docker container ID
+  docker ps | grep puzzle-2-9xslr | awk '{print $1}'
+
+  # Use the docker-stats to view the resource consumption
+  docker stats 8b7298bf3150 --no-stream=false
+
+#+END_SRC
+
+/Here are the previous installation steps that is deprecated, just for reference./
+#+BEGIN_SRC sh
+  # Clean previous setup
+  ansible-playbook \
+      /usr/share/ansible/openshift-ansible/playbooks/metrics-server/config.yml \
+      -e openshift_metrics_server_install=False \
+      -e openshift_metrics_install_metrics=False
+
+  # Run playbook in master-node as follows:
+  cd /usr/share/ansible/openshift-ansible
+  ansible-playbook \
+      -i /etc/ansible/hosts playbooks/openshift-metrics/config.yml \
+      -e openshift_metrics_server_install=True \
+      -e openshift_metrics_install_metrics=True \
+      -e openshift_metrics_start_cluster=True \
+      -e openshift_metrics_duration=1 \
+      -e openshift_metrics_resolution=10s \
+      -e openshift_metrics_hawkular_hostname=hawkular-metrics.apps.myopenshift.com \
+      -e openshift_metrics_cassandra_storage_type=emptydir
+
+  # Use 'watch' to check the status of pos every two seconds
+  watch oc get pods
+
+  # Cleanup if necessary
+  # 1st clean
+  ansible-playbook \
+      /usr/share/ansible/openshift-ansible/playbooks/metrics-server/config.yml \
+      -e openshift_metrics_server_install=False \
+      -e openshift_metrics_install_metrics=False
+
+  # Double clean
+  ansible-playbook \
+      /usr/share/ansible/openshift-ansible/playbooks/metrics-server/config.yml \
+      -e openshift_metrics_install_metrics=False
+
+  # Guarantee cleanup
+  ansible-playbook \
+      /usr/share/ansible/openshift-ansible/playbooks/metrics-server/config.yml \
+      -e openshift_metrics_server_install=False \
+      -e openshift_metrics_install_metrics=False
 #+END_SRC
 
 *** Create the puzzle-master-node pod
