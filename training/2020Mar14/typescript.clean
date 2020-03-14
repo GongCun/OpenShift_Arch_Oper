@@ -1,0 +1,2682 @@
+Script started on 2020-03-14 14:28:34+0800
+sh-4.2# 
+sh-4.2# 
+sh-4.2# 
+sh-4.2# 
+sh-4.2# 
+sh-4.2# su - student
+Last login: Sat Mar 14 06:19:17 UTC 2020 on pts/2
+[student@workstation ~]$ 
+[student@workstation ~]$ 
+
+
+oc projects
+You are not a member of any projects. You can request a project to be created with the 'new-project' command.
+ projectg projecte projectt project
+No resources found.
+oc get supsudo podman ps
+images
+su(reverse-i-search)`':s': sudo podman images[student@workstation ~]$sudsudo podman serarch rhel
+INDEX        NAME                                                                     DESCRIPTION                                       STARS   OFFICIAL   AUTOMATED
+redhat.com   registry.access.redhat.com/rhel7-atomic                                  Red Hat Enterprise Linux Atomic Image is a m...   0                  
+redhat.com   registry.access.redhat.com/dotnet/dotnet-20-rhel7                        .NET Core 2.0 for RHEL                            0                  
+redhat.com   registry.access.redhat.com/dotnet/dotnetcore-10-rhel7                    .NET Core 1.0 for RHEL                            0                  
+redhat.com   registry.access.redhat.com/dotnet/dotnetcore-11-rhel7                    .NET Core 1.1 for RHEL                            0                  
+redhat.com   registry.access.redhat.com/rhel7/rhel-atomic                             Red Hat Enterprise Linux Atomic Image is a m...   0                  
+redhat.com   registry.access.redhat.com/rhel-atomic                                   Red Hat Enterprise Linux Atomic Image is a m...   0                  
+redhat.com   registry.access.redhat.com/rhel-minimal                                  Red Hat Enterprise Linux Minimal Image is a ...   0                  
+redhat.com   registry.access.redhat.com/rhel7-rhel-minimal                            Red Hat Enterprise Linux Minimal Image is a ...   0                  
+redhat.com   registry.access.redhat.com/rhel7-minimal                                 Red Hat Enterprise Linux Minimal Image is a ...   0                  
+redhat.com   registry.access.redhat.com/rhceph/rhceph-3-dashboard-rhel7               Red Hat Ceph Storage 3 Dashboard                  0                  
+redhat.com   registry.access.redhat.com/dotnet/dotnet-20-runtime-rhel7                .NET Core 2.0 runtime for RHEL                    0                  
+redhat.com   registry.access.redhat.com/dotnet/dotnet-21-runtime-rhel7                .NET Core 2.1 runtime for RHEL                    0                  
+redhat.com   registry.access.redhat.com/dotnet/dotnet-22-runtime-rhel7                .NET Core 2.2 runtime only on RHEL 7              0                  
+redhat.com   registry.access.redhat.com/rhgs3/rhgs-volmanager-rhel7                   Management Service Instance responsible for ...   0                  
+redhat.com   registry.access.redhat.com/dotnet/dotnet-20-jenkins-slave-rhel7          .NET Core 2.0 Jenkins Slave for RHEL              0                  
+redhat.com   registry.access.redhat.com/rhgs3/rhgs-server-rhel7                       containerized Red Hat Gluster Storage image ...   0                  
+redhat.com   registry.access.redhat.com/rhgs3/rhgs-s3-server-rhel7                    Containerized S3 server image for Red Hat Gl...   0                  
+redhat.com   registry.access.redhat.com/dotnet/dotnet-22-rhel7                        .NET Core 2.2 SDK and Runtime for RHEL 7          0                  
+redhat.com   registry.access.redhat.com/dotnet/dotnet-21-rhel7                        .NET Core 2.1 for RHEL                            0                  
+redhat.com   registry.access.redhat.com/dotnet/dotnet-21-jenkins-slave-rhel7          .NET Core 2.1 Jenkins Slave for RHEL              0                  
+redhat.com   registry.access.redhat.com/dotnet/dotnet-22-jenkins-slave-rhel7          .NET Core 2.2 Jenkins Slave for RHEL              0                  
+redhat.com   registry.access.redhat.com/rhgs3/rhgs-gluster-block-prov-rhel7           Containerized Gluster-block Provisioner imag...   0                  
+redhat.com   registry.access.redhat.com/codeready-workspaces-beta/stacks-java-rhel8   Red Hat CodeReady Workspaces - RHEL 8 Beta J...   0                  
+redhat.com   registry.access.redhat.com/rhel                                          This platform image provides a minimal runti...   0                  
+redhat.com   registry.access.redhat.com/rhel7/rhel                                    This platform image provides a minimal runti...   0                  
+
+SUCCESS
+  Creating create_table.txt file..............................  SUCCESS
+sudo podman 
+[root@workstation ~]# 
+podman rupodman images
+mysql-basic
+INDEX     NAME                                                         DESCRIPTION                                       STARS   OFFICIAL   AUTOMATED
+quay.io   quay.io/cosee-concourse/mysql-resource                                                                         0                  
+quay.io   quay.io/freshbooks/liquibase-mysql                                                                             0                  
+quay.io   quay.io/presslabs/mysql-operator                             Docker images for presslabs mysql-operator. ...   0                  
+quay.io   quay.io/mprzycho/do180-mysql-57-rhel7                                                                          0                  
+quay.io   quay.io/presslabs/mysql-operator-sidecar                     Docker images for presslabs mysql operator's...   0                  
+quay.io   quay.io/thomasjungblut/nginx-basic-auth-proxy                                                                  0                  
+quay.io   quay.io/paulfantom/restic-mysql                              Wrapper around restic to provide automated b...   0                  
+quay.io   quay.io/app-sre/mysql                                        Used by the SQL-QUERY integration                 0                  
+quay.io   quay.io/mettle/mysql-database-provisioning                                                                     0                  
+quay.io   quay.io/presslabs/mysql-operator-orchestrator                                                                  0                  
+quay.io   quay.io/egwiazda/do180-mysql-57-rhel7                                                                          0                  
+quay.io   quay.io/dtan4/nginx-basic-auth-proxy                                                                           0                  
+quay.io   quay.io/mettle/docker-mysql                                                                                    0                  
+quay.io   quay.io/patobest/do180-mysql                                                                                   0                  
+quay.io   quay.io/cybozu/mysql                                                                                           0                  
+quay.io   quay.io/ukhomeofficedigital/mysql                                                                              0                  
+quay.io   quay.io/kiegroup/jboss-kie-mysql-extension-openshift-image                                                     0                  
+quay.io   quay.io/nmaz/do180-mysql-57-rhel7                                                                              0                  
+quay.io   quay.io/yeebase/mysql-client                                                                                   0                  
+quay.io   quay.io/prometheus/haproxy-exporter                          # HAProxy Exporter for Prometheus [![Build S...   0                  
+quay.io   quay.io/openzipkin/zipkin-mysql                              MySQL image for testing Zipkin                    0                  
+quay.io   quay.io/bitnami/mysql                                        Official build of [Bitnami MySQL](https://gi...   0                  
+quay.io   quay.io/whisk/fastboot-mysql                                                                                   0                  
+quay.io   quay.io/presslabs/mysql-helper                               Docker images for presslabs mysql operator's...   0                  
+quay.io   quay.io/redhattraining/mysql-57-rhel7                                                                          0                  
+
+INDEX        NAME                                                         DESCRIPTION                                       STARS   OFFICIAL   AUTOMATED
+redhat.com   registry.access.redhat.com/rhscl/mysql-57-rhel7              Docker image for running MySQL 5.7 server. T...   0                  
+redhat.com   registry.access.redhat.com/rhscl/mysql-56-rhel7              MySQL 5.6 SQL database server                     0                  
+redhat.com   registry.access.redhat.com/openshift3/mysql-55-rhel7         MySQL 5.5 SQL database server                     0                  
+redhat.com   registry.access.redhat.com/openshift3/mysql-apb              Ansible Playbook Bundle application definiti...   0                  
+redhat.com   registry.access.redhat.com/rhmap44/mysql                     Provides an extension to the RHSCL MySQL Doc...   0                  
+redhat.com   registry.access.redhat.com/rhmap42/mysql                     Provides an extension to the RHSCL MySQL Doc...   0                  
+redhat.com   registry.access.redhat.com/rhmap43/mysql                     Provides an extension to the RHSCL MySQL Doc...   0                  
+redhat.com   registry.access.redhat.com/rhmap46/mysql                     Provides an extension to the RHSCL MySQL ima...   0                  
+redhat.com   registry.access.redhat.com/rhscl/mysql-80-rhel7              This container image provides a containerize...   0                  
+redhat.com   registry.access.redhat.com/rhmap45/mysql                     Provides an extension to the RHSCL MySQL ima...   0                  
+redhat.com   registry.access.redhat.com/rhmap47/mysql                     Provides an extension to the RHSCL MySQL ima...   0                  
+quay.io      quay.io/cosee-concourse/mysql-resource                                                                         0                  
+quay.io      quay.io/freshbooks/liquibase-mysql                                                                             0                  
+quay.io      quay.io/presslabs/mysql-operator                             Docker images for presslabs mysql-operator. ...   0                  
+quay.io      quay.io/mprzycho/do180-mysql-57-rhel7                                                                          0                  
+quay.io      quay.io/presslabs/mysql-operator-sidecar                     Docker images for presslabs mysql operator's...   0                  
+quay.io      quay.io/paulfantom/restic-mysql                              Wrapper around restic to provide automated b...   0                  
+quay.io      quay.io/app-sre/mysql                                        Used by the SQL-QUERY integration                 0                  
+quay.io      quay.io/mettle/mysql-database-provisioning                                                                     0                  
+quay.io      quay.io/presslabs/mysql-operator-orchestrator                                                                  0                  
+quay.io      quay.io/egwiazda/do180-mysql-57-rhel7                                                                          0                  
+quay.io      quay.io/mettle/docker-mysql                                                                                    0                  
+quay.io      quay.io/patobest/do180-mysql                                                                                   0                  
+quay.io      quay.io/cybozu/mysql                                                                                           0                  
+quay.io      quay.io/ukhomeofficedigital/mysql                                                                              0                  
+quay.io      quay.io/kiegroup/jboss-kie-mysql-extension-openshift-image                                                     0                  
+quay.io      quay.io/nmaz/do180-mysql-57-rhel7                                                                              0                  
+quay.io      quay.io/yeebase/mysql-client                                                                                   0                  
+quay.io      quay.io/openzipkin/zipkin-mysql                              MySQL image for testing Zipkin                    0                  
+quay.io      quay.io/bitnami/mysql                                        Official build of [Bitnami MySQL](https://gi...   0                  
+quay.io      quay.io/whisk/fastboot-mysql                                                                                   0                  
+quay.io      quay.io/presslabs/mysql-helper                               Docker images for presslabs mysql operator's...   0                  
+quay.io      quay.io/redhattraining/mysql-57-rhel7                                                                          0                  
+quay.io      quay.io/spaces/mysql-pmm                                                                                       0                  
+quay.io      quay.io/easywp/mysql-backup                                                                                    0                  
+quay.io      quay.io/aptible/mysql                                        ![](https://quay.io/repository/aptible/mysql...   0                  
+ull rhscl/mysql-57-rhel7
+Trying to pull registry.access.redhat.com/rhscl/mysql-57-rhel7:latest...Getting image source signatures
+Copying blob sha256:1c9f515fc6ab2b7ebfcaffd8af681b68869d78a3b19c69e87c296363ab1bc2fe
+ 0 B / ?  928.00 KB / ?  2.75 MB / ?  4.72 MB / ?  6.50 MB / ?  8.12 MB / ?  10.00 MB / ?  11.97 MB / ?  13.84 MB / ?  15.66 MB / ?  17.06 MB / ?  19.22 MB / ?  21.22 MB / ?  23.09 MB / ?  24.72 MB / ?  26.62 MB / ?  28.66 MB / ?  30.47 MB / ?  32.44 MB / ?  34.25 MB / ?  35.91 MB / ?  38.09 MB / ?  40.09 MB / ?  42.12 MB / ?  44.22 MB / ?  46.00 MB / ?  47.78 MB / ?  49.56 MB / ?  51.31 MB / ?  52.84 MB / ?  54.44 MB / ?  56.62 MB / ?  58.78 MB / ?  60.88 MB / ?  62.31 MB / ?  63.66 MB / ?  66.38 MB / ?  68.12 MB / ?  70.34 MB / ?  71.94 MB / ?  72.70 MB / ?  8s
+Copying blob sha256:1d2c4ce43b78cb9a97ede7f19ad1406a43ee50532568bda660193e4a404b424f
+ 0 B / ?  1.54 KB / ?  0s
+Copying blob sha256:f1e961fe4c5192ab9f8e241a2efc674779623ac6a3ed49ee9a1a5b3b8425fe0d
+ 0 B / ?  992.00 KB / ?  3.22 MB / ?  5.16 MB / ?  6.85 MB / ?  0s
+Copying blob sha256:9f1840c3b3bd1303763f9abba51fdd1dcce1ed28bfff318dd2af055b78207520
+ 0 B / ?  1.25 MB / ?  3.16 MB / ?  4.97 MB / ?  6.66 MB / ?  8.16 MB / ?  9.91 MB / ?  11.69 MB / ?  13.56 MB / ?  15.19 MB / ?  16.28 MB / ?  18.16 MB / ?  19.94 MB / ?  21.94 MB / ?  23.34 MB / ?  24.75 MB / ?  26.72 MB / ?  28.50 MB / ?  30.28 MB / ?  31.69 MB / ?  32.94 MB / ?  34.38 MB / ?  36.09 MB / ?  37.88 MB / ?  39.00 MB / ?  40.38 MB / ?  42.12 MB / ?  44.16 MB / ?  45.69 MB / ?  47.34 MB / ?  48.72 MB / ?  50.00 MB / ?  51.31 MB / ?  52.75 MB / ?  53.66 MB / ?  54.91 MB / ?  56.75 MB / ?  58.03 MB / ?  59.75 MB / ?  61.00 MB / ?  62.31 MB / ?  8s
+Copying config sha256:60726b33a00a2c3be60e25c3270a34a9b147db86602f05a71988a1c92a70cebc
+ 0 B / 6.85 KB  6.85 KB / 6.85 KB  0s
+Writing manifest to image destination
+Storing signatures
+60726b33a00a2c3be60e25c3270a34a9b147db86602f05a71988a1c92a70cebc
+podman run --name mysql-basesic dopodman images
+REPOSITORY                                        TAG      IMAGE ID       CREATED        SIZE
+registry.access.redhat.com/rhscl/mysql-57-rhel7   latest   60726b33a00a   5 months ago   448MB
+top 97fec7a2f1a5
+USER    PID   PPID   %CPU    ELAPSED         TTY   TIME   COMMAND
+mysql   1     0      0.000   28.603756042s   ?     0s     /opt/rh/rh-mysql57/root/usr/libexec/mysqld --defaults-file=/etc/my.cnf 
+bash
+bash-4.2$ 
+bash-4.2$ mysql -ur root
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 2
+Server version: 5.7.24 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show show database
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'database' at line 1
+mysql> 
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| items              |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> 
+mysql> use itesmms;
+Database changed
+mysql> 
+mysql> show tables;
+Empty set (0.01 sec)
+
+mysql> 
+mysql> 
+mysql> CREATE TABLE Projects (id int(11) NOT NULL,
+    -> name varchar(255) DEFAULT NULL,
+    -> code varchar(255) DEFAULT NULL,
+    -> PRIMARY KEY (id));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> 
+mysql> seshow tables;
++-----------------+
+| Tables_in_items |
++-----------------+
+| Projects        |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> select * from taProjects;
+Empty set (0.01 sec)
+
+mysql> Insert into desc Projects;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| id    | int(11)      | NO   | PRI | NULL    |       |
+| name  | varchar(255) | YES  |     | NULL    |       |
+| code  | varchar(255) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into Projects(id,name,coe)de) valuse(es(0,GongCunCunGong,"C",250"0xff");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from Projects;
++----+---------+------+
+| id | name    | code |
++----+---------+------+
+|  0 | CunGong | 0xff |
++----+---------+------+
+1 row in set (0.00 sec)
+
+mysql> ^DBye
+bash-4.2$ exit
+podman ps
+CONTAINER ID   IMAGE                                                    COMMAND                  CREATED          STATUS              PORTS   NAMES
+97fec7a2f1a5   registry.access.redhat.com/rhscl/mysql-57-rhel7:latest   container-entrypoin...   11 minutes ago   Up 11 minutes ago           mysql-basic
+p': podman pss^C
+e': podman exec -it 97fec7a2f1a5 bashxe[root@workstation ~]#
+bash-4.2$ 
+bash-4.2$ mysql -uroot
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.7.24 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| items              |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.01 sec)
+
+mysql> use items;
+Database changed
+mysql> select * from Projects;
++----+---------+------+
+| id | name    | code |
++----+---------+------+
+|  0 | CunGong | 0xff |
++----+---------+------+
+1 row in set (0.00 sec)
+
+mysql> ^DBye
+bash-4.2$ 
+bash-4.2$ exit
+# storage.conf is the configuration file for all tools
+# that share the containers/storage libraries
+# See man 5 containers-storage.conf for more information
+# The "container storage" table contains all of the server options.
+[storage]
+
+# Default Storage Driver
+driver = "overlay"
+
+# Temporary storage location
+runroot = "/var/run/containers/storage"
+
+# Primary Read/Write location of container storage
+graphroot = "/var/lib/containers/storage"
+
+[storage.options]
+# Storage options to be passed to underlying storage drivers
+
+# AdditionalImageStores is used to pass paths to additional Read/Only image stor es
+# Must be comma separated list.
+additionalimagestores = [
+]
+storage.conftmp
+drwx------. 2 root root    6 Mar 14 06:32 mounts
+drwxr-xr-x. 2 root root   27 Mar 14 06:32 libpod
+drwx------. 3 root root  116 Mar 14 06:41 overlay-images
+-rw-------. 1 root root   64 Mar 14 06:43 storage.lock
+drwx------. 3 root root  124 Mar 14 06:43 overlay-containers
+drwx------. 2 root root 4096 Mar 14 06:43 overlay-layers
+drwx------. 8 root root 4096 Mar 14 06:55 overlay
+cd overlay
+2cab4440f9070965c8454792eee4b122bce5939cc6d21e554469f01e71712a89
+drwx------. 5 root root     69 Mar 14 06:41 db5648edd5cee7bb1f348369b60e7ffba46bd3a83ad24a8f079d117181eb3774
+drwx------. 5 root root     69 Mar 14 06:41 9c95cbce8d373223f7946f11dcee0ddac8ca11b98e7c3b63e2a4be27681fb1ce
+drwx------. 5 root root     69 Mar 14 06:41 582f807423b178c75f2c65a8cebe89f826c546f754d1db0735fa0bda992df2a1
+drwx------. 2 root root    176 Mar 14 06:43 l
+drwx------. 5 root root     69 Mar 14 06:43 7b520c31f785c8406877f876baf5c0240f934b795dd1405ffcc2e431552284e9
+brw-------. 1 root root 252, 1 Mar 14 06:55 backingFsBlockDev
+ckackls -ltr
+total 0
+drwx------. 6 root root     69 Mar 14 06:41 2cab4440f9070965c8454792eee4b122bce5939cc6d21e554469f01e71712a89
+drwx------. 5 root root     69 Mar 14 06:41 db5648edd5cee7bb1f348369b60e7ffba46bd3a83ad24a8f079d117181eb3774
+drwx------. 5 root root     69 Mar 14 06:41 9c95cbce8d373223f7946f11dcee0ddac8ca11b98e7c3b63e2a4be27681fb1ce
+drwx------. 5 root root     69 Mar 14 06:41 582f807423b178c75f2c65a8cebe89f826c546f754d1db0735fa0bda992df2a1
+drwx------. 2 root root    176 Mar 14 06:43 l
+drwx------. 5 root root     69 Mar 14 06:43 7b520c31f785c8406877f876baf5c0240f934b795dd1405ffcc2e431552284e9
+brw-------. 1 root root 252, 1 Mar 14 06:55 backingFsBlockDev
+podman images
+REPOSITORY                                        TAG      IMAGE ID       CREATED        SIZE
+registry.access.redhat.com/rhscl/mysql-57-rhel7   latest   60726b33a00a   5 months ago   448MB
+podman 
+podman-export(1)            General Commands Manual           podman-export(1)
+
+NAME
+       podman-export - Export container's filesystem contents as a tar archive
+
+SYNOPSIS
+       podman export [options] container
+
+DESCRIPTION
+       podman  export  exports the filesystem of a container and saves it as a
+       tarball on the local machine. podman export writes to STDOUT by default
+       and  can be redirected to a file using the --output flag.  Note: : is a
+       restricted character and cannot be part of the file name.
+
+       podman [GLOBAL OPTIONS]
+
+       podman export [GLOBAL OPTIONS]
+
+       podman export [OPTIONS] CONTAINER
+
+OPTIONS
+       --output, -o
+
+ Manual page podman-export(1) line 1 (press h for help or q to quit)
+podman(1)                   General Commands Manual                  podman(1)
+
+NAME
+       podman - Simple management tool for containers and images
+
+SYNOPSIS
+       podman [options] command
+
+DESCRIPTION
+       podman  is a simple client only tool to help with debugging issues when
+       daemons such as CRI runtime and the kubelet are not responding or fail
+       ing. A shared API layer could be created to share code between the dae
+       mon and podman. podman does not require any daemon running. podman uti
+       lizes  the  same  underlying  components  that  crio uses i.e. contain
+       ers/image, container/storage, oci-runtime-tool/generate,  runc  or  any
+       other  OCI compatible runtime. podman shares state with crio and so has
+       the capability to debug pods/images created by crio.
+
+       podman [GLOBAL OPTIONS]
+
+GLOBAL OPTIONS
+       --help, -h
+
+ Manual page podman(1) line 1 (press h for help or q to quit)manman pod
+[root@workstation overlay]# podman images
+REPOSITORY                                        TAG      IMAGE ID       CREATED        SIZE
+registry.access.redhat.com/rhscl/mysql-57-rhel7   latest   60726b33a00a   5 months ago   448MB
+do
+podman ps
+CONTAINER ID   IMAGE                                                    COMMAND                  CREATED          STATUS              PORTS   NAMES
+97fec7a2f1a5   registry.access.redhat.com/rhscl/mysql-57-rhel7:latest   container-entrypoin...   35 minutes ago   Up 35 minutes ago           mysql-basic
+inspect 97fec7a2f1a5
+[
+    {
+        "ID": "97fec7a2f1a5d3652977c8762063574dd66156cd48fa55112eea5e81b721243f",
+        "Created": "2020-03-14T06:43:43.146037273Z",
+        "Path": "container-entrypoint",
+        "Args": [
+            "run-mysqld"
+        ],
+        "State": {
+            "OciVersion": "1.0.1-dev",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 20583,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2020-03-14T06:43:45.53604867Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "60726b33a00a2c3be60e25c3270a34a9b147db86602f05a71988a1c92a70cebc",
+        "ImageName": "registry.access.redhat.com/rhscl/mysql-57-rhel7:latest",
+        "Rootfs": "",
+        "ResolvConfPath": "/var/run/containers/storage/overlay-containers/97fec7a2f1a5d3652977c8762063574dd66156cd48fa55112eea5e81b721243f/userdata/resolv.conf",
+        "HostnamePath": "/var/run/containers/storage/overlay-containers/97fec7a2f1a5d3652977c8762063574dd66156cd48fa55112eea5e81b721243f/userdata/hostname",
+        "HostsPath": "/var/run/containers/storage/overlay-containers/97fec7a2f1a5d3652977c8762063574dd66156cd48fa55112eea5e81b721243f/userdata/hosts",
+        "StaticDir": "/var/lib/containers/storage/overlay-containers/97fec7a2f1a5d3652977c8762063574dd66156cd48fa55112eea5e81b721243f/userdata",
+        "LogPath": "/var/lib/containers/storage/overlay-containers/97fec7a2f1a5d3652977c8762063574dd66156cd48fa55112eea5e81b721243f/userdata/ctr.log",
+        "Name": "mysql-basic",
+        "RestartCount": 0,
+        "Driver": "overlay",
+        "MountLabel": "system_u:object_r:svirt_sandbox_file_t:s0:c39,c235",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "EffectiveCaps": null,
+        "BoundingCaps": [
+            "CAP_CHOWN",
+            "CAP_DAC_OVERRIDE",
+            "CAP_FSETID",
+            "CAP_FOWNER",
+            "CAP_MKNOD",
+            "CAP_NET_RAW",
+            "CAP_SETGID",
+            "CAP_SETUID",
+            "CAP_SETFCAP",
+            "CAP_SETPCAP",
+            "CAP_NET_BIND_SERVICE",
+            "CAP_SYS_CHROOT",
+            "CAP_KILL",
+            "CAP_AUDIT_WRITE"
+        ],
+        "ExecIDs": [],
+        "GraphDriver": {
+            "Name": "overlay",
+            "Data": {
+                "LowerDir": "/var/lib/containers/storage/overlay/582f807423b178c75f2c65a8cebe89f826c546f754d1db0735fa0bda992df2a1/diff:/var/lib/containers/storage/overlay/9c95cbce8d373223f7946f11dcee0ddac8ca11b98e7c3b63e2a4be27681fb1ce/diff:/var/lib/containers/storage/overlay/db5648edd5cee7bb1f348369b60e7ffba46bd3a83ad24a8f079d117181eb3774/diff:/var/lib/containers/storage/overlay/2cab4440f9070965c8454792eee4b122bce5939cc6d21e554469f01e71712a89/diff",
+                "MergedDir": "/var/lib/containers/storage/overlay/7b520c31f785c8406877f876baf5c0240f934b795dd1405ffcc2e431552284e9/merged",
+                "UpperDir": "/var/lib/containers/storage/overlay/7b520c31f785c8406877f876baf5c0240f934b795dd1405ffcc2e431552284e9/diff",
+                "WorkDir": "/var/lib/containers/storage/overlay/7b520c31f785c8406877f876baf5c0240f934b795dd1405ffcc2e431552284e9/work"
+            }
+        },
+        "Mounts": [
+            {
+                "destination": "/proc",
+                "type": "proc",
+                "source": "proc",
+                "options": [
+                    "nosuid",
+                    "noexec",
+                    "nodev"
+                ]
+            },
+            {
+                "destination": "/dev",
+                "type": "tmpfs",
+                "source": "tmpfs",
+                "options": [
+                    "nosuid",
+                    "strictatime",
+                    "mode=755",
+                    "size=65536k"
+                ]
+            },
+            {
+                "destination": "/dev/pts",
+                "type": "devpts",
+                "source": "devpts",
+                "options": [
+                    "nosuid",
+                    "noexec",
+                    "newinstance",
+                    "ptmxmode=0666",
+                    "mode=0620",
+                    "gid=5"
+                ]
+            },
+            {
+                "destination": "/dev/shm",
+                "type": "tmpfs",
+                "source": "shm",
+                "options": [
+                    "nosuid",
+                    "noexec",
+                    "nodev",
+                    "mode=1777",
+                    "size=65536k"
+                ]
+            },
+            {
+                "destination": "/dev/mqueue",
+                "type": "mqueue",
+                "source": "mqueue",
+                "options": [
+                    "nosuid",
+                    "noexec",
+                    "nodev"
+                ]
+            },
+            {
+                "destination": "/sys",
+                "type": "sysfs",
+                "source": "sysfs",
+                "options": [
+                    "nosuid",
+                    "noexec",
+                    "nodev",
+                    "ro"
+                ]
+            },
+            {
+                "destination": "/sys/fs/cgroup",
+                "type": "cgroup",
+                "source": "cgroup",
+                "options": [
+                    "rprivate",
+                    "nosuid",
+                    "noexec",
+                    "nodev",
+                    "relatime",
+                    "ro"
+                ]
+            }
+        ],
+        "Dependencies": [],
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "",
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "Ports": [],
+            "SandboxKey": "/var/run/netns/cni-72a25c13-7146-c237-e6d7-77df81bb71db",
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "10.88.0.1",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "10.88.0.2",
+            "IPPrefixLen": 16,
+            "IPv6Gateway": "",
+            "MacAddress": "5e:fa:60:a4:da:23"
+        },
+        "ExitCommand": [
+            "/usr/bin/podman",
+            "--root",
+            "/var/lib/containers/storage",
+            "--runroot",
+            "/var/run/containers/storage",
+            "--log-level",
+            "error",
+            "--cgroup-manager",
+            "systemd",
+            "--tmpdir",
+            "/var/run/libpod",
+            "--storage-driver",
+            "overlay",
+            "container",
+            "cleanup",
+            "97fec7a2f1a5d3652977c8762063574dd66156cd48fa55112eea5e81b721243f"
+        ],
+        "Namespace": "",
+        "IsInfra": false,
+        "HostConfig": {
+            "ContainerIDFile": "",
+            "LogConfig": null,
+            "NetworkMode": "bridge",
+            "PortBindings": null,
+            "AutoRemove": false,
+            "CapAdd": [],
+            "CapDrop": [],
+            "DNS": [],
+            "DNSOptions": [],
+            "DNSSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "",
+            "Cgroup": "host",
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": [],
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 65536000,
+            "Runtime": "runc",
+            "ConsoleSize": null,
+            "CpuShares": null,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": null,
+            "BlkioWeightDevice": null,
+            "BlkioDeviceReadBps": null,
+            "BlkioDeviceWriteBps": null,
+            "BlkioDeviceReadIOps": null,
+            "BlkioDeviceWriteIOps": null,
+            "CpuPeriod": null,
+            "CpuQuota": null,
+            "CpuRealtimePeriod": null,
+            "CpuRealtimeRuntime": null,
+            "CpuSetCpus": "",
+            "CpuSetMems": "",
+            "Devices": null,
+            "DiskQuota": 0,
+            "KernelMemory": null,
+            "MemoryReservation": null,
+            "MemorySwap": null,
+            "MemorySwappiness": null,
+            "OomKillDisable": false,
+            "PidsLimit": null,
+            "Ulimits": [],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "Tmpfs": []
+        },
+        "Config": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": {
+                "uid": 0,
+                "gid": 0
+            },
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/opt/app-root/src/bin:/opt/app-root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "TERM=xterm",
+                "HOSTNAME=",
+                "container=oci",
+                "MYSQL_VERSION=5.7",
+                "MYSQL_USER=user1",
+                "MYSQL_DATABASE=items",
+                "STI_SCRIPTS_URL=image:///usr/libexec/s2i",
+                "STI_SCRIPTS_PATH=/usr/libexec/s2i",
+                "APP_ROOT=/opt/app-root",
+                "HOME=/var/lib/mysql",
+                "SUMMARY=MySQL 5.7 SQL database server",
+                "APP_DATA=/opt/app-root/src",
+                "MYSQL_PREFIX=/opt/rh/rh-mysql57/root/usr",
+                "MYSQL_ROOT_PASSWORD=r00tpa55",
+                "PROMPT_COMMAND=. /usr/share/container-scripts/mysql/scl_enable",
+                "CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/mysql",
+                "ENABLED_COLLECTIONS=rh-mysql57",
+                "DESCRIPTION=MySQL is a multi-user, multi-threaded SQL database server. The container image provides a containerized packaging of the MySQL mysqld daemon and client application. The mysqld server daemon accepts connections from clients and provides access to content from MySQL databases on behalf of the clients.",
+                "PLATFORM=el7",
+                "BASH_ENV=/usr/share/container-scripts/mysql/scl_enable",
+                "ENV=/usr/share/container-scripts/mysql/scl_enable",
+                "MYSQL_PASSWORD=mypa55"
+            ],
+            "Cmd": [
+                "container-entrypoint",
+                "run-mysqld"
+            ],
+            "Image": "registry.access.redhat.com/rhscl/mysql-57-rhel7:latest",
+            "Volumes": null,
+            "WorkingDir": "/opt/app-root/src",
+            "Entrypoint": "container-entrypoint",
+            "Labels": {
+                "architecture": "x86_64",
+                "authoritative-source-url": "registry.access.redhat.com",
+                "build-date": "2019-10-10T12:14:29.640025",
+                "com.redhat.build-host": "cpt-1006.osbs.prod.upshift.rdu2.redhat.com",
+                "com.redhat.component": "rh-mysql57-container",
+                "com.redhat.license_terms": "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#rhel",
+                "description": "MySQL is a multi-user, multi-threaded SQL database server. The container image provides a containerized packaging of the MySQL mysqld daemon and client application. The mysqld server daemon accepts connections from clients and provides access to content from MySQL databases on behalf of the clients.",
+                "distribution-scope": "public",
+                "io.k8s.description": "MySQL is a multi-user, multi-threaded SQL database server. The container image provides a containerized packaging of the MySQL mysqld daemon and client application. The mysqld server daemon accepts connections from clients and provides access to content from MySQL databases on behalf of the clients.",
+                "io.k8s.display-name": "MySQL 5.7",
+                "io.openshift.expose-services": "3306:mysql",
+                "io.openshift.s2i.scripts-url": "image:///usr/libexec/s2i",
+                "io.openshift.tags": "database,mysql,mysql57,rh-mysql57",
+                "io.s2i.scripts-url": "image:///usr/libexec/s2i",
+                "maintainer": "SoftwareCollections.org <sclorg@redhat.com>",
+                "name": "rhscl/mysql-57-rhel7",
+                "release": "49",
+                "summary": "MySQL 5.7 SQL database server",
+                "url": "https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/mysql-57-rhel7/images/5.7-49",
+                "usage": "docker run -d -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=db -p 3306:3306 rhscl/mysql-57-rhel7",
+                "vcs-ref": "abeeaf61d5e8abc22dda8ce057951eee3b38b883",
+                "vcs-type": "git",
+                "vendor": "Red Hat, Inc.",
+                "version": "5.7"
+            },
+            "Annotations": {
+                "io.kubernetes.cri-o.ContainerType": "sandbox",
+                "io.kubernetes.cri-o.TTY": "false"
+            },
+            "StopSignal": 15
+        }
+    }
+]
+
+ipts/mysql/scl_enable",
+                "CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/mysql",
+                "BASH_ENV=/usr/share/container-scripts/mysql/scl_enable",
+                "ENV=/usr/share/container-scripts/mysql/scl_enable",
+                "description": "MySQL is a multi-user, multi-threaded SQL database server. The container image provides a containerized packaging of the MySQL mysqld daemon and client application. The mysqld server daemon accepts connections from clients and provides access to content from MySQL databases on behalf of the clients.",
+                "io.k8s.description": "MySQL is a multi-user, multi-threaded SQL database server. The container image provides a containerized packaging of the MySQL mysqld daemon and client application. The mysqld server daemon accepts connections from clients and provides access to content from MySQL databases on behalf of the clients.",
+                "io.openshift.s2i.scripts-url": "image:///usr/libexec/s2i",
+                "io.s2i.scripts-url": "image:///usr/libexec/s2i",
+less
+[
+    {
+        "ID": "97fec7a2f1a5d3652977c8762063574dd66156cd48fa55112eea5e81b721243f" ,
+        "Created": "2020-03-14T06:43:43.146037273Z",
+        "Path": "container-entrypoint",
+        "Args": [
+            "run-mysqld"
+        ],
+        "State": {
+            "OciVersion": "1.0.1-dev",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 20583,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2020-03-14T06:43:45.53604867Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+:/IIPP[
+    {
+        "ID": "97fec7a2f1a5d3652977c8762063574dd66156cd48fa55112eea5e81b721243f" ,
+        "Created": "2020-03-14T06:43:43.146037273Z",
+        "Path": "container-entrypoint",
+        "Args": [
+            "run-mysqld"
+        ],
+        "State": {
+            "OciVersion": "1.0.1-dev",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 20583,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2020-03-14T06:43:45.53604867Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+[
+    {
+        "ID": "97fec7a2f1a5d3652977c8762063574dd66156cd48fa55112eea5e81b721243f" ,
+        "Created": "2020-03-14T06:43:43.146037273Z",
+        "Path": "container-entrypoint",
+        "Args": [
+            "run-mysqld"
+        ],
+        "State": {
+            "OciVersion": "1.0.1-dev",
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 20583,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2020-03-14T06:43:45.53604867Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+...skipping...
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "Ports": [],
+            "SandboxKey": "/var/run/netns/cni-72a25c13-7146-c237-e6d7-77df81bb71 db",
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "10.88.0.1",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "10.88.0.2",
+            "IPPrefixLen": 16,
+            "IPv6Gateway": "",
+            "MacAddress": "5e:fa:60:a4:da:23"
+        },
+        "ExitCommand": [
+            "/usr/bin/podman",
+            "--root",
+            "/var/lib/containers/storage",
+            "--runroot",
+            "/var/run/containers/storage",
+            "--log-level",
+:grep -i ipaddress
+            "SecondaryIPAddresses": null,
+            "IPAddress": "10.88.0.2",
+e': podman inspect 97fec7a2f1a5 | grep -i ipaddressx': man podman-exporte': podman exec -it 97fec7a2f1a5 bashc[root@workstation ~]#^C
+podman-exec(1)              General Commands Manual             podman-exec(1)
+
+NAME
+       podman-exec - Execute a command in a running container
+
+SYNOPSIS
+       podman exec container [options] [command [arg ...]]
+
+DESCRIPTION
+       podman exec executes a command in a running container.
+
+OPTIONS
+       --env, -e
+
+       You  may specify arbitrary environment variables that are available for
+       the command to be executed.
+
+       --interactive, -i
+
+       Not supported.  All exec commands are interactive by default.
+
+       --latest, -l
+
+ Manual page podman-exec(1) line 1 (press h for help or q to quit)       Instead of providing the container name or ID,  use  the  last  created
+ Manual page podman-exec(1) line 2 (press h for help or q to quit)       container.  If you use methods other than Podman to run containers such
+ Manual page podman-exec(1) line 5 (press h for help or q to quit)       as CRI-O, the last started  container could be  from  either  of  those
+ Manual page podman-exec(1) line 6 (press h for help or q to quit)       methods.
+ Manual page podman-exec(1) line 7 (press h for help or q to quit)
+ Manual page podman-exec(1) line 9 (press h for help or q to quit)       --privileged
+ Manual page podman-exec(1) line 10 (press h for help or q to quit)
+ Manual page podman-exec(1) line 11 (press h for help or q to quit)       Give  the  process extended Linux capabilities when running the command
+ Manual page podman-exec(1) line 13 (press h for help or q to quit)       in container.
+ Manual page podman-exec(1) line 14 (press h for help or q to quit)
+ Manual page podman-exec(1) line 15 (press h for help or q to quit)       --tty, -t
+ Manual page podman-exec(1) line 17 (press h for help or q to quit)[root@workstation ~]# 
+
+ct
+podman-inspect(1)           General Commands Manual          podman-inspect(1)
+
+NAME
+       podman-inspect - Display a container or image's configuration
+
+SYNOPSIS
+       podman inspect [options] name ...
+
+DESCRIPTION
+       This  displays the low-level information on containers and images iden
+       tified by name or ID. By default, this will render  all  results  in  a
+       JSON  array.  If  the container and image have the same name, this will
+       return container JSON for unspecified type. If a format  is  specified,
+       the given template will be executed for each result.
+
+OPTIONS
+       --type, t="TYPE"
+
+       Return  JSON  for the specified type.  Type can be 'container', 'image'
+       or 'all' (default: all)
+
+       --format, -f="FORMAT"
+
+ Manual page podman-inspect(1) line 1 (press h for help or q to quit)       Format the output using  the  given  Go  template.   The  keys  of  the
+ Manual page podman-inspect(1) line 2 (press h for help or q to quit)/--ff
+NAME
+       podman-inspect - Display a container or image's configuration
+
+SYNOPSIS
+       podman inspect [options] name ...
+
+DESCRIPTION
+       This  displays the low-level information on containers and images iden
+       tified by name or ID. By default, this will render  all  results  in  a
+       JSON  array.  If  the container and image have the same name, this will
+       return container JSON for unspecified type. If a format  is  specified,
+       the given template will be executed for each result.
+
+OPTIONS
+       --type, t="TYPE"
+
+       Return  JSON  for the specified type.  Type can be 'container', 'image'
+       or 'all' (default: all)
+
+       --format, -f="FORMAT"
+
+       Format the output using  the  given  Go  template.   The  keys  of  the
+
+NAME
+       podman-inspect - Display a container or image's configuration
+
+SYNOPSIS
+       podman inspect [options] name ...
+
+DESCRIPTION
+       This  displays the low-level information on containers and images iden
+       tified by name or ID. By default, this will render  all  results  in  a
+       JSON  array.  If  the container and image have the same name, this will
+       return container JSON for unspecified type. If a format  is  specified,
+       the given template will be executed for each result.
+
+OPTIONS
+       --type, t="TYPE"
+
+       Return  JSON  for the specified type.  Type can be 'container', 'image'
+       or 'all' (default: all)
+
+       --format, -f="FORMAT"
+
+       Format the output using  the  given  Go  template.   The  keys  of  the
+       returned  JSON  can  be  used  as the values for the --format flag (see
+       examples below).
+
+       --latest, -l
+
+       Instead of providing the container name or ID,  use  the  last  created
+       container.  If you use methods other than Podman to run containers such
+       as CRI-O, the last started container could  be  from  either  of  those
+       methods.
+
+       --size
+
+       Display the total file size if the type is a container
+
+EXAMPLE
+              # podman inspect fedora
+              {
+                  "Id": "422dc563ca3260ad9ef5c47a1c246f5065d7f177ce51f4dd208efd8 2967ff182",
+                  "Digest": "sha256:1b9bfb4e634dc1e5c19d0fa1eb2e5a28a5c2b498e3d3  Manual page podman-inspect(1) line 29/129 39% (press h for help or q to quit)/e4ac742bd7f5dae08611",
+                  "RepoTags": [
+                      "docker.io/library/fedora:latest"
+ Manual page podman-inspect(1) line 33/129 41% (press h for help or q to quit)/...skipping...
+              # podman inspect a04 --format "{{.ImageName}}"
+              fedora
+
+              # podman inspect a04 --format "{{.GraphDriver.Name}}"
+              overlay
+
+              # podman inspect --format "size: {{.Size}}" alpine
+              size:   4405240
+
+              podman inspect --latest --format {{.EffectiveCaps}}
+              [CAP_CHOWN CAP_DAC_OVERRIDE CAP_FSETID CAP_FOWNER CAP_MKNOD CAP_NE T_RAW CAP_SETGID CAP_SETUID CAP_SETFCAP CAP_SETPCAP CAP_NET_BIND_SERVICE CAP_SYS _CHROOT CAP_KILL CAP_AUDIT_WRITE]
+
+SEE ALSO
+       podman(1)
+
+HISTORY
+       July 2017, Originally compiled by Dan Walsh 
+
+                                                             podman-inspect(1)
+~
+~
+nual page podman-inspect(1) line 100/129 (END) (press h for help or q to quit)/~
+~
+~
+nual page podman-inspect(1) line 105/129 (END) (press h for help or q to quit)/~
+~
+~
+nual page podman-inspect(1) line 110/129 (END) (press h for help or q to quit)/~
+~
+~
+nual page podman-inspect(1) line 115/129 (END) (press h for help or q to quit)podman ps
+CONTAINER ID   IMAGE                                                    COMMAND                  CREATED          STATUS              PORTS   NAMES
+97fec7a2f1a5   registry.access.redhat.com/rhscl/mysql-57-rhel7:latest   container-entrypoin...   44 minutes ago   Up 44 minutes ago           mysql-basic
+
+=> sourcing 20-validate-variables.sh ...
+=> sourcing 25-validate-replication-variables.sh ...
+=> sourcing 30-base-config.sh ...
+---> 06:43:45     Processing basic MySQL configuration files ...
+=> sourcing 60-replication-config.sh ...
+=> sourcing 70-s2i-config.sh ...
+---> 06:43:45     Processing additional arbitrary  MySQL configuration provided by s2i ...
+=> sourcing 10-mysql57.cnf ...
+=> sourcing 40-paas.cnf ...
+=> sourcing 50-my-tuning.cnf ...
+---> 06:43:45     Initializing database ...
+---> 06:43:45     Running /opt/rh/rh-mysql57/root/usr/libexec/mysqld --initialize --datadir=/var/lib/mysql/data --ignore-db-dir=lost+found
+---> 06:43:49     Starting MySQL server with disabled networking ...
+---> 06:43:49     Waiting for MySQL to start ...
+2020-03-14T06:43:49.280284Z 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).
+2020-03-14T06:43:49.307664Z 0 [Note] /opt/rh/rh-mysql57/root/usr/libexec/mysqld (mysqld 5.7.24) starting as process 63 ...
+2020-03-14T06:43:49.385773Z 0 [Note] InnoDB: PUNCH HOLE support available
+2020-03-14T06:43:49.385952Z 0 [Note] InnoDB: Mutexes and rw_locks use GCC atomic builtins
+2020-03-14T06:43:49.385969Z 0 [Note] InnoDB: Uses event mutexes
+2020-03-14T06:43:49.385983Z 0 [Note] InnoDB: GCC builtin __atomic_thread_fence() is used for memory barrier
+2020-03-14T06:43:49.385996Z 0 [Note] InnoDB: Compressed tables use zlib 1.2.7
+2020-03-14T06:43:49.386015Z 0 [Note] InnoDB: Using Linux native AIO
+2020-03-14T06:43:49.386691Z 0 [Note] InnoDB: Number of pools: 1
+2020-03-14T06:43:49.387202Z 0 [Note] InnoDB: Not using CPU crc32 instructions
+2020-03-14T06:43:49.392629Z 0 [Note] InnoDB: Initializing buffer pool, total size = 32M, instances = 1, chunk size = 32M
+2020-03-14T06:43:49.398502Z 0 [Note] InnoDB: Completed initialization of buffer pool
+2020-03-14T06:43:49.401804Z 0 [Note] InnoDB: If the mysqld execution user is authorized, page cleaner thread priority can be changed. See the man page of setpriority().
+2020-03-14T06:43:49.431256Z 0 [Note] InnoDB: Highest supported file format is Barracuda.
+2020-03-14T06:43:49.521982Z 0 [Note] InnoDB: Creating shared tablespace for temporary tables
+2020-03-14T06:43:49.522187Z 0 [Note] InnoDB: Setting file './ibtmp1' size to 12 MB. Physically writing the file full; Please wait ...
+2020-03-14T06:43:49.681810Z 0 [Note] InnoDB: File './ibtmp1' size is now 12 MB.
+2020-03-14T06:43:49.684084Z 0 [Note] InnoDB: 96 redo rollback segment(s) found. 96 redo rollback segment(s) are active.
+2020-03-14T06:43:49.684110Z 0 [Note] InnoDB: 32 non-redo rollback segment(s) are active.
+2020-03-14T06:43:49.711442Z 0 [Note] InnoDB: 5.7.24 started; log sequence number 2591440
+2020-03-14T06:43:49.714546Z 0 [Note] Plugin 'FEDERATED' is disabled.
+2020-03-14T06:43:49.717206Z 0 [Note] InnoDB: Loading buffer pool(s) from /var/lib/mysql/data/ib_buffer_pool
+2020-03-14T06:43:49.784457Z 0 [Note] InnoDB: Buffer pool(s) load completed at 200314  6:43:49
+2020-03-14T06:43:49.822184Z 0 [Note] Found ca.pem, server-cert.pem and server-key.pem in data directory. Trying to enable SSL support using them.
+2020-03-14T06:43:49.822245Z 0 [Note] Skipping generation of SSL certificates as certificate files are present in data directory.
+2020-03-14T06:43:49.823354Z 0 [Warning] CA certificate ca.pem is self signed.
+2020-03-14T06:43:49.823487Z 0 [Note] Skipping generation of RSA key pair as key files are present in data directory.
+2020-03-14T06:43:49.828978Z 0 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.829081Z 0 [Warning] 'user' entry 'mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.829104Z 0 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.829168Z 0 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.829182Z 0 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.829217Z 0 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.832356Z 0 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.832417Z 0 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.850639Z 0 [Note] Event Scheduler: Loaded 0 events
+2020-03-14T06:43:49.851456Z 0 [Note] /opt/rh/rh-mysql57/root/usr/libexec/mysqld: ready for connections.
+Version: '5.7.24'  socket: '/tmp/mysql.sock'  port: 0  MySQL Community Server (GPL)
+2020-03-14T06:43:50.157375Z 2 [Note] Your password has expired. To log in you must change it using a client that supports expired passwords.
+---> 06:43:50     MySQL started successfully
+---> 06:43:50     Setting password for MySQL root user ...
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Checking if update is needed.
+Checking server version.
+Running queries to upgrade MySQL server.
+2020-03-14T06:43:51.144980Z 5 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.145037Z 5 [Warning] 'user' entry 'mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.145066Z 5 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.145130Z 5 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.145146Z 5 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.145180Z 5 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.145302Z 5 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.145323Z 5 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635417Z 5 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635503Z 5 [Warning] 'user' entry 'mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635526Z 5 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635583Z 5 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635597Z 5 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635627Z 5 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635709Z 5 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635729Z 5 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+Checking system database.
+mysql.columns_priv                                 OK
+mysql.db                                           OK
+mysql.engine_cost                                  OK
+mysql.event                                        OK
+mysql.func                                         OK
+mysql.general_log                                  OK
+mysql.gtid_executed                                OK
+mysql.help_category                                OK
+mysql.help_keyword                                 OK
+mysql.help_relation                                OK
+mysql.help_topic                                   OK
+mysql.innodb_index_stats                           OK
+mysql.innodb_table_stats                           OK
+mysql.ndb_binlog_index                             OK
+mysql.plugin                                       OK
+mysql.proc                                         OK
+mysql.procs_priv                                   OK
+mysql.proxies_priv                                 OK
+mysql.server_cost                                  OK
+mysql.servers                                      OK
+mysql.slave_master_info                            OK
+mysql.slave_relay_log_info                         OK
+mysql.slave_worker_info                            OK
+mysql.slow_log                                     OK
+mysql.tables_priv                                  OK
+mysql.time_zone                                    OK
+mysql.time_zone_leap_second                        OK
+mysql.time_zone_name                               OK
+mysql.time_zone_transition                         OK
+mysql.time_zone_transition_type                    OK
+mysql.user                                         OK
+The sys schema is already up to date (version 1.5.1).
+Checking databases.
+sys.sys_config                                     OK
+Upgrade process completed successfully.
+Checking if update is needed.
+---> 06:43:51     Creating user specified by MYSQL_USER (user1) ...
+---> 06:43:51     Creating database items ...
+---> 06:43:51     Granting privileges to user user1 for items ...
+2020-03-14T06:43:51.822712Z 8 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.822757Z 8 [Warning] 'user' entry 'mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.822772Z 8 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.822812Z 8 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.823004Z 8 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.823042Z 8 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.823341Z 8 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.823399Z 8 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+---> 06:43:51     Initialization finished
+=> sourcing 40-datadir-action.sh ...
+---> 06:43:51     Running datadir action: upgrade-warn
+---> 06:43:51     MySQL server version check passed, both server and data directory are version 5.7.
+=> sourcing 50-passwd-change.sh ...
+---> 06:43:51     Setting passwords ...
+2020-03-14T06:43:51.978140Z 11 [Warning] Following users were specified in CREATE USER IF NOT EXISTS but they already exist. Corresponding entry in binary log used default authentication plugin 'mysql_native_password' to rewrite authentication information(if any) for them: 'root'@'%'
+
+---> 06:43:51     Shutting down MySQL ...
+2020-03-14T06:43:51.999528Z 12 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.999579Z 12 [Warning] 'user' entry 'mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.999598Z 12 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.999655Z 12 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.999670Z 12 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.999701Z 12 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:52.000155Z 12 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:52.000178Z 12 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:52.008640Z 0 [Note] Giving 0 client threads a chance to die gracefully
+2020-03-14T06:43:52.008680Z 0 [Note] Shutting down slave threads
+2020-03-14T06:43:52.008700Z 0 [Note] Forcefully disconnecting 0 remaining clients
+2020-03-14T06:43:52.008716Z 0 [Note] Event Scheduler: Purging the queue. 0 events
+2020-03-14T06:43:52.009025Z 0 [Note] Binlog end
+2020-03-14T06:43:52.012414Z 0 [Note] Shutting down plugin 'ngram'
+2020-03-14T06:43:52.012468Z 0 [Note] Shutting down plugin 'BLACKHOLE'
+2020-03-14T06:43:52.012483Z 0 [Note] Shutting down plugin 'ARCHIVE'
+2020-03-14T06:43:52.012494Z 0 [Note] Shutting down plugin 'partition'
+2020-03-14T06:43:52.012504Z 0 [Note] Shutting down plugin 'INNODB_SYS_VIRTUAL'
+2020-03-14T06:43:52.012516Z 0 [Note] Shutting down plugin 'INNODB_SYS_DATAFILES'
+2020-03-14T06:43:52.012527Z 0 [Note] Shutting down plugin 'INNODB_SYS_TABLESPACES'
+2020-03-14T06:43:52.012538Z 0 [Note] Shutting down plugin 'INNODB_SYS_FOREIGN_COLS'
+2020-03-14T06:43:52.012549Z 0 [Note] Shutting down plugin 'INNODB_SYS_FOREIGN'
+2020-03-14T06:43:52.012560Z 0 [Note] Shutting down plugin 'INNODB_SYS_FIELDS'
+2020-03-14T06:43:52.012571Z 0 [Note] Shutting down plugin 'INNODB_SYS_COLUMNS'
+2020-03-14T06:43:52.012581Z 0 [Note] Shutting down plugin 'INNODB_SYS_INDEXES'
+2020-03-14T06:43:52.012592Z 0 [Note] Shutting down plugin 'INNODB_SYS_TABLESTATS'
+2020-03-14T06:43:52.012604Z 0 [Note] Shutting down plugin 'INNODB_SYS_TABLES'
+2020-03-14T06:43:52.012616Z 0 [Note] Shutting down plugin 'INNODB_FT_INDEX_TABLE'
+2020-03-14T06:43:52.012627Z 0 [Note] Shutting down plugin 'INNODB_FT_INDEX_CACHE'
+2020-03-14T06:43:52.012637Z 0 [Note] Shutting down plugin 'INNODB_FT_CONFIG'
+2020-03-14T06:43:52.012649Z 0 [Note] Shutting down plugin 'INNODB_FT_BEING_DELETED'
+2020-03-14T06:43:52.012660Z 0 [Note] Shutting down plugin 'INNODB_FT_DELETED'
+2020-03-14T06:43:52.012671Z 0 [Note] Shutting down plugin 'INNODB_FT_DEFAULT_STOPWORD'
+2020-03-14T06:43:52.012682Z 0 [Note] Shutting down plugin 'INNODB_METRICS'
+2020-03-14T06:43:52.012694Z 0 [Note] Shutting down plugin 'INNODB_TEMP_TABLE_INFO'
+2020-03-14T06:43:52.012705Z 0 [Note] Shutting down plugin 'INNODB_BUFFER_POOL_STATS'
+2020-03-14T06:43:52.012715Z 0 [Note] Shutting down plugin 'INNODB_BUFFER_PAGE_LRU'
+2020-03-14T06:43:52.012727Z 0 [Note] Shutting down plugin 'INNODB_BUFFER_PAGE'
+2020-03-14T06:43:52.012738Z 0 [Note] Shutting down plugin 'INNODB_CMP_PER_INDEX_RESET'
+2020-03-14T06:43:52.012749Z 0 [Note] Shutting down plugin 'INNODB_CMP_PER_INDEX'
+2020-03-14T06:43:52.012760Z 0 [Note] Shutting down plugin 'INNODB_CMPMEM_RESET'
+2020-03-14T06:43:52.012770Z 0 [Note] Shutting down plugin 'INNODB_CMPMEM'
+2020-03-14T06:43:52.012781Z 0 [Note] Shutting down plugin 'INNODB_CMP_RESET'
+2020-03-14T06:43:52.012792Z 0 [Note] Shutting down plugin 'INNODB_CMP'
+2020-03-14T06:43:52.012803Z 0 [Note] Shutting down plugin 'INNODB_LOCK_WAITS'
+2020-03-14T06:43:52.012915Z 0 [Note] Shutting down plugin 'INNODB_LOCKS'
+2020-03-14T06:43:52.012967Z 0 [Note] Shutting down plugin 'INNODB_TRX'
+2020-03-14T06:43:52.012977Z 0 [Note] Shutting down plugin 'InnoDB'
+2020-03-14T06:43:52.013144Z 0 [Note] InnoDB: FTS optimize thread exiting.
+2020-03-14T06:43:52.013583Z 0 [Note] InnoDB: Starting shutdown...
+2020-03-14T06:43:52.114422Z 0 [Note] InnoDB: Dumping buffer pool(s) to /var/lib/mysql/data/ib_buffer_pool
+2020-03-14T06:43:52.115164Z 0 [Note] InnoDB: Buffer pool(s) dump completed at 200314  6:43:52
+2020-03-14T06:43:53.525173Z 0 [Note] InnoDB: Shutdown completed; log sequence number 2690167
+2020-03-14T06:43:53.527628Z 0 [Note] InnoDB: Removed temporary tablespace data file: "ibtmp1"
+2020-03-14T06:43:53.527704Z 0 [Note] Shutting down plugin 'MEMORY'
+2020-03-14T06:43:53.527720Z 0 [Note] Shutting down plugin 'MRG_MYISAM'
+2020-03-14T06:43:53.527764Z 0 [Note] Shutting down plugin 'MyISAM'
+2020-03-14T06:43:53.527782Z 0 [Note] Shutting down plugin 'PERFORMANCE_SCHEMA'
+2020-03-14T06:43:53.527993Z 0 [Note] Shutting down plugin 'CSV'
+2020-03-14T06:43:53.528039Z 0 [Note] Shutting down plugin 'sha256_password'
+2020-03-14T06:43:53.528052Z 0 [Note] Shutting down plugin 'mysql_native_password'
+2020-03-14T06:43:53.528297Z 0 [Note] Shutting down plugin 'binlog'
+2020-03-14T06:43:53.529961Z 0 [Note] /opt/rh/rh-mysql57/root/usr/libexec/mysqld: Shutdown complete
+
+---> 06:43:54     Cleaning up environment variables MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE and MYSQL_ROOT_PASSWORD ...
+---> 06:43:54     Running final exec -- Only MySQL server logs after this point
+2020-03-14T06:43:54.236247Z 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).
+2020-03-14T06:43:54.240167Z 0 [Note] /opt/rh/rh-mysql57/root/usr/libexec/mysqld (mysqld 5.7.24) starting as process 1 ...
+2020-03-14T06:43:54.247257Z 0 [Note] InnoDB: PUNCH HOLE support available
+2020-03-14T06:43:54.247308Z 0 [Note] InnoDB: Mutexes and rw_locks use GCC atomic builtins
+2020-03-14T06:43:54.247319Z 0 [Note] InnoDB: Uses event mutexes
+2020-03-14T06:43:54.247328Z 0 [Note] InnoDB: GCC builtin __atomic_thread_fence() is used for memory barrier
+2020-03-14T06:43:54.247337Z 0 [Note] InnoDB: Compressed tables use zlib 1.2.7
+2020-03-14T06:43:54.247350Z 0 [Note] InnoDB: Using Linux native AIO
+2020-03-14T06:43:54.247766Z 0 [Note] InnoDB: Number of pools: 1
+2020-03-14T06:43:54.248207Z 0 [Note] InnoDB: Not using CPU crc32 instructions
+2020-03-14T06:43:54.251174Z 0 [Note] InnoDB: Initializing buffer pool, total size = 32M, instances = 1, chunk size = 32M
+2020-03-14T06:43:54.256582Z 0 [Note] InnoDB: Completed initialization of buffer pool
+2020-03-14T06:43:54.258726Z 0 [Note] InnoDB: If the mysqld execution user is authorized, page cleaner thread priority can be changed. See the man page of setpriority().
+2020-03-14T06:43:54.271400Z 0 [Note] InnoDB: Highest supported file format is Barracuda.
+2020-03-14T06:43:54.283426Z 0 [Note] InnoDB: Creating shared tablespace for temporary tables
+2020-03-14T06:43:54.283570Z 0 [Note] InnoDB: Setting file './ibtmp1' size to 12 MB. Physically writing the file full; Please wait ...
+2020-03-14T06:43:54.301738Z 0 [Note] InnoDB: File './ibtmp1' size is now 12 MB.
+2020-03-14T06:43:54.303416Z 0 [Note] InnoDB: 96 redo rollback segment(s) found. 96 redo rollback segment(s) are active.
+2020-03-14T06:43:54.303439Z 0 [Note] InnoDB: 32 non-redo rollback segment(s) are active.
+2020-03-14T06:43:54.305042Z 0 [Note] InnoDB: Waiting for purge to start
+2020-03-14T06:43:54.355519Z 0 [Note] InnoDB: 5.7.24 started; log sequence number 2690167
+2020-03-14T06:43:54.356644Z 0 [Note] InnoDB: Loading buffer pool(s) from /var/lib/mysql/data/ib_buffer_pool
+2020-03-14T06:43:54.357202Z 0 [Note] Plugin 'FEDERATED' is disabled.
+2020-03-14T06:43:54.360974Z 0 [Note] InnoDB: Buffer pool(s) load completed at 200314  6:43:54
+2020-03-14T06:43:54.366680Z 0 [Note] Found ca.pem, server-cert.pem and server-key.pem in data directory. Trying to enable SSL support using them.
+2020-03-14T06:43:54.366744Z 0 [Note] Skipping generation of SSL certificates as certificate files are present in data directory.
+2020-03-14T06:43:54.367724Z 0 [Warning] CA certificate ca.pem is self signed.
+2020-03-14T06:43:54.367990Z 0 [Note] Skipping generation of RSA key pair as key files are present in data directory.
+2020-03-14T06:43:54.368675Z 0 [Note] Server hostname (bind-address): '*'; port: 3306
+2020-03-14T06:43:54.369509Z 0 [Note] IPv6 is available.
+2020-03-14T06:43:54.369576Z 0 [Note]   - '::' resolves to '::';
+2020-03-14T06:43:54.369628Z 0 [Note] Server socket created on IP: '::'.
+2020-03-14T06:43:54.373574Z 0 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.373665Z 0 [Warning] 'user' entry 'mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.373688Z 0 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.373754Z 0 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.373769Z 0 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.373806Z 0 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.375573Z 0 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.375643Z 0 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.388486Z 0 [Note] Event Scheduler: Loaded 0 events
+2020-03-14T06:43:54.389519Z 0 [Note] /opt/rh/rh-mysql57/root/usr/libexec/mysqld: ready for connections.
+Version: '5.7.24'  socket: '/var/lib/mysql/mysql.sock'  port: 3306  MySQL Community Server (GPL)
+ -f
+=> sourcing 20-validate-variables.sh ...
+=> sourcing 25-validate-replication-variables.sh ...
+=> sourcing 30-base-config.sh ...
+---> 06:43:45     Processing basic MySQL configuration files ...
+=> sourcing 60-replication-config.sh ...
+=> sourcing 70-s2i-config.sh ...
+---> 06:43:45     Processing additional arbitrary  MySQL configuration provided by s2i ...
+=> sourcing 10-mysql57.cnf ...
+=> sourcing 40-paas.cnf ...
+=> sourcing 50-my-tuning.cnf ...
+---> 06:43:45     Initializing database ...
+---> 06:43:45     Running /opt/rh/rh-mysql57/root/usr/libexec/mysqld --initialize --datadir=/var/lib/mysql/data --ignore-db-dir=lost+found
+---> 06:43:49     Starting MySQL server with disabled networking ...
+---> 06:43:49     Waiting for MySQL to start ...
+2020-03-14T06:43:49.280284Z 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).
+2020-03-14T06:43:49.307664Z 0 [Note] /opt/rh/rh-mysql57/root/usr/libexec/mysqld (mysqld 5.7.24) starting as process 63 ...
+2020-03-14T06:43:49.385773Z 0 [Note] InnoDB: PUNCH HOLE support available
+2020-03-14T06:43:49.385952Z 0 [Note] InnoDB: Mutexes and rw_locks use GCC atomic builtins
+2020-03-14T06:43:49.385969Z 0 [Note] InnoDB: Uses event mutexes
+2020-03-14T06:43:49.385983Z 0 [Note] InnoDB: GCC builtin __atomic_thread_fence() is used for memory barrier
+2020-03-14T06:43:49.385996Z 0 [Note] InnoDB: Compressed tables use zlib 1.2.7
+2020-03-14T06:43:49.386015Z 0 [Note] InnoDB: Using Linux native AIO
+2020-03-14T06:43:49.386691Z 0 [Note] InnoDB: Number of pools: 1
+2020-03-14T06:43:49.387202Z 0 [Note] InnoDB: Not using CPU crc32 instructions
+2020-03-14T06:43:49.392629Z 0 [Note] InnoDB: Initializing buffer pool, total size = 32M, instances = 1, chunk size = 32M
+2020-03-14T06:43:49.398502Z 0 [Note] InnoDB: Completed initialization of buffer pool
+2020-03-14T06:43:49.401804Z 0 [Note] InnoDB: If the mysqld execution user is authorized, page cleaner thread priority can be changed. See the man page of setpriority().
+2020-03-14T06:43:49.431256Z 0 [Note] InnoDB: Highest supported file format is Barracuda.
+2020-03-14T06:43:49.521982Z 0 [Note] InnoDB: Creating shared tablespace for temporary tables
+2020-03-14T06:43:49.522187Z 0 [Note] InnoDB: Setting file './ibtmp1' size to 12 MB. Physically writing the file full; Please wait ...
+2020-03-14T06:43:49.681810Z 0 [Note] InnoDB: File './ibtmp1' size is now 12 MB.
+2020-03-14T06:43:49.684084Z 0 [Note] InnoDB: 96 redo rollback segment(s) found. 96 redo rollback segment(s) are active.
+2020-03-14T06:43:49.684110Z 0 [Note] InnoDB: 32 non-redo rollback segment(s) are active.
+2020-03-14T06:43:49.711442Z 0 [Note] InnoDB: 5.7.24 started; log sequence number 2591440
+2020-03-14T06:43:49.714546Z 0 [Note] Plugin 'FEDERATED' is disabled.
+2020-03-14T06:43:49.717206Z 0 [Note] InnoDB: Loading buffer pool(s) from /var/lib/mysql/data/ib_buffer_pool
+2020-03-14T06:43:49.784457Z 0 [Note] InnoDB: Buffer pool(s) load completed at 200314  6:43:49
+2020-03-14T06:43:49.822184Z 0 [Note] Found ca.pem, server-cert.pem and server-key.pem in data directory. Trying to enable SSL support using them.
+2020-03-14T06:43:49.822245Z 0 [Note] Skipping generation of SSL certificates as certificate files are present in data directory.
+2020-03-14T06:43:49.823354Z 0 [Warning] CA certificate ca.pem is self signed.
+2020-03-14T06:43:49.823487Z 0 [Note] Skipping generation of RSA key pair as key files are present in data directory.
+2020-03-14T06:43:49.828978Z 0 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.829081Z 0 [Warning] 'user' entry 'mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.829104Z 0 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.829168Z 0 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.829182Z 0 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.829217Z 0 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.832356Z 0 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.832417Z 0 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:49.850639Z 0 [Note] Event Scheduler: Loaded 0 events
+2020-03-14T06:43:49.851456Z 0 [Note] /opt/rh/rh-mysql57/root/usr/libexec/mysqld: ready for connections.
+Version: '5.7.24'  socket: '/tmp/mysql.sock'  port: 0  MySQL Community Server (GPL)
+2020-03-14T06:43:50.157375Z 2 [Note] Your password has expired. To log in you must change it using a client that supports expired passwords.
+---> 06:43:50     MySQL started successfully
+---> 06:43:50     Setting password for MySQL root user ...
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Checking if update is needed.
+Checking server version.
+Running queries to upgrade MySQL server.
+2020-03-14T06:43:51.144980Z 5 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.145037Z 5 [Warning] 'user' entry 'mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.145066Z 5 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.145130Z 5 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.145146Z 5 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.145180Z 5 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.145302Z 5 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.145323Z 5 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635417Z 5 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635503Z 5 [Warning] 'user' entry 'mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635526Z 5 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635583Z 5 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635597Z 5 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635627Z 5 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635709Z 5 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.635729Z 5 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+Checking system database.
+mysql.columns_priv                                 OK
+mysql.db                                           OK
+mysql.engine_cost                                  OK
+mysql.event                                        OK
+mysql.func                                         OK
+mysql.general_log                                  OK
+mysql.gtid_executed                                OK
+mysql.help_category                                OK
+mysql.help_keyword                                 OK
+mysql.help_relation                                OK
+mysql.help_topic                                   OK
+mysql.innodb_index_stats                           OK
+mysql.innodb_table_stats                           OK
+mysql.ndb_binlog_index                             OK
+mysql.plugin                                       OK
+mysql.proc                                         OK
+mysql.procs_priv                                   OK
+mysql.proxies_priv                                 OK
+mysql.server_cost                                  OK
+mysql.servers                                      OK
+mysql.slave_master_info                            OK
+mysql.slave_relay_log_info                         OK
+mysql.slave_worker_info                            OK
+mysql.slow_log                                     OK
+mysql.tables_priv                                  OK
+mysql.time_zone                                    OK
+mysql.time_zone_leap_second                        OK
+mysql.time_zone_name                               OK
+mysql.time_zone_transition                         OK
+mysql.time_zone_transition_type                    OK
+mysql.user                                         OK
+The sys schema is already up to date (version 1.5.1).
+Checking databases.
+sys.sys_config                                     OK
+Upgrade process completed successfully.
+Checking if update is needed.
+---> 06:43:51     Creating user specified by MYSQL_USER (user1) ...
+---> 06:43:51     Creating database items ...
+---> 06:43:51     Granting privileges to user user1 for items ...
+2020-03-14T06:43:51.822712Z 8 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.822757Z 8 [Warning] 'user' entry 'mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.822772Z 8 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.822812Z 8 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.823004Z 8 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.823042Z 8 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.823341Z 8 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.823399Z 8 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+---> 06:43:51     Initialization finished
+=> sourcing 40-datadir-action.sh ...
+---> 06:43:51     Running datadir action: upgrade-warn
+---> 06:43:51     MySQL server version check passed, both server and data directory are version 5.7.
+=> sourcing 50-passwd-change.sh ...
+---> 06:43:51     Setting passwords ...
+2020-03-14T06:43:51.978140Z 11 [Warning] Following users were specified in CREATE USER IF NOT EXISTS but they already exist. Corresponding entry in binary log used default authentication plugin 'mysql_native_password' to rewrite authentication information(if any) for them: 'root'@'%'
+
+---> 06:43:51     Shutting down MySQL ...
+2020-03-14T06:43:51.999528Z 12 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.999579Z 12 [Warning] 'user' entry 'mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.999598Z 12 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.999655Z 12 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.999670Z 12 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:51.999701Z 12 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:52.000155Z 12 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:52.000178Z 12 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:52.008640Z 0 [Note] Giving 0 client threads a chance to die gracefully
+2020-03-14T06:43:52.008680Z 0 [Note] Shutting down slave threads
+2020-03-14T06:43:52.008700Z 0 [Note] Forcefully disconnecting 0 remaining clients
+2020-03-14T06:43:52.008716Z 0 [Note] Event Scheduler: Purging the queue. 0 events
+2020-03-14T06:43:52.009025Z 0 [Note] Binlog end
+2020-03-14T06:43:52.012414Z 0 [Note] Shutting down plugin 'ngram'
+2020-03-14T06:43:52.012468Z 0 [Note] Shutting down plugin 'BLACKHOLE'
+2020-03-14T06:43:52.012483Z 0 [Note] Shutting down plugin 'ARCHIVE'
+2020-03-14T06:43:52.012494Z 0 [Note] Shutting down plugin 'partition'
+2020-03-14T06:43:52.012504Z 0 [Note] Shutting down plugin 'INNODB_SYS_VIRTUAL'
+2020-03-14T06:43:52.012516Z 0 [Note] Shutting down plugin 'INNODB_SYS_DATAFILES'
+2020-03-14T06:43:52.012527Z 0 [Note] Shutting down plugin 'INNODB_SYS_TABLESPACES'
+2020-03-14T06:43:52.012538Z 0 [Note] Shutting down plugin 'INNODB_SYS_FOREIGN_COLS'
+2020-03-14T06:43:52.012549Z 0 [Note] Shutting down plugin 'INNODB_SYS_FOREIGN'
+2020-03-14T06:43:52.012560Z 0 [Note] Shutting down plugin 'INNODB_SYS_FIELDS'
+2020-03-14T06:43:52.012571Z 0 [Note] Shutting down plugin 'INNODB_SYS_COLUMNS'
+2020-03-14T06:43:52.012581Z 0 [Note] Shutting down plugin 'INNODB_SYS_INDEXES'
+2020-03-14T06:43:52.012592Z 0 [Note] Shutting down plugin 'INNODB_SYS_TABLESTATS'
+2020-03-14T06:43:52.012604Z 0 [Note] Shutting down plugin 'INNODB_SYS_TABLES'
+2020-03-14T06:43:52.012616Z 0 [Note] Shutting down plugin 'INNODB_FT_INDEX_TABLE'
+2020-03-14T06:43:52.012627Z 0 [Note] Shutting down plugin 'INNODB_FT_INDEX_CACHE'
+2020-03-14T06:43:52.012637Z 0 [Note] Shutting down plugin 'INNODB_FT_CONFIG'
+2020-03-14T06:43:52.012649Z 0 [Note] Shutting down plugin 'INNODB_FT_BEING_DELETED'
+2020-03-14T06:43:52.012660Z 0 [Note] Shutting down plugin 'INNODB_FT_DELETED'
+2020-03-14T06:43:52.012671Z 0 [Note] Shutting down plugin 'INNODB_FT_DEFAULT_STOPWORD'
+2020-03-14T06:43:52.012682Z 0 [Note] Shutting down plugin 'INNODB_METRICS'
+2020-03-14T06:43:52.012694Z 0 [Note] Shutting down plugin 'INNODB_TEMP_TABLE_INFO'
+2020-03-14T06:43:52.012705Z 0 [Note] Shutting down plugin 'INNODB_BUFFER_POOL_STATS'
+2020-03-14T06:43:52.012715Z 0 [Note] Shutting down plugin 'INNODB_BUFFER_PAGE_LRU'
+2020-03-14T06:43:52.012727Z 0 [Note] Shutting down plugin 'INNODB_BUFFER_PAGE'
+2020-03-14T06:43:52.012738Z 0 [Note] Shutting down plugin 'INNODB_CMP_PER_INDEX_RESET'
+2020-03-14T06:43:52.012749Z 0 [Note] Shutting down plugin 'INNODB_CMP_PER_INDEX'
+2020-03-14T06:43:52.012760Z 0 [Note] Shutting down plugin 'INNODB_CMPMEM_RESET'
+2020-03-14T06:43:52.012770Z 0 [Note] Shutting down plugin 'INNODB_CMPMEM'
+2020-03-14T06:43:52.012781Z 0 [Note] Shutting down plugin 'INNODB_CMP_RESET'
+2020-03-14T06:43:52.012792Z 0 [Note] Shutting down plugin 'INNODB_CMP'
+2020-03-14T06:43:52.012803Z 0 [Note] Shutting down plugin 'INNODB_LOCK_WAITS'
+2020-03-14T06:43:52.012915Z 0 [Note] Shutting down plugin 'INNODB_LOCKS'
+2020-03-14T06:43:52.012967Z 0 [Note] Shutting down plugin 'INNODB_TRX'
+2020-03-14T06:43:52.012977Z 0 [Note] Shutting down plugin 'InnoDB'
+2020-03-14T06:43:52.013144Z 0 [Note] InnoDB: FTS optimize thread exiting.
+2020-03-14T06:43:52.013583Z 0 [Note] InnoDB: Starting shutdown...
+2020-03-14T06:43:52.114422Z 0 [Note] InnoDB: Dumping buffer pool(s) to /var/lib/mysql/data/ib_buffer_pool
+2020-03-14T06:43:52.115164Z 0 [Note] InnoDB: Buffer pool(s) dump completed at 200314  6:43:52
+2020-03-14T06:43:53.525173Z 0 [Note] InnoDB: Shutdown completed; log sequence number 2690167
+2020-03-14T06:43:53.527628Z 0 [Note] InnoDB: Removed temporary tablespace data file: "ibtmp1"
+2020-03-14T06:43:53.527704Z 0 [Note] Shutting down plugin 'MEMORY'
+2020-03-14T06:43:53.527720Z 0 [Note] Shutting down plugin 'MRG_MYISAM'
+2020-03-14T06:43:53.527764Z 0 [Note] Shutting down plugin 'MyISAM'
+2020-03-14T06:43:53.527782Z 0 [Note] Shutting down plugin 'PERFORMANCE_SCHEMA'
+2020-03-14T06:43:53.527993Z 0 [Note] Shutting down plugin 'CSV'
+2020-03-14T06:43:53.528039Z 0 [Note] Shutting down plugin 'sha256_password'
+2020-03-14T06:43:53.528052Z 0 [Note] Shutting down plugin 'mysql_native_password'
+2020-03-14T06:43:53.528297Z 0 [Note] Shutting down plugin 'binlog'
+2020-03-14T06:43:53.529961Z 0 [Note] /opt/rh/rh-mysql57/root/usr/libexec/mysqld: Shutdown complete
+
+---> 06:43:54     Cleaning up environment variables MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE and MYSQL_ROOT_PASSWORD ...
+---> 06:43:54     Running final exec -- Only MySQL server logs after this point
+2020-03-14T06:43:54.236247Z 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).
+2020-03-14T06:43:54.240167Z 0 [Note] /opt/rh/rh-mysql57/root/usr/libexec/mysqld (mysqld 5.7.24) starting as process 1 ...
+2020-03-14T06:43:54.247257Z 0 [Note] InnoDB: PUNCH HOLE support available
+2020-03-14T06:43:54.247308Z 0 [Note] InnoDB: Mutexes and rw_locks use GCC atomic builtins
+2020-03-14T06:43:54.247319Z 0 [Note] InnoDB: Uses event mutexes
+2020-03-14T06:43:54.247328Z 0 [Note] InnoDB: GCC builtin __atomic_thread_fence() is used for memory barrier
+2020-03-14T06:43:54.247337Z 0 [Note] InnoDB: Compressed tables use zlib 1.2.7
+2020-03-14T06:43:54.247350Z 0 [Note] InnoDB: Using Linux native AIO
+2020-03-14T06:43:54.247766Z 0 [Note] InnoDB: Number of pools: 1
+2020-03-14T06:43:54.248207Z 0 [Note] InnoDB: Not using CPU crc32 instructions
+2020-03-14T06:43:54.251174Z 0 [Note] InnoDB: Initializing buffer pool, total size = 32M, instances = 1, chunk size = 32M
+2020-03-14T06:43:54.256582Z 0 [Note] InnoDB: Completed initialization of buffer pool
+2020-03-14T06:43:54.258726Z 0 [Note] InnoDB: If the mysqld execution user is authorized, page cleaner thread priority can be changed. See the man page of setpriority().
+2020-03-14T06:43:54.271400Z 0 [Note] InnoDB: Highest supported file format is Barracuda.
+2020-03-14T06:43:54.283426Z 0 [Note] InnoDB: Creating shared tablespace for temporary tables
+2020-03-14T06:43:54.283570Z 0 [Note] InnoDB: Setting file './ibtmp1' size to 12 MB. Physically writing the file full; Please wait ...
+2020-03-14T06:43:54.301738Z 0 [Note] InnoDB: File './ibtmp1' size is now 12 MB.
+2020-03-14T06:43:54.303416Z 0 [Note] InnoDB: 96 redo rollback segment(s) found. 96 redo rollback segment(s) are active.
+2020-03-14T06:43:54.303439Z 0 [Note] InnoDB: 32 non-redo rollback segment(s) are active.
+2020-03-14T06:43:54.305042Z 0 [Note] InnoDB: Waiting for purge to start
+2020-03-14T06:43:54.355519Z 0 [Note] InnoDB: 5.7.24 started; log sequence number 2690167
+2020-03-14T06:43:54.356644Z 0 [Note] InnoDB: Loading buffer pool(s) from /var/lib/mysql/data/ib_buffer_pool
+2020-03-14T06:43:54.357202Z 0 [Note] Plugin 'FEDERATED' is disabled.
+2020-03-14T06:43:54.360974Z 0 [Note] InnoDB: Buffer pool(s) load completed at 200314  6:43:54
+2020-03-14T06:43:54.366680Z 0 [Note] Found ca.pem, server-cert.pem and server-key.pem in data directory. Trying to enable SSL support using them.
+2020-03-14T06:43:54.366744Z 0 [Note] Skipping generation of SSL certificates as certificate files are present in data directory.
+2020-03-14T06:43:54.367724Z 0 [Warning] CA certificate ca.pem is self signed.
+2020-03-14T06:43:54.367990Z 0 [Note] Skipping generation of RSA key pair as key files are present in data directory.
+2020-03-14T06:43:54.368675Z 0 [Note] Server hostname (bind-address): '*'; port: 3306
+2020-03-14T06:43:54.369509Z 0 [Note] IPv6 is available.
+2020-03-14T06:43:54.369576Z 0 [Note]   - '::' resolves to '::';
+2020-03-14T06:43:54.369628Z 0 [Note] Server socket created on IP: '::'.
+2020-03-14T06:43:54.373574Z 0 [Warning] 'user' entry 'root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.373665Z 0 [Warning] 'user' entry 'mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.373688Z 0 [Warning] 'user' entry 'mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.373754Z 0 [Warning] 'db' entry 'performance_schema mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.373769Z 0 [Warning] 'db' entry 'sys mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.373806Z 0 [Warning] 'proxies_priv' entry '@ root@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.375573Z 0 [Warning] 'tables_priv' entry 'user mysql.session@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.375643Z 0 [Warning] 'tables_priv' entry 'sys_config mysql.sys@localhost' ignored in --skip-name-resolve mode.
+2020-03-14T06:43:54.388486Z 0 [Note] Event Scheduler: Loaded 0 events
+2020-03-14T06:43:54.389519Z 0 [Note] /opt/rh/rh-mysql57/root/usr/libexec/mysqld: ready for connections.
+Version: '5.7.24'  socket: '/var/lib/mysql/mysql.sock'  port: 3306  MySQL Community Server (GPL)
+
+
+
+^C
+
+nvL
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+    0     0 ACCEPT     tcp  --  eth1   *       122.100.217.177      0.0.0.0/0            tcp dpt:22
+    0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+17670  151M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+   94  6658 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+  108 21488 INPUT_direct  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  108 21488 INPUT_ZONES_SOURCE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  108 21488 INPUT_ZONES  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID
+   84 17910 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-host-prohibited
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      virbr0  0.0.0.0/0            192.168.122.0/24     ctstate RELATED,ESTABLISHED
+    0     0 ACCEPT     all  --  virbr0 *       192.168.122.0/24     0.0.0.0/0           
+    0     0 ACCEPT     all  --  virbr0 virbr0  0.0.0.0/0            0.0.0.0/0           
+    0     0 REJECT     all  --  *      virbr0  0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+    0     0 REJECT     all  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    0     0 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FORWARD_direct  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FORWARD_IN_ZONES_SOURCE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FORWARD_IN_ZONES  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FORWARD_OUT_ZONES_SOURCE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FORWARD_OUT_ZONES  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID
+    0     0 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-host-prohibited
+
+Chain OUTPUT (policy ACCEPT 1166 packets, 154K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     udp  --  *      virbr0  0.0.0.0/0            0.0.0.0/0            udp dpt:68
+ 7788  622K OUTPUT_direct  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FORWARD_IN_ZONES (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 FWDI_external  all  --  eth1   *       0.0.0.0/0            0.0.0.0/0           [goto] 
+    0     0 FWDI_trusted  all  --  eth0   *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FWDI_public  all  --  +      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain FORWARD_IN_ZONES_SOURCE (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 FWDI_trusted  all  --  *      *       10.88.0.2            0.0.0.0/0           
+
+Chain FORWARD_OUT_ZONES (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 FWDO_external  all  --  *      eth1    0.0.0.0/0            0.0.0.0/0           [goto] 
+    0     0 FWDO_trusted  all  --  *      eth0    0.0.0.0/0            0.0.0.0/0           
+    0     0 FWDO_public  all  --  *      +       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain FORWARD_OUT_ZONES_SOURCE (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 FWDO_trusted  all  --  *      *       0.0.0.0/0            10.88.0.2           
+
+Chain FORWARD_direct (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDI_external (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 FWDI_external_log  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FWDI_external_deny  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FWDI_external_allow  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FWDI_external_allow (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDI_external_deny (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDI_external_log (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDI_public (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 FWDI_public_log  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FWDI_public_deny  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FWDI_public_allow  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FWDI_public_allow (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDI_public_deny (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDI_public_log (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDI_trusted (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 FWDI_trusted_log  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FWDI_trusted_deny  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FWDI_trusted_allow  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FWDI_trusted_allow (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDI_trusted_deny (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDI_trusted_log (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDO_external (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 FWDO_external_log  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FWDO_external_deny  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FWDO_external_allow  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FWDO_external_allow (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate NEW
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate NEW
+
+Chain FWDO_external_deny (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDO_external_log (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDO_public (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 FWDO_public_log  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FWDO_public_deny  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FWDO_public_allow  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FWDO_public_allow (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDO_public_deny (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDO_public_log (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDO_trusted (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 FWDO_trusted_log  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FWDO_trusted_deny  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 FWDO_trusted_allow  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FWDO_trusted_allow (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDO_trusted_deny (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain FWDO_trusted_log (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain INPUT_ZONES (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+   51 12422 IN_external  all  --  eth1   *       0.0.0.0/0            0.0.0.0/0           [goto] 
+   24  3578 IN_trusted  all  --  eth0   *       0.0.0.0/0            0.0.0.0/0           
+   33  5488 IN_public  all  --  +      *       0.0.0.0/0            0.0.0.0/0           [goto] 
+
+Chain INPUT_ZONES_SOURCE (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 IN_trusted  all  --  *      *       10.88.0.2            0.0.0.0/0           
+
+Chain INPUT_direct (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain IN_external (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+   51 12422 IN_external_log  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+   51 12422 IN_external_deny  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+   51 12422 IN_external_allow  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain IN_external_allow (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22 ctstate NEW
+
+Chain IN_external_deny (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain IN_external_log (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain IN_public (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+   33  5488 IN_public_log  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+   33  5488 IN_public_deny  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+   33  5488 IN_public_allow  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain IN_public_allow (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22 ctstate NEW
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53 ctstate NEW
+
+Chain IN_public_deny (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain IN_public_log (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain IN_trusted (2 references)
+ pkts bytes target     prot opt in     out     source               destination         
+   24  3578 IN_trusted_log  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+   24  3578 IN_trusted_deny  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+   24  3578 IN_trusted_allow  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+   24  3578 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain IN_trusted_allow (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53 ctstate NEW
+
+Chain IN_trusted_deny (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain IN_trusted_log (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT_direct (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ -L INPUT
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+    0     0 ACCEPT     tcp  --  eth1   *       122.100.217.177      0.0.0.0/0            tcp dpt:22
+    0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:53
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:53
+    0     0 ACCEPT     udp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            udp dpt:67
+    0     0 ACCEPT     tcp  --  virbr0 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:67
+17701  151M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+   94  6658 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+  108 21488 INPUT_direct  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  108 21488 INPUT_ZONES_SOURCE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+  108 21488 INPUT_ZONES  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID
+   84 17910 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-host-prohibited
+p': iptables -nv -L INPUTs': podman ps[root@workstation ~]#
+CONTAINER ID   IMAGE                                                    COMMAND                  CREATED             STATUS                 PORTS   NAMES
+97fec7a2f1a5   registry.access.redhat.com/rhscl/mysql-57-rhel7:latest   container-entrypoin...   About an hour ago   Up About an hour ago           mysql-basic
+g': podman logs -f 97fec7a2f1a5r': podman inspect 97fec7a2f1a5 | grep -i ipaddressep[root@workstation ~]#
+            "SecondaryIPAddresses": null,
+            "IPAddress": "10.88.0.2",
+type mysql
+mysql is /bin/mysql
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MySQL connection id is 5
+Server version: 5.7.24 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MySQL [items]> select * from tableshow tables;
++-----------------+
+| Tables_in_items |
++-----------------+
+| Projects        |
++-----------------+
+1 row in set (0.00 sec)
+
+MySQL [items]> select * from Projects;
++----+---------+------+
+| id | name    | code |
++----+---------+------+
+|  0 | CunGong | 0xff |
++----+---------+------+
+1 row in set (0.01 sec)
+
+MySQL [items]> Bye
+podman images
+REPOSITORY                                        TAG      IMAGE ID       CREATED        SIZE
+registry.access.redhat.com/rhscl/mysql-57-rhel7   latest   60726b33a00a   5 months ago   448MB
+account
+drwxr-xr-x.  2 root root    6 Dec 14  2017 adm
+drwxr-xr-x. 13 root root  154 Oct 22 05:25 cache
+drwxr-xr-x.  2 root root    6 Aug 30  2018 crash
+drwxr-xr-x.  3 root root   34 Oct 10  2018 db
+drwxr-xr-x.  3 root root   18 Oct 10  2018 empty
+drwxr-xr-x.  2 root root    6 Dec 14  2017 games
+drwxr-xr-x.  2 root root    6 Dec 14  2017 gopher
+drwxr-xr-x.  3 root root   18 Oct 10  2018 kerberos
+drwxr-xr-x. 65 root root 4096 Mar 14 06:43 lib
+drwxr-xr-x.  2 root root    6 Dec 14  2017 local
+lrwxrwxrwx.  1 root root   11 Oct 10  2018 lock -> ../run/lock
+drwxr-xr-x. 20 root root 4096 Mar 13 07:30 log
+lrwxrwxrwx.  1 root root   10 Oct 10  2018 mail -> spool/mail
+drwxr-xr-x.  2 root root    6 Dec 14  2017 nis
+drwxr-xr-x.  2 root root    6 Dec 14  2017 opt
+drwxr-xr-x.  2 root root    6 Dec 14  2017 preserve
+lrwxrwxrwx.  1 root root    6 Oct 10  2018 run -> ../run
+drwxr-xr-x. 14 root root  167 Nov 29  2018 spool
+drwxrwxrwt. 12 root root 4096 Mar 14 06:41 tmp
+drwxr-xr-x.  4 root root   33 Nov 29  2018 www
+drwxr-xr-x.  2 root root    6 Dec 14  2017 yp
+dmkmkdir -pv -m0755 /libvar/local/mysql
+mkdir: created directory 
+d /var/local/mysql
+drwxr-xr-x. 2 root root 6 Mar 14 07:44 /var/local/mysql
+ls -l /var/local/mysql
+total 0
+ld /var/local/mysql
+drwxr-xr-x. 2 27 27 6 Mar 14 07:44 /var/local/mysql
+LS(1)                            User Commands                           LS(1)
+
+NAME
+       ls - list directory contents
+
+SYNOPSIS
+       ls [OPTION]... [FILE]...
+
+DESCRIPTION
+       List  information  about  the FILEs (the current directory by default).
+       Sort entries alphabetically if none of -cftuvSUX nor --sort  is  speci
+       fied.
+
+       Mandatory  arguments  to  long  options are mandatory for short options
+       too.
+
+       -a, --all
+              do not ignore entries starting with .
+
+       -A, --almost-all
+              do not list implied . and ..
+
+       --author
+ Manual page ls(1) line 1 (press h for help or q to quit)/--ZZLS(1)                            User Commands                           LS(1)
+
+NAME
+       ls - list directory contents
+
+SYNOPSIS
+       ls [OPTION]... [FILE]...
+
+DESCRIPTION
+       List  information  about  the FILEs (the current directory by default).
+       Sort entries alphabetically if none of -cftuvSUX nor --sort  is  speci
+       fied.
+
+       Mandatory  arguments  to  long  options are mandatory for short options
+       too.
+
+       -a, --all
+              do not ignore entries starting with .
+
+       -A, --almost-all
+              do not list implied . and ..
+
+       --author
+LS(1)                            User Commands                           LS(1)
+
+NAME
+       ls - list directory contents
+
+SYNOPSIS
+       ls [OPTION]... [FILE]...
+
+DESCRIPTION
+       List  information  about  the FILEs (the current directory by default).
+       Sort entries alphabetically if none of -cftuvSUX nor --sort  is  speci
+       fied.
+
+       Mandatory  arguments  to  long  options are mandatory for short options
+       too.
+
+       -a, --all
+              do not ignore entries starting with .
+
+       -A, --almost-all
+              do not list implied . and ..
+
+       --author
+...skipping...
+       -Z, --context
+              Display  security context so it fits on most displays.  Displays
+              only mode, user, group, security context and file name.
+
+       --scontext
+              Display only security context and file name.
+
+       --help display this help and exit
+
+       --version
+              output version information and exit
+
+       SIZE is an integer and optional unit (example:  10M  is  10*1024*1024).
+       Units  are K, M, G, T, P, E, Z, Y (powers of 1024) or KB, MB, ... (pow
+       ers of 1000).
+
+       Using color to distinguish file types is disabled both by  default  and
+       with  --color=never.  With --color=auto, ls emits color codes only when
+       standard output is connected to a terminal.  The LS_COLORS  environment
+       variable can change the settings.  Use the dircolors command to set it.
+
+   Exit status:
+       0      if OK,
+ Manual page ls(1) line 200/251 89% (press h for help or q to quit)m': man lsy': ls -ld /var/local/mysqlsql^C
+s': man lsq': ls -ld /var/local/mysqll /var/local/mysqlchown -R 27:27ls -ldmkdir -pv -m0755ysql -uuser1 -h 10.88.0.2 -p items^C
+podman ps
+CONTAINER ID   IMAGE                                                    COMMAND                  CREATED             STATUS                 PORTS   NAMES
+97fec7a2f1a5   registry.access.redhat.com/rhscl/mysql-57-rhel7:latest   container-entrypoin...   About an hour ago   Up About an hour ago           mysql-basic
+mysql-basic
+iptables pod
+k': mkdir -pv -m0755 /var/local/mysql^C
+getenforce
+Enforcing
+/var/local/mysql
+d /var/local/mysql
+drwxr-xr-x. 27 27 unconfined_u:object_r:container_file_t:s0 /var/local/mysql
+(reverse-i-search)`':r': ls -lZd /var/local/mysqlu': podman run --name mysql-basic -e MYSQL_USER=user1 -e MYSQQL_PASSWORD=mypa55 -e MYSQL_DATABASE=items -e MYSQL_ROOT_PASSWORD=r00tpa55 -d rhsscl/mysql-57-rhel7:latestn': podman run --name mysql-basic -e MYSQL_USER=user1 -e MYSQL_PASSWORD=mypa55 -e MYSQL_DATABASE=items -e MYSQL_ROOT_PASSWORD=r00tpa55 -d rhscl/mysql-57-rhel7:latest[root@workstation ~]# podman run --name mysql-basic -e MYSQL_USER=user1 -e MYSQL_PASSWORD=mypa55 -e MYSQL_DATABASE=items -e MYSQL_ROOT_PASSWORD=r00tpa55 -d rhscl/mysql-57-rhel7:latest
+
+^C
+[root@workstation ~]# 
+Z /var/local/mysql
+drwxr-xr-x. 27 27 unconfined_u:object_r:container_file_t:s0 /var/local/mysql
+ps
+CONTAINER ID   IMAGE                                                    COMMAND                  CREATED             STATUS                 PORTS                     NAMES
+68e48aac46e9   registry.access.redhat.com/rhscl/mysql-57-rhel7:latest   container-entrypoin...   24 seconds ago      Up 23 seconds ago      0.0.0.0:13306->3306/tcp   mysqldb-port
+97fec7a2f1a5   registry.access.redhat.com/rhscl/mysql-57-rhel7:latest   container-entrypoin...   About an hour ago   Up About an hour ago                             mysql-basic
+excec 68e48aac46e9 df -h
+Filesystem      Size  Used Avail Use% Mounted on
+overlay         100G  4.9G   96G   5% /
+tmpfs            64M     0   64M   0% /dev
+tmpfs           2.9G   18M  2.9G   1% /etc/hosts
+shm              63M     0   63M   0% /dev/shm
+tmpfs           2.9G     0  2.9G   0% /sys/fs/cgroup
+/dev/vda1       100G  4.9G   96G   5% /var/lib/mysql/data
+tmpfs           2.9G     0  2.9G   0% /proc/acpi
+tmpfs           2.9G     0  2.9G   0% /proc/scsi
+tmpfs           2.9G     0  2.9G   0% /sys/firmware
+items
+drwxr-x---. 2 27 27     4096 Mar 14 08:12 mysql
+-rw-r--r--. 1 27 27        6 Mar 14 08:12 mysql_upgrade_info
+drwxr-x---. 2 27 27     8192 Mar 14 08:12 performance_schema
+-rw-------. 1 27 27     1676 Mar 14 08:12 private_key.pem
+-rw-r--r--. 1 27 27      452 Mar 14 08:12 public_key.pem
+-rw-r--r--. 1 27 27     1112 Mar 14 08:12 server-cert.pem
+-rw-------. 1 27 27     1676 Mar 14 08:12 server-key.pem
+drwxr-x---. 2 27 27     8192 Mar 14 08:12 sys
+(reverse-i-search)`':m': podman psy': ls -l /var/local/mysqlsql ': mysql -uuser1 -h 10.88.0.2 -p items[root@workstation ~]#127.0.0.1 -P 13306
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MySQL connection id is 2
+Server version: 5.7.24 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MySQL [items]> selshow tables;
+Empty set (0.00 sec)
+
+MySQL [items]> Bye
+i': mysql -uuser1 -h 127.0.0.1 -p items -P 13306n': semanage fcontext -a -t container_file_t '/var/local/mysqql(/.*)?'s': podman inspect 97fec7a2f1a5 | grep -i ipaddress
+[root@workstation ~]#68e48aac46e9
+            "SecondaryIPAddresses": null,
+            "IPAddress": "10.88.0.3",
+u': mysql -uuser1 -h 127.0.0.1 -p items -P 13306u[root@workstation ~]#10.88.0.3133063306 3306
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.7.24 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MySQL [items]> Bye
+e': mysql -uuser1 -h 10.88.0.3 -p items -P 3306x': podman exec 68e48aac46e9 df -hec[root@workstation ~]#bash
+
+^C
+/bin/bash
+^C
+ /bin/bash9 /bin/bash7 /bin/bashf /bin/bashe /bin/bashc /bin/bash7 /bin/basha /bin/bash2 /bin/bashf /bin/bash1 /bin/basha /bin/bash5 /bin/bash
+^C
+df -h
+Filesystem      Size  Used Avail Use% Mounted on
+overlay         100G  4.9G   96G   5% /
+tmpfs            64M     0   64M   0% /dev
+tmpfs           2.9G   18M  2.9G   1% /etc/hosts
+shm              63M     0   63M   0% /dev/shm
+tmpfs           2.9G     0  2.9G   0% /sys/fs/cgroup
+/dev/vda1       100G  4.9G   96G   5% /var/lib/mysql/data
+tmpfs           2.9G     0  2.9G   0% /proc/acpi
+tmpfs           2.9G     0  2.9G   0% /proc/scsi
+tmpfs           2.9G     0  2.9G   0% /sys/firmware
+/bin/sh
+
+^C
+basic /bash
+unable to exec into mysqldb-basic: no container with name or ID mysqldb-basic found: no such container
+i=pit-it mysqldb-port bash
+bash-4.2$ 
+bash-4.2$ whoami
+mysql
+bash-4.2$ id
+uid=27(mysql) gid=27(mysql) groups=27(mysql),0(root)
+bash-4.2$ 
+bash-4.2$ 
+bash-4.2$ cat     cat     id  df
+Filesystem     1K-blocks    Used Available Use% Mounted on
+overlay        104845184 5113796  99731388   5% /
+tmpfs              65536       0     65536   0% /dev
+tmpfs            2972396   18136   2954260   1% /etc/hosts
+shm                64000       0     64000   0% /dev/shm
+tmpfs            2972396       0   2972396   0% /sys/fs/cgroup
+/dev/vda1      104845184 5113796  99731388   5% /var/lib/mysql/data
+tmpfs            2972396       0   2972396   0% /proc/acpi
+tmpfs            2972396       0   2972396   0% /proc/scsi
+tmpfs            2972396       0   2972396   0% /sys/firmware
+bash-4.2$ cd /var/lib/mysql/data
+bash-4.2$ ls -ltr
+total 41036
+-rw-r-----. 1 mysql mysql  8388608 Mar 14 08:12 ib_logfile1
+-rw-r-----. 1 mysql mysql       56 Mar 14 08:12 auto.cnf
+-rw-------. 1 mysql mysql     1680 Mar 14 08:12 ca-key.pem
+-rw-r--r--. 1 mysql mysql     1112 Mar 14 08:12 ca.pem
+-rw-------. 1 mysql mysql     1676 Mar 14 08:12 server-key.pem
+-rw-r--r--. 1 mysql mysql     1112 Mar 14 08:12 server-cert.pem
+-rw-------. 1 mysql mysql     1680 Mar 14 08:12 client-key.pem
+-rw-r--r--. 1 mysql mysql     1112 Mar 14 08:12 client-cert.pem
+-rw-------. 1 mysql mysql     1676 Mar 14 08:12 private_key.pem
+-rw-r--r--. 1 mysql mysql      452 Mar 14 08:12 public_key.pem
+drwxr-x---. 2 mysql mysql     8192 Mar 14 08:12 sys
+drwxr-x---. 2 mysql mysql     8192 Mar 14 08:12 performance_schema
+drwxr-x---. 2 mysql mysql     4096 Mar 14 08:12 mysql
+-rw-r--r--. 1 mysql mysql        6 Mar 14 08:12 mysql_upgrade_info
+drwxr-x---. 2 mysql mysql       20 Mar 14 08:12 items
+-rw-r-----. 1 mysql mysql      673 Mar 14 08:12 ib_buffer_pool
+-rw-r-----. 1 mysql mysql        2 Mar 14 08:12 68e48aac46e9.pid
+-rw-r-----. 1 mysql mysql 12582912 Mar 14 08:12 ibtmp1
+-rw-r-----. 1 mysql mysql 12582912 Mar 14 08:12 ibdata1
+-rw-r-----. 1 mysql mysql  8388608 Mar 14 08:12 ib_logfile0
+bash-4.2$ touch hello.txt
+bash-4.2$ ls -l hello.txt 
+-rw-r--r--. 1 mysql mysql 0 Mar 14 08:18 hello.txt
+bash-4.2$ whoami >./hello.txt 
+bash-4.2$ 
+bash-4.2$ ls -ltr
+total 41040
+-rw-r-----. 1 mysql mysql  8388608 Mar 14 08:12 ib_logfile1
+-rw-r-----. 1 mysql mysql       56 Mar 14 08:12 auto.cnf
+-rw-------. 1 mysql mysql     1680 Mar 14 08:12 ca-key.pem
+-rw-r--r--. 1 mysql mysql     1112 Mar 14 08:12 ca.pem
+-rw-------. 1 mysql mysql     1676 Mar 14 08:12 server-key.pem
+-rw-r--r--. 1 mysql mysql     1112 Mar 14 08:12 server-cert.pem
+-rw-------. 1 mysql mysql     1680 Mar 14 08:12 client-key.pem
+-rw-r--r--. 1 mysql mysql     1112 Mar 14 08:12 client-cert.pem
+-rw-------. 1 mysql mysql     1676 Mar 14 08:12 private_key.pem
+-rw-r--r--. 1 mysql mysql      452 Mar 14 08:12 public_key.pem
+drwxr-x---. 2 mysql mysql     8192 Mar 14 08:12 sys
+drwxr-x---. 2 mysql mysql     8192 Mar 14 08:12 performance_schema
+drwxr-x---. 2 mysql mysql     4096 Mar 14 08:12 mysql
+-rw-r--r--. 1 mysql mysql        6 Mar 14 08:12 mysql_upgrade_info
+drwxr-x---. 2 mysql mysql       20 Mar 14 08:12 items
+-rw-r-----. 1 mysql mysql      673 Mar 14 08:12 ib_buffer_pool
+-rw-r-----. 1 mysql mysql        2 Mar 14 08:12 68e48aac46e9.pid
+-rw-r-----. 1 mysql mysql 12582912 Mar 14 08:12 ibtmp1
+-rw-r-----. 1 mysql mysql 12582912 Mar 14 08:12 ibdata1
+-rw-r-----. 1 mysql mysql  8388608 Mar 14 08:12 ib_logfile0
+-rw-r--r--. 1 mysql mysql        6 Mar 14 08:18 hello.txt
+bash-4.2$ cat ./hello.txt 
+mysql
+bash-4.2$ exit
+sys
+drwxr-x---. 2 27 27     8192 Mar 14 08:12 performance_schema
+drwxr-x---. 2 27 27     4096 Mar 14 08:12 mysql
+-rw-r--r--. 1 27 27        6 Mar 14 08:12 mysql_upgrade_info
+drwxr-x---. 2 27 27       20 Mar 14 08:12 items
+-rw-r-----. 1 27 27      673 Mar 14 08:12 ib_buffer_pool
+-rw-r-----. 1 27 27        2 Mar 14 08:12 68e48aac46e9.pid
+-rw-r-----. 1 27 27 12582912 Mar 14 08:12 ibtmp1
+-rw-r-----. 1 27 27 12582912 Mar 14 08:12 ibdata1
+-rw-r-----. 1 27 27  8388608 Mar 14 08:12 ib_logfile0
+-rw-r--r--. 1 27 27        6 Mar 14 08:18 hello.txt
+registries.d
+-rw-r--r--. 1 root root  858 Mar 14 06:37 registries.conf
+"./registries.conf" 25L, 858C# This is a system-wide configuration file used to
+# keep track of registries for various container backends.
+# It adheres to TOML format and does not support recursive
+# lists of registries.
+
+# The default location for this configuration file is /etc/containers/registriess.conf.
+
+# The only valid categories are: 'registries.search', 'registries.insecure',
+# and 'registries.block'.
+
+[registries.search]
+registries = ["registry.access.redhat.com", "quay.io"]
+
+# If you need to access insecure registries, add the registry's fully-qualified  name.
+# An insecure registry is one that does not have a valid SSL certificate or onlyy does HTTP.
+[registries.insecure]
+registries = []
+
+
+# If you need to block pull access from a registry, uncomment the section below
+
+
+
+
+
+
+
+
+
+
+
+:qcurl(1)                           Curl Manual                          curl(1)
+
+NAME
+       curl - transfer a URL
+
+SYNOPSIS
+       curl [options] [URL...]
+
+DESCRIPTION
+       curl  is  a tool to transfer data from or to a server, using one of the
+       supported protocols (DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS,  IMAP,
+       IMAPS,  LDAP,  LDAPS,  POP3, POP3S, RTMP, RTSP, SCP, SFTP, SMTP, SMTPS,
+       TELNET and TFTP).  The command is designed to work without user  inter
+       action.
+
+       curl offers a busload of useful tricks like proxy support, user authen
+       tication, FTP upload, HTTP post, SSL connections, cookies, file  trans
+       fer  resume,  Metalink,  and more. As you will see below, the number of
+       features will make your head spin!
+
+       curl is powered by  libcurl  for  all  transfer-related  features.  See
+       libcurl(3) for details.
+
+ Manual page curl(1) line 1 (press h for help or q to quit)/--LLcurl(1)                           Curl Manual                          curl(1)
+
+NAME
+       curl - transfer a URL
+
+SYNOPSIS
+       curl [options] [URL...]
+
+DESCRIPTION
+       curl  is  a tool to transfer data from or to a server, using one of the
+       supported protocols (DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS,  IMAP,
+       IMAPS,  LDAP,  LDAPS,  POP3, POP3S, RTMP, RTSP, SCP, SFTP, SMTP, SMTPS,
+       TELNET and TFTP).  The command is designed to work without user  inter
+       action.
+
+       curl offers a busload of useful tricks like proxy support, user authen
+       tication, FTP upload, HTTP post, SSL connections, cookies, file  trans
+       fer  resume,  Metalink,  and more. As you will see below, the number of
+       features will make your head spin!
+
+       curl is powered by  libcurl  for  all  transfer-related  features.  See
+       libcurl(3) for details.
+
+curl(1)                           Curl Manual                          curl(1)
+
+NAME
+       curl - transfer a URL
+
+SYNOPSIS
+       curl [options] [URL...]
+
+DESCRIPTION
+       curl  is  a tool to transfer data from or to a server, using one of the
+       supported protocols (DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS,  IMAP,
+       IMAPS,  LDAP,  LDAPS,  POP3, POP3S, RTMP, RTSP, SCP, SFTP, SMTP, SMTPS,
+       TELNET and TFTP).  The command is designed to work without user  inter
+       action.
+
+       curl offers a busload of useful tricks like proxy support, user authen
+       tication, FTP upload, HTTP post, SSL connections, cookies, file  trans
+       fer  resume,  Metalink,  and more. As you will see below, the number of
+       features will make your head spin!
+
+       curl is powered by  libcurl  for  all  transfer-related  features.  See
+       libcurl(3) for details.
+
+...skipping...
+              combination  with  the -L, --location option. The file format of
+              the file to read cookies from should be plain  HTTP  headers  or
+              the Netscape/Mozilla cookie file format.
+
+              NOTE  that  the file specified with -b, --cookie is only used as
+              input. No cookies will be stored in the file. To store  cookies,
+              use  the -c, --cookie-jar option or you could even save the HTTP
+              headers to a file using -D, --dump-header!
+
+              If this option is used several times, the last one will be used.
+
+       -B, --use-ascii
+              (FTP/LDAP) Enable ASCII transfer. For  FTP,  this  can  also  be
+              enforced  by  using an URL that ends with ";type=A". This option
+              causes data sent to stdout to be in text mode for win32 systems.
+
+       --basic
+              (HTTP) Tells curl to use HTTP Basic authentication. This is  the
+              default  and this option is usually pointless, unless you use it
+              to override a  previously  set  option  that  sets  a  different
+              authentication  method  (such  as --ntlm, --digest, or --negoti
+              ate).
+
+ Manual page curl(1) line 171 (press h for help or q to quit)/...skipping...
+              used with -L, --location you can append ";auto" to the --referer
+              URL to make curl automatically set the previous URL when it fol
+              lows  a  Location: header. The ";auto" string can be used alone,
+              even if you don't set an initial --referer.
+
+              If this option is used several times, the last one will be used.
+
+       -E, --cert <certificate[:password]>
+              (SSL) Tells curl to use the specified  client  certificate  file
+              when getting a file with HTTPS, FTPS or another SSL-based proto
+              col. The certificate must be in PEM  format.   If  the  optional
+              password  isn't  specified, it will be queried for on the termi
+              nal. Note that this option assumes a "certificate" file that  is
+              the  private  key  and the private certificate concatenated! See
+              --cert and --key to specify them independently.
+
+              If curl is built against the NSS SSL library  then  this  option
+              can  tell curl the nickname of the certificate to use within the
+              NSS database defined by the environment variable SSL_DIR (or  by
+              default  /etc/pki/nssdb).  If  the  NSS PEM PKCS#11 module (lib
+              nsspem.so) is available then PEM files may  be  loaded.  If  you
+              want to use a file from the current directory, please precede it
+              with "./" prefix, in order to avoid confusion with  a  nickname.
+ Manual page curl(1) line 424 (press h for help or q to quit)/...skipping...
+              (HTTP) Ignore the Content-Length header.  This  is  particularly
+              useful  for servers running Apache 1.x, which will report incor
+              rect Content-Length for files larger than 2 gigabytes.
+
+       -i, --include
+              (HTTP) Include the HTTP-header in the  output.  The  HTTP-header
+              includes  things  like  server-name, date of the document, HTTP-
+              version and more...
+
+       -I, --head
+              (HTTP/FTP/FILE) Fetch the HTTP-header only! HTTP-servers feature
+              the  command  HEAD which this uses to get nothing but the header
+              of a document. When used on an FTP or FILE file,  curl  displays
+              the file size and last modification time only.
+
+       --interface <name>
+              Perform  an operation using a specified interface. You can enter
+              interface name, IP address or host name. An example  could  look
+              like:
+
+               curl --interface eth0:1 http://www.netscape.com/
+
+              If this option is used several times, the last one will be used.
+ Manual page curl(1) line 725 (press h for help or q to quit)/
+       -j, --junk-session-cookies
+ Manual page curl(1) line 727 (press h for help or q to quit)/...skipping...
+       -L, --location
+              (HTTP/HTTPS) If the server reports that the requested  page  has
+              moved to a different location (indicated with a Location: header
+              and a 3XX response code), this option will make  curl  redo  the
+              request on the new place. If used together with -i, --include or
+              -I, --head, headers from all requested pages will be shown. When
+              authentication  is  used, curl only sends its credentials to the
+              initial host. If a redirect takes curl to a different  host,  it
+              won't  be  able to intercept the user+password. See also --loca
+              tion-trusted on how to change this. You can limit the amount  of
+              redirects to follow by using the --max-redirs option.
+
+              When  curl follows a redirect and the request is not a plain GET
+              (for example POST or PUT), it will do the following request with
+              a GET if the HTTP response was 301, 302, or 303. If the response
+              code was any other 3xx code, curl  will  re-send  the  following
+              request using the same unmodified method.
+
+       --libcurl <file>
+              Append  this  option  to any ordinary curl command line, and you
+              will get a libcurl-using C source code written to the file  that
+              does the equivalent of what your command-line operation does!
+
+ Manual page curl(1) line 880 (press h for help or q to quit)/...skipping...
+              (HTTP/HTTPS)  Like  -L,  --location,  but will allow sending the
+              name + password to all hosts that the site may redirect to. This
+              may or may not introduce a security breach if the site redirects
+              you to a site to which  you'll  send  your  authentication  info
+              (which is plaintext in the case of HTTP Basic authentication).
+
+       -m, --max-time <seconds>
+              Maximum  time  in  seconds that you allow the whole operation to
+              take.  This is useful for preventing your batch jobs from  hang
+              ing  for  hours  due  to slow networks or links going down.  See
+              also the --connect-timeout option.
+
+              If this option is used several times, the last one will be used.
+
+       --mail-auth <address>
+              (SMTP) Specify a single address. This will be  used  to  specify
+              the  authentication  address  (identity)  of a submitted message
+              that is being relayed to another server.
+
+              (Added in 7.25.0)
+
+       --mail-from <address>
+              (SMTP) Specify a single address that the given mail  should  get
+ Manual page curl(1) line 934 (press h for help or q to quit)/--ss              (HTTP/HTTPS)  Like  -L,  --location,  but will allow sending the
+              name + password to all hosts that the site may redirect to. This
+              may or may not introduce a security breach if the site redirects
+              you to a site to which  you'll  send  your  authentication  info
+              (which is plaintext in the case of HTTP Basic authentication).
+
+       -m, --max-time <seconds>
+              Maximum  time  in  seconds that you allow the whole operation to
+              take.  This is useful for preventing your batch jobs from  hang
+              ing  for  hours  due  to slow networks or links going down.  See
+              also the --connect-timeout option.
+
+              If this option is used several times, the last one will be used.
+
+       --mail-auth <address>
+              (SMTP) Specify a single address. This will be  used  to  specify
+              the  authentication  address  (identity)  of a submitted message
+              that is being relayed to another server.
+
+              (Added in 7.25.0)
+
+       --mail-from <address>
+              (SMTP) Specify a single address that the given mail  should  get
+              (HTTP/HTTPS)  Like  -L,  --location,  but will allow sending the
+              name + password to all hosts that the site may redirect to. This
+              may or may not introduce a security breach if the site redirects
+              you to a site to which  you'll  send  your  authentication  info
+              (which is plaintext in the case of HTTP Basic authentication).
+
+       -m, --max-time <seconds>
+              Maximum  time  in  seconds that you allow the whole operation to
+              take.  This is useful for preventing your batch jobs from  hang
+              ing  for  hours  due  to slow networks or links going down.  See
+              also the --connect-timeout option.
+
+              If this option is used several times, the last one will be used.
+
+       --mail-auth <address>
+              (SMTP) Specify a single address. This will be  used  to  specify
+              the  authentication  address  (identity)  of a submitted message
+              that is being relayed to another server.
+
+              (Added in 7.25.0)
+
+       --mail-from <address>
+              (SMTP) Specify a single address that the given mail  should  get
+...skipping...
+       --no-sessionid
+              (SSL)  Disable curl's use of SSL session-ID caching.  By default
+              all transfers are done using the cache. Note that while  nothing
+              should  ever  get  hurt  by attempting to reuse SSL session-IDs,
+              there seem to be broken SSL implementations in the wild that may
+              require  you to disable this in order for you to succeed. (Added
+              in 7.16.0)
+
+              Note that this is the negated option name  documented.  You  can
+              thus use --sessionid to enforce session-ID caching.
+
+       --noproxy <no-proxy-list>
+              Comma-separated  list  of hosts which do not use a proxy, if one
+              is specified.  The only wildcard is a single * character,  which
+              matches all hosts, and effectively disables the proxy. Each name
+              in this list is matched as either a domain  which  contains  the
+              hostname,  or  the hostname itself. For example, local.com would
+              match  local.com,  local.com:80,  and  www.local.com,  but   not
+              www.notlocal.com.  (Added in 7.19.4).
+
+       --ntlm (HTTP)  Enables  NTLM  authentication.  The  NTLM authentication
+              method was designed by Microsoft and is used by IIS web servers.
+              It  is a proprietary protocol, reverse-engineered by clever peo
+ Manual page curl(1) line 1087 (press h for help or q to quit)?              take.  This is useful for preventing your batch jobs from  hang
+              Maximum  time  in  seconds that you allow the whole operation to
+       -m, --max-time <seconds>
+
+              (which is plaintext in the case of HTTP Basic authentication).
+              you to a site to which  you'll  send  your  authentication  info
+              may or may not introduce a security breach if the site redirects
+              name + password to all hosts that the site may redirect to. This
+              (HTTP/HTTPS)  Like  -L,  --location,  but will allow sending the
+       --location-trusted
+
+              failures. (Added in 7.15.2)
+              to something too narrow might cause unnecessary connection setup
+              scarce resource that will be busy at times so setting this range
+              the connection(s).  Note that  port  numbers  by  nature  are  a
+              Set a preferred number or range of local port numbers to use for
+       --local-port <num>[-num]
+
+              If this option is used several times, the last one will be used.
+
+              help keeping the speed-limit logic working.
+              take precedence and might cripple the rate-limiting slightly, to
+              If  you  also use the -Y, --speed-limit option, that option will
+ Manual page curl(1) line 920 (press h for help or q to quit)?              transfer. It means that curl might use higher transfer speeds in
+              The  given  rate  is the average speed counted during the entire
+
+              gigabytes. Examples: 200K, 3m and 1G.
+              bytes, 'm' or M' makes it megabytes, while 'g' or 'G'  makes  it
+              appended.   Appending  'k' or 'K' will count the number as kilo
+              The given speed is measured in bytes/second, unless a suffix  is
+
+              transfer not to use your entire bandwidth.
+              feature is useful if you have a limited pipe and you'd like your
+              Specify the maximum transfer rate you want  curl  to  use.  This
+       --limit-rate <speed>
+
+              will be used. (Added in 7.16.1)
+              If  this  option is used several times, the last given file name
+
+              does the equivalent of what your command-line operation does!
+              will get a libcurl-using C source code written to the file  that
+              Append  this  option  to any ordinary curl command line, and you
+       --libcurl <file>
+
+              request using the same unmodified method.
+              code was any other 3xx code, curl  will  re-send  the  following
+ Manual page curl(1) line 895 (press h for help or q to quit)?              quotes. Within double quotes, the following escape sequences are
+              contain  whitespace,  the  parameter  must  be  enclosed  within
+              preferred separator is the equals sign). If the parameter is  to
+              colon,  the equals sign or any combination thereof (however, the
+              fied on the same config  file  line,  separated  by  whitespace,
+              actual command line. Options and their parameters must be speci
+              written which then will be used as if they were written  on  the
+              fig  file  is a text file in which command line arguments can be
+              Specify which config file to read curl arguments from. The  con
+       -K, --config <config file>
+
+              http://curl.haxx.se/docs/sslcerts.html
+              See     this    online    resource    for    further    details:
+
+              fail unless -k, --insecure is used.
+              by default. This makes  all  connections  considered  "insecure"
+              to  be  made secure by using the CA certificate bundle installed
+              SSL connections and transfers. All SSL connections are attempted
+              (SSL)  This  option explicitly allows curl to perform "insecure"
+       -k, --insecure
+
+              extracting a filename from the URL.
+              server-specified   Content-Disposition   filename   instead   of
+ Manual page curl(1) line 758 (press h for help or q to quit)?              (HTTP) This option tells the -O, --remote-name option to use the
+       -J, --remote-header-name
+
+              closed down.
+              Typical browsers always discard  session  cookies  when  they're
+              basically  have  the same effect as if a new session is started.
+              option will make it discard all  "session  cookies".  This  will
+              (HTTP) When curl is told to read cookies from a given file, this
+       -j, --junk-session-cookies
+ Manual page curl(1) line 749 (press h for help or q to quit)?
+              If this option is used several times, the last one will be used.
+
+               curl --interface eth0:1 http://www.netscape.com/
+
+              like:
+              interface name, IP address or host name. An example  could  look
+              Perform  an operation using a specified interface. You can enter
+       --interface <name>
+
+              the file size and last modification time only.
+              of a document. When used on an FTP or FILE file,  curl  displays
+              the  command  HEAD which this uses to get nothing but the header
+              (HTTP/FTP/FILE) Fetch the HTTP-header only! HTTP-servers feature
+ Manual page curl(1) line 735 (press h for help or q to quit)?              appended to the URL with a HEAD request.
+              If  used  in  combination with -I, the POST data will instead be
+
+              data will be appended to the URL with a '?' separator.
+              instead of the POST request that otherwise would  be  used.  The
+              --data  or  --data-binary  to  be  used  in  an HTTP GET request
+              When used, this option will make all  data  specified  with  -d,
+       -G, --get
+
+              be encoded according to the URI standard.
+              these  letters are not normal legal URL contents but they should
+              without having them being interpreted by curl itself. Note  that
+              this  option, you can specify URLs that contain the letters {}[]
+              This option switches off the "URL globbing parser". When you set
+       -g, --globoff
+
+              features of --form.
+              that  the  string  value may accidentally trigger the '@' or '<'
+              ing. Use this in preference to --form if there's any possibility
+              ters, and the ';type=' string in the value have no special mean
+              named parameter is used literally. Leading '@' and  '<'  charac
+              (HTTP)  Similar  to  --form except that the value string for the
+       --form-string <name=string>
+ Manual page curl(1) line 666 (press h for help or q to quit)?
+              be removed in a future version.
+              port SSL/TLS.  (Added in 7.16.0) that can still be used but will
+              for  efficiency.   Fails the transfer if the server doesn't sup
+              Allows secure authentication, but non-encrypted  data  transfers
+              (FTP)  Require  SSL/TLS  for  the FTP login, clear for transfer.
+       --ftp-ssl-control
+ Manual page curl(1) line 659 (press h for help or q to quit)?
+              a reply from the server.  (Added in 7.16.2)
+              the server. The active mode initiates the shutdown and waits for
+              for the server to do it, and will not reply to the shutdown from
+              passive mode will not initiate the shutdown,  but  instead  wait
+              (FTP)  Use  CCC  (Clear  Command Channel) Sets the CCC mode. The
+       --ftp-ssl-ccc-mode [active/passive]
+ Manual page curl(1) line 652 (press h for help or q to quit)?
+              ssl-ccc-mode for other modes.  (Added in 7.16.1)
+              low the FTP transaction. The default mode is passive. See --ftp-
+              munication  will be unencrypted. This allows NAT routers to fol
+              layer after authenticating. The rest of the control channel com
+              (FTP)  Use  CCC  (Clear  Command Channel) Shuts down the SSL/TLS
+       --ftp-ssl-ccc
+ Manual page curl(1) line 645 (press h for help or q to quit)?
+              PASV mode.  (Added in 7.20.x)
+              command for directory listings as well as up  and  downloads  in
+              Certain  FTP  servers,  mainly drftpd, require this non-standard
+ Manual page curl(1) line 641 (press h for help or q to quit)?              (FTP) Tell curl to send a PRET command before PASV  (and  EPSV).
+       --ftp-pret
+
+              of PASV.
+              This  option has no effect if PORT, EPRT or EPSV is used instead
+
+              already uses for the control connection. (Added in 7.14.2)
+              connection. Instead curl will re-use  the  same  IP  address  it
+              its  response to curl's PASV command when curl connects the data
+              (FTP) Tell curl to not use the IP address the server suggests in
+       --ftp-skip-pasv-ip
+ Manual page curl(1) line 630 (press h for help or q to quit)?              To read content from stdin instead of a file, use - as the file
+
+              curl -F password=@/etc/passwd www.mypasswords.com
+
+              the input:
+              word' is the name of the form-field to which /etc/passwd will be
+              Example, to send your password file to the server, where  'pass
+
+              that text field from a file.
+              while  the  <  makes  a text field and just get the contents for
+              that @ makes a file get attached in the post as a  file  upload,
+              name  with  the symbol <. The difference between @ and < is then
+              sign. To just get the content part from a file, prefix the  file
+              'content'  part  to  be  a  file, prefix the file name with an @
+              2388. This enables uploading of binary files etc. To  force  the
+              using  the  Content-Type  multipart/form-data  according  to RFC
+              has pressed the submit button. This causes  curl  to  POST  data
+              (HTTP)  This  lets curl emulate a filled-in form in which a user
+       -F, --form <name=content>
+
+              authentication is involved (response codes 401 and 407).
+              successful response codes will  slip  through,  especially  when
+              This  method is not fail-safe and there are occasions where non-
+ Manual page curl(1) line 520 (press h for help or q to quit)?
+              being "headers" and thus are saved there.
+              When used in FTP, the FTP server response lines  are  considered
+
+              way to store cookies.
+              --cookie option! The -c, --cookie-jar option is however a better
+              then be read in a  second  curl  invocation  by  using  the  -b,
+              that  an  HTTP site sends to you. Cookies from the headers could
+              This option is handy to use when you want to store  the  headers
+
+              Write the protocol headers to the specified file.
+       -D, --dump-header <file>
+
+              bar.
+              from  a file named 'foobar' would thus be done with --data @foo
+              URL-encoded. Multiple files can also be specified. Posting  data
+              the  data  from stdin.  The contents of the file must already be
+              file name to read the data from, or - if you want curl  to  read
+              If  you  start  the data with the letter @, the rest should be a
+
+              'name=daniel&skill=lousy'.
+              skill=lousy'  would  generate  a  post  chunk  that  looks  like
+              with  a  separating  &-symbol.  Thus,  using  '-d name=daniel -d
+ Manual page curl(1) line 289 (press h for help or q to quit)?              Some   badly   done  CGIs  fail  if  this  field  isn't  set  to
+              (HTTP) Specify the User-Agent string to send to the HTTP server.
+       -A, --user-agent <agent string>
+
+              ignored by some SSH servers (including OpenSSH).
+              doesn't  exist,  it  will  be  created.   Note that this flag is
+              to the target file  instead  of  overwriting  it.  If  the  file
+              (FTP/SFTP) When used in an upload, this will tell curl to append
+       -a, --append
+
+              curl to resolve names to IPv6 addresses only.
+              sions (which it is if it is  IPv6-capable),  this  option  tells
+              If  curl  is capable of resolving an address to multiple IP ver
+       -6, --ipv6
+
+              curl to resolve names to IPv4 addresses only.
+              sions (which it is if it is  IPv6-capable),  this  option  tells
+              If  curl  is capable of resolving an address to multiple IP ver
+       -4, --ipv4
+
+              remote SSL server.
+              (SSL) Forces curl to use SSL version 3 when negotiating  with  a
+       -3, --sslv3
+ Manual page curl(1) line 117 (press h for help or q to quit)?
+              remote SSL server.
+              (SSL)  Forces  curl to use SSL version 2 when negotiating with a
+       -2, --sslv2
+ Manual page curl(1) line 113 (press h for help or q to quit)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)?Pattern not found  (press RETURN)io
+Password: 
+error logging into "quay.io": invalid username/password
+
+docker docker ps 
+bash: docker: command not found...
+dpodman images
+REPOSITORY                                        TAG      IMAGE ID       CREATED        SIZE
+registry.access.redhat.com/rhscl/mysql-57-rhel7   latest   60726b33a00a   5 months ago   448MB
+it 68e48aac46e9 mysql-57-rhel7:v1testportv1-v1 1
+ERRO[0000] Can't add file /var/lib/containers/storage/overlay/2143624619a7fb62c901db6a28ca7265d8a94f8e379d369a8ed4f33c9fe77313/diff/var/lib/mysql/mysql.sock to tar: archive/tar: sockets not supported 
+Getting image source signatures
+Skipping fetch of repeat blob sha256:2cab4440f9070965c8454792eee4b122bce5939cc6d21e554469f01e71712a89
+Skipping fetch of repeat blob sha256:64f2bd9f473b0ae150f07dc65aafb90beeec7ebaa722625055cb8c1ddede0b09
+Skipping fetch of repeat blob sha256:682be05d59b268579900963a5bfd91689d6823d0b9c111c61fd3fb979972d7eb
+Skipping fetch of repeat blob sha256:21eb863ed59246de28954bb7723541702353de9a387b341f70ec9cf317819773
+Copying blob sha256:00d162b5c6f6e15d25c14d2b66f6b4a396e1e1e09ff430d74cbefce0a7384e1a
+ 0 B / 14.00 KB  14.00 KB / 14.00 KB  0s
+Copying config sha256:b212bccc7b6063b69fe13397692aaa1c3391226c012d3bb6d8d281a070af31bf
+ 0 B / 3.74 KB  3.74 KB / 3.74 KB  0s
+Writing manifest to image destination
+Storing signatures
+b212bccc7b6063b69fe13397692aaa1c3391226c012d3bb6d8d281a070af31bf
+ERRO[0001] Can't add file /var/lib/containers/storage/overlay/7b520c31f785c8406877f876baf5c0240f934b795dd1405ffcc2e431552284e9/diff/var/lib/mysql/mysql.sock to tar: archive/tar: sockets not supported 
+Getting image source signatures
+Skipping fetch of repeat blob sha256:2cab4440f9070965c8454792eee4b122bce5939cc6d21e554469f01e71712a89
+Skipping fetch of repeat blob sha256:64f2bd9f473b0ae150f07dc65aafb90beeec7ebaa722625055cb8c1ddede0b09
+Skipping fetch of repeat blob sha256:682be05d59b268579900963a5bfd91689d6823d0b9c111c61fd3fb979972d7eb
+Skipping fetch of repeat blob sha256:21eb863ed59246de28954bb7723541702353de9a387b341f70ec9cf317819773
+Copying blob sha256:8d50cb40426cd28fa3c88b2a535cbb63d2e3c7f0428f845766d33c71fae87916
+ 0 B / 51.07 MB  14.25 MB / 51.07 MB  24.06 MB / 51.07 MB  30.44 MB / 51.07 MB  41.50 MB / 51.07 MB  49.06 MB / 51.07 MB  51.07 MB / 51.07 MB  1s
+Copying config sha256:5516833adee98a9829cdacad4e04bf22100d67892c9f5eedf6941a8dc189d52e
+ 0 B / 3.69 KB  3.69 KB / 3.69 KB  0s
+Writing manifest to image destination
+Storing signatures
+5516833adee98a9829cdacad4e04bf22100d67892c9f5eedf6941a8dc189d52e
+
+quay.io:/gongcun/training/mysql-57-rhe l7:basic-v1
+unable to find 'quay.io/gongcun/training/mysql-57-rhel7:basic-v1' in local storage
+
+
+docker podman diff mysqldb-port
+C /etc
+C /etc/opt/rh/rh-mysql57
+C /etc/opt/rh/rh-mysql57/my.cnf.d
+C /etc/opt
+C /etc/opt/rh
+A /etc/opt/rh/rh-mysql57/my.cnf.d/10-mysql57.cnf
+A /etc/opt/rh/rh-mysql57/my.cnf.d/40-paas.cnf
+A /etc/opt/rh/rh-mysql57/my.cnf.d/50-my-tuning.cnf
+A /etc/opt/rh/rh-mysql57/my.cnf.d/base.cnf
+C /tmp
+C /var
+C /var/lib
+C /var/lib/mysql
+A /var/lib/mysql/.bash_history
+A /var/lib/mysql/mysql.sock
+A /var/lib/mysql/mysql.sock.lock
+C /var/tmp
+(reverse-i-search)`':p': podman diff mysqldb-portu': podman push quay.io/gongcun/training/mysql-57-rhel7:basicc-v1s': podman push quay.io/gongcun/training/mysql-57-rhel7:basic-v1h': podman push quay.io/gongcun/training/mysql-57-rhel7:basic-v1^C
+
+(reverse-i-search)`':c': podman push quay.io/gongcun/training/mysql-57-rhel7:basic--v1o': podman commit 97fec7a2f1a5 mysql-57-rhel7:basic-v1
+mm[root@workstation containers]# podman commit 97fec7a2f1a5 mysql-57-rhel7:basic-v11
+^C
+podman images
+REPOSITORY                                        TAG        IMAGE ID       CREATED          SIZE
+localhost/mysql-57-rhel7                          basic-v1   5516833adee9   10 minutes ago   501MB
+quay.io/gongcun/training/mysql-57-rhel7           basic      5516833adee9   10 minutes ago   501MB
+localhost/mysql-57-rhel7                          port-v1    b212bccc7b60   10 minutes ago   448MB
+registry.access.redhat.com/rhscl/mysql-57-rhel7   latest     60726b33a00a   5 months ago     448MB
+ rmi quay.io/gongcun/training/mysql-57-rhel7:basic^C
+
+docker
+^C
+
+unable to find 'quay.io/gongcun/training' in local storage
+podman images
+REPOSITORY                                        TAG        IMAGE ID       CREATED          SIZE
+localhost/mysql-57-rhel7                          basic-v1   5516833adee9   12 minutes ago   501MB
+quay.io/gongcun/training/mysql-57-rhel7           basic-v1   5516833adee9   12 minutes ago   501MB
+localhost/mysql-57-rhel7                          port-v1    b212bccc7b60   13 minutes ago   448MB
+registry.access.redhat.com/rhscl/mysql-57-rhel7   latest     60726b33a00a   5 months ago     448MB
+/mysql-57-rhell7:basic-v1^C
+n images
+REPOSITORY                                        TAG        IMAGE ID       CREATED          SIZE
+localhost/mysql-57-rhel7                          basic-v1   5516833adee9   15 minutes ago   501MB
+quay.io/gongcun/training/mysql-57-rhel7           basic-v1   5516833adee9   15 minutes ago   501MB
+localhost/mysql-57-rhel7                          port-v1    b212bccc7b60   15 minutes ago   448MB
+registry.access.redhat.com/rhscl/mysql-57-rhel7   latest     60726b33a00a   5 months ago     448MB
+ quay.io/gongcun/training/mysql-57-rhe l7:basic-v1
+Getting image source signatures
+Error copying image to the remote destination: Error checking for blob sha256:2cab4440f9070965c8454792eee4b122bce5939cc6d21e554469f01e71712a89 at destination: unexpected http code: 400 (Bad Request), URL: https://quay.io/v2/auth?account=gongcun&scope=repository%3Agongcun%2Ftraining%2Fmysql-57-rhel7%3Apull%2Cpush&service=quay.io
+(reverse-i-search)`':l': podman push quay.io/gongcun/training/mysql-57-rhel7:basic--v1o': podman login -u gongcun quay.io
+^C
+ogin -u gongcunquay.io quay.io
+Password: 
+Login Succeeded!
+
+^C
+(reverse-i-search)`':c': podman push quay.io/gongcun/training/mysql-57-rhel7:basic--v1o': podman commit 97fec7a2f1a5 mysql-57-rhel7:basic-v1
+mm[root@workstation containers]# podman commit 97fec7a2f1a5 mysql-57-rhel7:basic-v11^C
+
+commit 68e48aac46e9 mysql-57-rhel7:port-v1
+148 podman commit 97fec7a2f1a5 mysql-57-rhel7:basic-v1
+^C
+ERRO[0000] Can't add file /var/lib/containers/storage/overlay/2143624619a7fb62c901db6a28ca7265d8a94f8e379d369a8ed4f33c9fe77313/diff/var/lib/mysql/mysql.sock to tar: archive/tar: sockets not supported 
+Getting image source signatures
+Skipping fetch of repeat blob sha256:2cab4440f9070965c8454792eee4b122bce5939cc6d21e554469f01e71712a89
+Skipping fetch of repeat blob sha256:64f2bd9f473b0ae150f07dc65aafb90beeec7ebaa722625055cb8c1ddede0b09
+Skipping fetch of repeat blob sha256:682be05d59b268579900963a5bfd91689d6823d0b9c111c61fd3fb979972d7eb
+Skipping fetch of repeat blob sha256:21eb863ed59246de28954bb7723541702353de9a387b341f70ec9cf317819773
+Skipping fetch of repeat blob sha256:00d162b5c6f6e15d25c14d2b66f6b4a396e1e1e09ff430d74cbefce0a7384e1a
+Copying config sha256:35982b8b5ce6b61facef615f90ab1f1628142c81a3880afb6badcb40ff34d3f8
+ 0 B / 3.74 KB  3.74 KB / 3.74 KB  0s
+Writing manifest to image destination
+Storing signatures
+35982b8b5ce6b61facef615f90ab1f1628142c81a3880afb6badcb40ff34d3f8
+podman rm quay.io/gongcun/training:latest
+no container with name or ID quay.io/gongcun/training:latest found: no such container
+unable to find container quay.io/gongcun/training:latest: no container with name or ID quay.io/gongcun/training:latest found: no such container
+i quay.io/gongcun/training:latest
+35982b8b5ce6b61facef615f90ab1f1628142c81a3880afb6badcb40ff34d3f8
+podman images
+REPOSITORY                                        TAG        IMAGE ID       CREATED          SIZE
+localhost/mysql-57-rhel7                          basic-v1   5516833adee9   21 minutes ago   501MB
+quay.io/gongcun/training/mysql-57-rhel7           basic-v1   5516833adee9   21 minutes ago   501MB
+quay.io/gongcun/mysql-57-rhel7                    basic-v1   5516833adee9   21 minutes ago   501MB
+localhost/mysql-57-rhel7                          port-v1    b212bccc7b60   21 minutes ago   448MB
+registry.access.redhat.com/rhscl/mysql-57-rhel7   latest     60726b33a00a   5 months ago     448MB
+images
+REPOSITORY                                        TAG        IMAGE ID       CREATED          SIZE
+localhost/mysql-57-rhel7                          basic-v1   5516833adee9   27 minutes ago   501MB
+quay.io/gongcun/mysql-57-rhel7                    basic-v1   5516833adee9   27 minutes ago   501MB
+localhost/mysql-57-rhel7                          port-v1    b212bccc7b60   27 minutes ago   448MB
+registry.access.redhat.com/rhscl/mysql-57-rhel7   latest     60726b33a00a   5 months ago     448MB
+logout
+exit
+
+Script done on 2020-03-14 17:07:20+0800
