@@ -1,0 +1,134 @@
+* Create a containerized application with s2i
+
+  Before begin, fork the =DO180-apps= from 'RedHatTraining/DO180-apps', then
+  clone the repository from github:
+
+  #+begin_src sh
+    su - student
+    git clone https://github.com/GongCun/DO180-apps.git
+    git branch -a
+    git checkout s2i
+  #+end_src
+
+  Then do the checks:
+  #+begin_example
+    [student@workstation ~]$ lab openshift-s2i start
+  #+end_example
+  
+
+Review the PHP source code of the application:
+#+begin_example
+  $ cd /home/student/DO180-apps/php-helloworld
+  $ cat ./index.php
+  <?php
+  print "Hello, World! php version is " . PHP_VERSION . "\n";
+  ?>
+#+end_example
+
+Prepare the lab environment:
+#+begin_src sh
+  source /usr/local/etc/ocp4.config
+  oc login -u ${RHT_OCP4_DEV_USER} -p \
+     ${RHT_OCP4_DEV_PASSWORD} ${RHT_OCP4_MASTER_API}
+#+end_src
+
+Create new PHP application using Source-to-Image from the *php-helloworld*
+directory using the *s2i* branch:
+#+begin_src sh
+  oc get  is -n openshift | grep php
+  oc new-app openshift/php~https://github.com/${RHT_OCP4_GITHUB_USER}/DO180-apps#s2i \
+     --context-dir php-helloworld
+
+  # Track the build progress
+  oc logs -f bc/php-helloworld
+  watch oc get pods -l app=php-helloworld
+#+end_src
+
+Add a route to test the application:
+#+begin_src sh
+  oc expose svc/php-helloworld --name php-helloworld
+  oc get route
+#+end_src
+
+Test the application by access the URL by browsers.
+
+Explore starting application builds by changing the application in its Git repository and
+executing the proper commands to start a new Source-to-Image build.
+
+#+begin_example
+  $ cd ~/DO180-apps/php-helloworld
+  $ wget Haruhi.jpg
+  $ cat index.php
+  <?php
+  print "Hello, World!\n";
+  print "<img src=\"./Haruhi.jpg\" alt=\"Haruhi\">";
+  ?>
+
+  $ git add ./Haruhi.jpg
+  $ git commit -am"add Haruhi.jpg"
+  $ git push -u origin s2i
+#+end_example
+
+Start a new Source-to-Image build process and wait for it to build and deploy:
+#+begin_src sh
+  oc start-build php-helloworld
+  oc logs -f bc/php-helloworld
+#+end_src
+
+* Deploying containerized application on OpenShift 
+Prepare the lab environment
+#+begin_src sh
+  source /usr/local/etc/ocp4.config
+
+  oc login -u ${RHT_OCP4_DEV_USER} -p \
+     ${RHT_OCP4_DEV_PASSWORD} ${RHT_OCP4_MASTER_API}
+
+  oc new-project training
+
+#+end_src
+
+
+Download the docker images from rhscl
+#+begin_src sh
+  podman pull registry.access.redhat.com/rhscl/httpd-24-rhel7
+  podman run -itd --name www-test-boc rhscl/httpd-24-rhel7:latest
+#+end_src
+
+Custom the images
+#+begin_src sh
+  mkdir -p ./www
+  # Download the single page with picture from its.bocmacau.com
+  wget -E -H -k -K -p  https://its.bocmacau.com/index.jsp
+  chown -R 1001 ./its.bocmacau.com/
+
+#+end_src
+
+Copy the files/folders from local filesystem to the container
+#+begin_src sh
+  mnt=$(podman mount CONTAINERID)
+  rsync -avn ./its.bocmacau.com/ ${mnt}/var/www/html/ # dry-run
+  rsync -av ./its.bocmacau.com/ ${mnt}/var/www/html/  # run
+  podman umount CONTAINERID
+#+end_src
+
+Change related files' permission
+#+begin_src sh
+  podman exec www-test-boc chown 777 /opt/rh/httpd24/root/etc/httpd/run/httpd.pid
+  ...
+#+end_src
+
+Commit the container and upload to quay.io
+#+begin_src sh
+  podman commit www-test-boc httpd-24-rhel7:v6
+  podman tag httpd-24-rhel7:v6 quay.io/gongcun/httpd-24-rhel7:v6
+  podman push quay.io/gongcun/httpd-24-rhel7:v6
+#+end_src
+
+Create the new application by =oc=
+#+begin_src sh
+  oc new-app --docker-image=quay.io/gongcun/httpd-24-rhel7:v6 --name=myboc
+  oc expose svc/myboc --name=boc
+  oc get routes
+#+end_src
+
+Test the application by the URL.
