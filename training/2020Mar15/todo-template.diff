@@ -1,0 +1,43 @@
+--- todo-template.yaml.bk	2020-03-17 13:45:01.118722003 +0000
++++ todo-template.yaml	2020-03-18 01:34:18.071591718 +0000
+@@ -39,11 +39,9 @@
+         name: db-init
+     volumes:
+     - name: db-volume
+-      persistentVolumeClaim:
+-        claimName: dbclaim
++      emptyDir: {}
+     - name: db-init
+-      persistentVolumeClaim:
+-        claimName: dbinit
++      emptyDir: {}
+ - apiVersion: v1
+   kind: Pod
+   metadata:
+@@ -89,26 +87,6 @@
+     - port: 3306
+     selector:
+       name: mysql
+-- kind: PersistentVolumeClaim
+-  apiVersion: v1
+-  metadata:
+-    name: dbinit
+-  spec:
+-    accessModes:
+-    - ReadWriteOnce
+-    resources:
+-      requests:
+-        storage: 1Mi
+-- kind: PersistentVolumeClaim
+-  apiVersion: v1
+-  metadata:
+-    name: dbclaim
+-  spec:
+-    accessModes:
+-    - ReadWriteOnce
+-    resources:
+-      requests:
+-        storage: 10Mi
+ parameters:
+ - description: Quay namespace the images are stored in
+   name: RHT_OCP4_QUAY_USER
