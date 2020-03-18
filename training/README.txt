@@ -57,3 +57,5 @@ Other screen operation:
   - share the screen: you need to enable MUTLUSER support (Ctrl-b:multiuser on)
     and add the specific user you want to share your session with to the acl
     list (Ctrl-b:acladd user). (*note* maybe happen suid error)
+  - copy the buffer: <Ctrl-b> + h: copy the current window; Ctrl-b:hardcopy -h
+    <file>: copy the whole buffer.
