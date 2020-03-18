@@ -1,0 +1,42 @@
+#+TITLE:     OpenShift Practise
+#+AUTHOR:    Cun Gong
+#+EMAIL:     gong_cun@bocmacau.com
+#+DATE:      [2020-03-20 Fri]
+#+DESCRIPTION: OpenShift Practise
+#+KEYWORDS: OpenShift DevOps CI/CD
+#+LATEX_HEADER: \usepackage[UTF8, heading = false, scheme = plain]{ctex}
+#+LATEX_HEADER: \setCJKmonofont[BoldFont={SimHei}, ItalicFont={KaiTi}]{STFangsong}
+# #+OPTIONS: TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+OPTIONS: H:2 toc:t
+#+STARTUP: beamer
+#+STARTUP: oddeven
+
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [bigger]
+
+
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+
+#+COLUMNS: %20ITEM %13BEAMER_env(Env) %6BEAMER_envargs(Args) %4BEAMER_col(Col) %7BEAMER_extra(Extra)
+
+* 動機
+
+** 快速的價值交付
+
+** 分佈式系統的天然容錯性
+   
+* 架構
+* 部署方式
+  
+** 手動部署
+   
+** S2I
+
+** 模板部署
+
+* 彈性伸縮
+
+** 固定
+
+** 彈性
