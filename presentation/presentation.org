@@ -1,42 +1,156 @@
-#+TITLE:     OpenShift Practise
-#+AUTHOR:    Cun Gong
-#+EMAIL:     gong_cun@bocmacau.com
-#+DATE:      [2020-03-20 Fri]
-#+DESCRIPTION: OpenShift Practise
-#+KEYWORDS: OpenShift DevOps CI/CD
-#+LATEX_HEADER: \usepackage[UTF8, heading = false, scheme = plain]{ctex}
-#+LATEX_HEADER: \setCJKmonofont[BoldFont={SimHei}, ItalicFont={KaiTi}]{STFangsong}
-# #+OPTIONS: TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
-#+OPTIONS: H:2 toc:t
-#+STARTUP: beamer
-#+STARTUP: oddeven
+#+TITLE: OpenShift Practise
+#+AUTHOR: 龔存
 
-#+LaTeX_CLASS: beamer
-#+LaTeX_CLASS_OPTIONS: [bigger]
+* Overview
+
+#+ATTR_HTML: :width 65% :height 65%
+#+CAPTION: OpenShift Flow
+[[./openshift_flow.jpg]]
+
+ #+CAPTION: BOCM OpenShift Cluster
+ [[./arch.png]]
+
+* Networking
+** Overview
+- Cluster :: The set of machines in the cluster. i.e. the Masters and the Nodes.
+
+- Master :: A controller of the OpenShift Container Platform cluster. Note that
+            the master may not be a node in the cluster, and thus, may not have
+            IP connectivity to the pods.
+
+- Node :: Group of containers running on a node, managed by OpenShift Container
+          Platform.
+
+- Service :: Abstraction that presents a unified network interface that is
+             backed by one or more pods.
+
+- Router :: A web proxy that can map various URLs and paths into OpenShift
+            Container Platform services to allow external traffic to travel into
+            the cluster.
+
+- Node Address :: The IP address of a node. This is assigned and managed by the
+                  owner of the network to which the node is attached. Must be
+                  reachable from any node in the cluster (master and client).
+
+- Pod Address :: The IP address of a pod. These are assigned and managed by
+                 OpenShift Container Platform. By default they are assigned out
+                 of the *10.128.0.0/14* network. Only reachable from the client
+                 nodes.
+
+- Service Address :: An IP address that represents the service, and is mapped to
+     a pod address internally. These are assigned and managed by OpenShift
+     Container Platform. By default they are assigned out of the *172.30.0.0/16*
+     network. Only reachable from the client nodes.
+
+The following diagram shows all of the pieces involved with external access:
+	 #+CAPTION: Traffic Path
+	 [[./traffic_path.png]]
+
+** SDN Flows Inside Nodes
+
+ OpenShift SDN creates and configures three network devices:
+
+     - br0 :: the OVS bridge device that pod containers will be attached to.
+              OpenShift SDN also configures a set of non-subnet-specific flow rules
+              on this bridge.
+     - tun0 :: an OVS internal port (port 2 on *br0*). This gets assigned the cluster
+               subnet gateway address, and is used for external network access.
+               OpenShift SDN configures *netfilter* and routing rules to enable access
+               from the cluster subnet to the external network via NAT.
+     - vxlan_sys_4789 :: The OVS VXLAN device (port 1 on *br0*), which provides access
+                         to containers on remote nodes. Referred to as *vxlan0* in the
+                         OVS rules. 
+
+ For each Pod in the Node, the local OpenShift creates a /vethXX/ interface and
+ assign it to the OVS br0. The /vxlan_sys_4789/ of /br0/ is the interface that
+ defines the /VXLAN/ tunnels, or the overlay network, that enables the
+ communication between local Pods with Pods in remote Nodes. This interface is
+ known as /vxlan0/ interface inside the OVS and that is the name used in the
+ OpenFlow entries. The /tun0/ interface gets the local cluster network subnet
+ gateway address. This is the interface that provide /NAT/ access from the
+ cluster network subnet to the external network. In additional to the local
+ cluster network subnet gateway address, on each /Node/ the Kubernetes Service
+ objects network is also pointed to the /tun0/ interface.
+
+ #+CAPTION: OpenShift Network & VxLan
+ [[./openshift_network.png]]
 
 
-#+SELECT_TAGS: export
-#+EXCLUDE_TAGS: noexport
+ The default OpenShift Router is one or more Router Pods running on
+ Infrastructure Nodes (=infra.myopenshift.com=) and is deployed as a /Deployment
+ Config/ (=deploymentconfig.apps.openshift.io/router=). Sharing the /Network
+ Namespace/ enables these /Router Pods/ to receive traffic over the
+ /host-network/. By default, the /OpenShift Router/ listens on TCP ports 80
+ (HTTP), 443 (HTTPS), and 1936 (HAProxy Stats). Once the traffic arrives to the
+ Pod, it will match the corresponding Route object.
 
-#+COLUMNS: %20ITEM %13BEAMER_env(Env) %6BEAMER_envargs(Args) %4BEAMER_col(Col) %7BEAMER_extra(Extra)
 
-* 動機
+ - Pod to pod in the same node
 
-** 快速的價值交付
+   /*eth0 (pod)*/ $\rightarrow$ /*vethA*/ $\rightarrow$ /*br0*/ $\rightarrow$ /*vethB*/ $\rightarrow$ /*eth0 (pod)*/
 
-** 分佈式系統的天然容錯性
+ - Pod to pod in the different nodes
+
+   /*eth0 (pod)*/ $\rightarrow$ /*vethA*/ $\rightarrow$ /*br0*/ $\rightarrow$
+   /*vxlan0*/ $\rightarrow$ /network/ $\rightarrow$ /*vxlan0*/ $\rightarrow$
+   /*br0*/ $\rightarrow$ /*vethB*/ $\rightarrow$ /*eth0 (pod)*/
+
+ - Pod to external host
+
+   /*eth0 (pod)*/ $\rightarrow$ /*vethA*/ $\rightarrow$ /*br0*/ $\rightarrow$
+   /*tun0*/ $\rightarrow$ $\texttt{SNAT} \atop \texttt{(MASQUERADE)}$
+   $\rightarrow$ /*eth0 (phy.)*/ $\rightarrow$ /*Host*/
+
+
+* Move Existing Application to OpenShift
+
+** What is [[https://github.com/GongCun/Pentomino/tree/map][PuzzleBrain]]?
+
+   PuzzleBrain is a distributed system based on DLX algorithm and MapReduce
+   architecture.
+
+   #+CAPTION: Puzzler Pro: Shapes & Solution
+   [[./shapes-solve.png]]
+
+   #+CAPTION: MapReduce
+   [[./mapreduce.png]]
    
-* 架構
-* 部署方式
-  
-** 手動部署
-   
-** S2I
+** Migrate the PuzzleBrain to OpenShift
+	  #+CAPTION: PuzzleBrain in OpenShift
+	  [[./openshift_farm.png]]
 
-** 模板部署
+* Creating Applications with Source-to-Image
 
-* 彈性伸縮
+  #+ATTR_HTML: :width 45% :height 45%
+  #+CAPTION: The S2I Process
+  [[./s2i-crop.png]]
 
-** 固定
+* Creating an Application with a Template 
+** What Is an Application Template?
 
-** 彈性
+A template describes a set of objects that can be parameterized and processed to
+produce a list of objects for creation by OpenShift. The objects to create can
+include anything that users have permission to create within a project, for
+example services, build configurations, and deployment configurations. A
+template may also define a set of labels to apply to every object defined in the
+template. 
+
+This means that typically a template will include:
+- A set of resources that is created as part of “creating/deploying” the template.
+- A set of values for the parameters defined in the template.
+- A matching label attached to each of the generated resources that provides a
+  convenient way to indicate the resources are connected.
+
+A template will be defined in JSON or YAML format, and will be loaded into
+OpenShift for user instantiation, also known as application creation. 
+** Benefits of Using Templates
+A template provides developers with an easy way to create all the necessary
+OpenShift resources for their application to work with minimal effort. This
+allows you to quickly deploy an application without having to understand all the
+underlying technology of the OpenShift platform. 
+** Using =To Do List= Application Template
+The architecture of *To Do List*
+- The presentation layer is built using AngularJS's single-page HTML5 front end
+- The business layer is made up of the HTTP API backend using node.js
+- The persistence layer is based on MySQL database services
+
