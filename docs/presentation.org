@@ -1,1 +1,548 @@
-../presentation/presentation.org
+#+TITLE: OpenShift Practise
+#+AUTHOR: 龔存
+
+* Overview
+** Kubernetes & OpenShift
+[[https://en.wikipedia.org/wiki/Kubernetes][*Kubernetes*]] (commonly stylized as *k8s*, refer to [[https://en.wikipedia.org/wiki/Cybernetics:_Or_Control_and_Communication_in_the_Animal_and_the_Machine][/Cybernetics/]]) is an open-source
+container-orchestration system for automating application deployment, scaling,
+and management.
+
+- Node :: The server hosting the pod and providing the Kubernetes runtime environment.
+- Pods :: A /pod/ is a higher level of abstraction grouping containerized
+          components.
+
+- Replica Sets :: A ReplicaSet’s purpose is to maintain a stable set of replica
+                  Pods running at any given time. As such, it is often used to
+                  guarantee the availability of a specified number of identical
+                  Pods.
+
+- Services :: A Kubernetes service is a set of pods that work together, such as
+              one tier of a multi-tier application. The set of pods that
+              constitute a service are defined by a label selector. Kubernetes
+              provides two modes of service discovery, using environmental
+              variables or using Kubernetes DNS.
+
+- Resource :: Resource is any kind of component definition managed by Kubernetes.
+             The resource contains the configuration of the managed component
+             (for example, the role assigned to the node) and the current state
+             of the component (for example, whether the node is available).
+
+- Controller :: Is a Kubernetes process that monitors resources and makes
+                changes to try to move the current state to the desired state.
+
+- Label :: A key-value pair that can be assigned to any Kubernetes resource.
+           Selector uses the label to choose qualified resources for scheduling
+           and other operations.
+
+- Namespaces :: Kubernetes provides a partitioning of the resources it manages
+                into non-overlapping sets called namespaces. They are intended
+                for use in environments with many users spread across multiple
+                teams, or projects, or even separating environments like
+                development, test, and production.
+
+- Volumes :: Filesystems in the Kubernetes container provide ephemeral storage,
+             by default. A Kubernetes Volume provides persistent storage that
+             exists for the lifetime of the pod itself (*retain* or *recycle*.
+             This storage can also be used as shared disk space for containers
+             within the pod.
+
+[[https://en.wikipedia.org/wiki/OpenShift][*OpenShift Container Platform*]] is a Kubernetes cluster that is managed by the
+OpenShift tools (*oc* command or web console).
+
+- Master node :: The OpenShift Container Platform /master/ is a server that
+                 performs control functions for the whole cluster environment.
+                 It is responsible for the creation, scheduling, and management
+                 of all objects specific to OpenShift. It includes API,
+                 controller manager, and scheduler capabilities in one OpenShift
+                 binary. It is also a common practice to install an etcd
+                 key-value store on OpenShift /masters/ to achieve a low-latency
+                 link between etcd and OpenShift /masters/.
+
+- Infrastructure node :: The OpenShift /infrastructure/ node runs
+     infrastructure-specific services such as the Docker Registry and the
+     HAProxy router. The Docker Registry stores application images in the form
+     of containers. The HAProxy router provides routing functions for OpenShift
+     applications.
+
+- Application node :: The OpenShift /application/ nodes run containerized
+     applications created and deployed by developers. An OpenShift /application/
+     node contains the OpenShift node components combined into a single binary,
+     which can be used by OpenShift /masters/ to schedule and control containers. 
+
+- Console :: Web UI provided by /RHOCP/ cluster.
+
+
+#+CAPTION: BOCM OpenShift Cluster
+[[./arch.png]]
+
+** DevOps
+*DevOps* is concerned with aligning the constituents in the software delivery
+process to a common goal of value delivery—and it’s not just Developers and
+Operators, but InfoSec and Quality Assurance functions and more. Recognize that
+wealth is created when the work product is valued by actors external to the
+production system. Value delivery outcomes are measured by metrics tied to
+production delivery velocity, quality, and waste. DevOps emphasizes behavioral-
+or cultural-related changes such as those which encourage teaming, inclusion,
+feedback, and experimentation. Technological interventions such as automation
+are central as they can reinforce such target behaviors. DevOps does not
+necessarily imply functional roles in software delivery such as development,
+quality assurance, or operations are merged or seconded. More important is that
+a professional respect and shared sensibility is formed across the delivery
+team. 
+
+*CI/CD* generally refers to the combined practices of continuous integration and
+either continuous delivery.
+
+# *DevOps = CI/CD*
+# \begin{equation}
+\[
+\boxed{
+DevOps = CI/CD
+}
+\]
+# \end{equation}
+
+#+ATTR_HTML: :width 60% :height 60%
+#+CAPTION: Continuous improvement & Smaller releases, release often, faster feedback
+[[./cicd-agile.png]]
+
+
+#+ATTR_HTML: :width 55% :height 55%
+#+CAPTION: OpenShift Flow
+[[./openshift_flow.jpg]]
+
+
+* Networking
+** Overview
+- Cluster :: The set of machines in the cluster. i.e. the Masters and the Nodes.
+
+- Master :: A controller of the OpenShift Container Platform cluster. Note that
+            the master may not be a node in the cluster, and thus, may not have
+            IP connectivity to the pods.
+
+- Node :: Group of containers running on a node, managed by OpenShift Container
+          Platform.
+
+- Service :: Abstraction that presents a unified network interface that is
+             backed by one or more pods.
+
+- Router :: A web proxy that can map various URLs and paths into OpenShift
+            Container Platform services to allow external traffic to travel into
+            the cluster.
+
+- Node Address :: The IP address of a node. This is assigned and managed by the
+                  owner of the network to which the node is attached. Must be
+                  reachable from any node in the cluster (master and client).
+
+- Pod Address :: The IP address of a pod. These are assigned and managed by
+                 OpenShift Container Platform. By default they are assigned out
+                 of the *10.128.0.0/14* network. Only reachable from the client
+                 nodes.
+
+- Service Address :: An IP address that represents the service, and is mapped to
+     a pod address internally. These are assigned and managed by OpenShift
+     Container Platform. By default they are assigned out of the *172.30.0.0/16*
+     network. Only reachable from the client nodes.
+
+The following diagram shows all of the pieces involved with external access:
+	 #+CAPTION: Traffic Path
+	 [[./traffic_path.png]]
+
+** SDN Flows Inside Nodes
+
+ OpenShift SDN creates and configures three network devices:
+
+     - br0 :: the OVS bridge device that pod containers will be attached to.
+              OpenShift SDN also configures a set of non-subnet-specific flow rules
+              on this bridge.
+     - tun0 :: an OVS internal port (port 2 on *br0*). This gets assigned the cluster
+               subnet gateway address, and is used for external network access.
+               OpenShift SDN configures *netfilter* and routing rules to enable access
+               from the cluster subnet to the external network via NAT.
+     - vxlan_sys_4789 :: The OVS VXLAN device (port 1 on *br0*), which provides access
+                         to containers on remote nodes. Referred to as *vxlan0* in the
+                         OVS rules. 
+
+ For each Pod in the Node, the local OpenShift creates a /vethXX/ interface and
+ assign it to the OVS br0. The /vxlan_sys_4789/ of /br0/ is the interface that
+ defines the /VXLAN/ tunnels, or the overlay network, that enables the
+ communication between local Pods with Pods in remote Nodes. This interface is
+ known as /vxlan0/ interface inside the OVS and that is the name used in the
+ OpenFlow entries. The /tun0/ interface gets the local cluster network subnet
+ gateway address. This is the interface that provide /NAT/ access from the
+ cluster network subnet to the external network. In additional to the local
+ cluster network subnet gateway address, on each /Node/ the Kubernetes Service
+ objects network is also pointed to the /tun0/ interface.
+
+ #+CAPTION: OpenShift Network & VxLan
+ [[./openshift_network.png]]
+
+
+ The default OpenShift Router is one or more Router Pods running on
+ Infrastructure Nodes (=infra.myopenshift.com=) and is deployed as a /Deployment
+ Config/ (=deploymentconfig.apps.openshift.io/router=). Sharing the /Network
+ Namespace/ enables these /Router Pods/ to receive traffic over the
+ /host-network/. By default, the /OpenShift Router/ listens on TCP ports 80
+ (HTTP), 443 (HTTPS), and 1936 (HAProxy Stats). Once the traffic arrives to the
+ Pod, it will match the corresponding Route object.
+
+
+ - Pod to pod in the same node
+
+   /*eth0 (pod)*/ $\rightarrow$ /*vethA*/ $\rightarrow$ /*br0*/ $\rightarrow$ /*vethB*/ $\rightarrow$ /*eth0 (pod)*/
+
+ - Pod to pod in the different nodes
+
+   /*eth0 (pod)*/ $\rightarrow$ /*vethA*/ $\rightarrow$ /*br0*/ $\rightarrow$
+   /*vxlan0*/ $\rightarrow$ /network/ $\rightarrow$ /*vxlan0*/ $\rightarrow$
+   /*br0*/ $\rightarrow$ /*vethB*/ $\rightarrow$ /*eth0 (pod)*/
+
+ - Pod to external host
+
+   /*eth0 (pod)*/ $\rightarrow$ /*vethA*/ $\rightarrow$ /*br0*/ $\rightarrow$
+   /*tun0*/ $\rightarrow$ $\texttt{SNAT} \atop \texttt{(MASQUERADE)}$
+   $\rightarrow$ /*eth0 (phy.)*/ $\rightarrow$ /*Host*/
+
+
+* Move Existing Application to OpenShift
+
+** What is [[https://github.com/GongCun/Pentomino/tree/map][PuzzleBrain]]?
+
+   PuzzleBrain is a distributed system based on DLX algorithm and MapReduce
+   architecture.
+
+   #+CAPTION: Puzzler solution with MapReduce
+   [[./shape-mapreduce.png]]
+
+Build the PuzzleBrain program /puzzler/
+#+begin_src sh
+  git clone https://github.com/GongCun/Pentomino.git
+  cd Pentomino
+  git branch -a
+  git checkout openshift
+  make puzzler
+#+end_src
+
+Test the /puzzler/
+#+begin_src sh
+  mkdir -p ./test
+  # Server
+  (cd ./test; ncat -4kl 3001 -c ../run.sh)
+  # Client
+  (cd ./test; ../puzzler -m -b8 -s 127.0.0.1 -p 3001)
+
+#+end_src
+
+   
+** Migrate the PuzzleBrain to OpenShift
+	  #+CAPTION: PuzzleBrain in OpenShift
+	  [[./openshift_farm.png]]
+
+*** Prepare the docker image
+#+BEGIN_EXAMPLE
+  $ docker login registry.redhat.io
+  Username: itd@bocmacau.com
+  Password:
+  Login Succeeded
+
+  $ view /etc/containers/registries.conf
+  [registries.search]
+  registries = ["hub.docker.com", "registry.redhat.io", "docker.io"]
+
+  $ docker search --filter is-official=true --limit=3 rhel7
+  $ docker pull registry.redhat.io/rhel7
+#+END_EXAMPLE
+
+*** The Dockerfile
+    A Dockerfile is a text document that defines how an image should be created.
+    Depending on the complexity of the application, the Dockerfile can quickly
+    become verbose and unwieldy. As an example, here is the Dockerfile for the
+    official rhel7 container:
+    #+begin_example
+      FROM rhel7:latest
+      MAINTAINER Cun Gong <gong_cun@bocmacau.com>
+      LABEL description="puzzle container"
+
+      RUN yum install -y socat && yum clean all
+
+      ADD root /
+      EXPOSE 3001
+      CMD ["/puzzle-entry.sh"]
+
+    #+end_example
+
+*** Building & testing the docker images
+#+BEGIN_SRC sh
+  cp -p ./puzzler ./root && strip -s root/puzzler
+  docker build -t demo-puzzle:v1 .
+#+END_SRC
+
+Test the docker functions
+#+BEGIN_SRC sh
+  docker run -dit --name=demo-puzzle-test -p 3001:3001 demo-puzzle:v1
+  # Follow the container logs
+  docker container logs --follow <container>
+  # In the host
+  (cd ./test; ../puzzler -m -b8 -s 127.0.0.1 -p 3001)
+
+#+END_SRC
+
+Stop & clean the docker images
+#+BEGIN_SRC sh
+  docker stop <container>
+  # or
+  docker container kill <container>
+  docker rm <container>
+#+END_SRC
+
+*** Running the docker images on OpenShift
+#+BEGIN_EXAMPLE
+  $ oc describe svc/docker-registry -n default
+  Name:              docker-registry
+  ...
+  IP:                172.30.151.202
+  Port:              5000-tcp  5000/TCP
+
+  $ oc new-project demo
+  $ docker tag demo-puzzle:v1 172.30.151.202:5000/demo/demo-puzzle:v1
+  $ docker login -p `oc whoami -t` -u system 172.30.151.202:5000
+  $ docker push 172.30.151.202:5000/demo/demo-puzzle:v1
+  $ oc new-app demo/demo-puzzle:v1 --name=mypuzzle
+
+#+END_EXAMPLE
+
+Test the pod
+#+BEGIN_EXAMPLE
+  $ oc get svc
+  NAME       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+  mypuzzle   ClusterIP   ${service-ip}    <none>        3001/TCP   21s
+
+  $ (cd ./test; ../puzzler -m -b8 -s ${service-ip} -p 3001)
+#+END_EXAMPLE
+
+Follow the pods log
+#+begin_example
+  $ oc get pods
+  $ oc logs -f <pod>
+#+end_example
+
+
+* Creating Applications with Source-to-Image
+
+The Source-to-Image tool implements a mechanism to take application source code
+and build it into a container image. The tool works by starting a container
+using an S2I builder image, injecting the application source code into the
+container, and running an /assemble/ script to set up the contents of the
+image.
+
+The S2I tool is a standalone application you can use on your own local
+system, independent of any platform for deploying applications to containers. To
+make it easier to use, OpenShift provides integrated support for the tool, which
+forms the core of the PaaS functionality of OpenShift.
+
+** Image Streams 
+OpenShift deploys new versions of user applications into pods quickly. To create
+a new application, in addition to the application source code, a base image (the
+S2I builder image) is required. If either of these two components gets updated,
+OpenShift creates a new container image. Pods created using the older container
+image are replaced by pods using the new image.
+
+The /image stream resource/ is a configuration that names specific container
+images associated with /image stream tags/, an alias for these container images.
+OpenShift builds applications against an image stream. The OpenShift installer
+populates several image streams by default during installation. To determine
+available image streams, use the *oc get* command, as follows:
+
+#+BEGIN_EXAMPLE
+$ oc get is -n openshift
+#+END_EXAMPLE
+
+** Building Application with S2I
+   #+begin_example
+     $ git clone https://github.com/GongCun/DO180-apps.git
+     $ git checkout -b demo
+     $ cd DO180-apps/php-helloworld
+
+     $ cat ./index.php
+     <?php
+     print "Hello, World!\n";
+     ?>
+
+     $ git push -u origin demo
+
+     $ oc new-app --name=php-helloworld \
+       openshift/php~https://github.com/GongCun/DO180-apps#demo \
+       --context-dir php-helloworld
+
+     $ oc logs -f bc/php-helloworld
+     $ oc expose --name php-helloworld svc/php-helloworld
+   #+end_example
+
+** Trigger new deployment
+Edit the *index.php* file
+#+begin_example
+  <?php
+  print "<img src=\"./Haruhi.jpg\" alt=\"Haruhi\" width=\"%75\" height=\"75%\">";
+  ?>
+
+#+end_example
+
+Commit the changes and push the code to remote Git repository
+#+begin_example
+  $ git add ./index.php
+  $ git commit -m"add .jpg"
+  $ git push -u origin demo
+#+end_example
+
+Start a new Source-to-Image build process and wait for it to build and deploy
+#+begin_example
+$ oc start-build php-helloworld
+$ oc logs -f bc/php-helloworld
+#+end_example
+* Creating an Application with a Template 
+** What Is an Application Template?
+
+A template describes a set of objects that can be parameterized and processed to
+produce a list of objects for creation by OpenShift. The objects to create can
+include anything that users have permission to create within a project, for
+example services, build configurations, and deployment configurations. A
+template may also define a set of labels to apply to every object defined in the
+template. 
+
+This means that typically a template will include:
+- A set of resources that is created as part of “creating/deploying” the template.
+- A set of values for the parameters defined in the template.
+- A matching label attached to each of the generated resources that provides a
+  convenient way to indicate the resources are connected.
+
+A template will be defined in JSON or YAML format, and will be loaded into
+OpenShift for user instantiation, also known as application creation. 
+** Benefits of Using Templates
+A template provides developers with an easy way to create all the necessary
+OpenShift resources for their application to work with minimal effort. This
+allows you to quickly deploy an application without having to understand all the
+underlying technology of the OpenShift platform. 
+** Using /To-Do-List/ Application Template
+
+#+ATTR_HTML: :width 30% :height 30%
+#+CAPTION: /To-Do-List/ architecture
+[[./todolist.png]]
+
+The components of /To-Do-List/
+- The presentation layer is built using AngularJS's single-page HTML5 front end
+- The business layer is made up of the HTTP API backend using node.js
+- The persistence layer is based on MySQL database services
+** Parameters
+   Templates define a set of /parameters/, which are assigned values. OpenShift
+   resources defined in the template can get their configuration values by
+   referencing named parameters. Parameters in a template can have default
+   values, but they are optional. Any default value can be replaced when
+   processing the template. 
+   #+begin_example
+     $ cd ./Template
+     $ oc process --parameters -f ./todo-template.yaml
+     NAME                DESCRIPTION                               GENERATOR           VALUE
+     QUAY_USER           Quay namespace the images are stored in
+
+   #+end_example
+** Creating with a Template
+   #+begin_example
+     # Login quay.io
+     $ docker login -u gongcun quay.io
+     Password:
+     Login Succeeded
+
+     # Creating application
+     $ oc process -f ./todo-template.yaml \
+          -p QUAY_USER=gongcun | oc create -f -
+
+     # Check the status
+     $ oc get pods -w
+     $ oc logs -f <pod>
+
+     # Create route
+     $ oc expose svc/todoapi
+   #+end_example
+
+   Use browser to open http://todoapi-demo.apps.myopenshift.com/todo/.
+* Automatically scaling pods
+
+In OpenShift, a resource request is a threshold you can set that affects
+scheduling and quality of service. It essentially provides the minimum amount of
+resources guarantee to the pod. CPU is measured in units called /millicores/
+(one-thousandth of a core). By default, pods don't get individual cores; they
+get time-slices of CPU, sharing the cores on the node with other pods. If a
+particular node has four CPUs assigned to it, then 4000 millicores are available
+to all the running pods on that node:
+
+#+BEGIN_SRC sh
+  cat /proc/cpuinfo | grep -wc '^processor'
+#+END_SRC
+
+Resource requests also can be combined with a resource /limit/, which is similar
+to a request but sets the maximum amount of resources guaranteed to the pod.
+Setting requests and limits also allows the user to set a quality of service
+level by default:
+
+- BestEffort :: Neither a resource nor a limit is specified. This is for
+                low-priority applications that can live with very low amounts of
+                CPU and memory.  
+- Burstable :: Provided when a request is specified that is less than an
+               optionally specified limit.
+- Guaranteed :: A request and a limit are both set to the same number. This is
+                for the highest-priority applications that need the most
+                consistent amount of computing power.  
+
+Setting a lower quality of service gives the scheduler more flexibility by
+allowing it to place more pods in the cluster. Setting a higher quality of
+service limits flexibility but gives applications more consistent resources.
+Because choosing the quality of service is about finding reasonable defaults,
+most applications should fall into the =Burstable= tier.  
+
+Define the resource limits:
+#+begin_src sh
+  oc set resources dc/php-helloworld \
+     --requests=cpu=100m,memory=128Mi \
+     --limits=cpu=1000m,memory=1024Mi
+#+end_src
+
+Check the resource limits:
+#+begin_example
+  $ oc describe dc/php-helloworld
+  ...
+      Limits:
+        cpu:      1
+        memory:   1Gi
+      Requests:
+        cpu:              100m
+        memory:           128Mi
+
+#+end_example
+
+Define the horizontal pod autoscaler (HPA)
+#+begin_src sh
+  oc autoscale dc/php-helloworld --min 1 --max 4 --cpu-percent=20
+  oc get hpa/php-helloworld -w
+  oc describe hpa/php-helloworld
+#+end_src
+
+Do the apache benchmark with *ab* command
+#+begin_src sh
+  ab -n 1000000 -c 500 \
+     http://php-helloworld-demo.apps.myopenshift.com/
+  # -n: the total number of HTTP requests
+  # -c: the number of concurrent requests
+#+end_src
+
+Monitor the auto-scaling
+#+begin_src sh
+  watch oc get pods -l app=php-helloworld
+#+end_src
+
+Monitor the performance by Prometheus grafana
+#+begin_example
+  # oc get route -n openshift-monitoring
+  ...
+  grafana             grafana-openshift-monitoring.apps.myopenshift.com 
+#+end_example
+Visit https://grafana-openshift-monitoring.apps.myopenshift.com to monitor the performance. 

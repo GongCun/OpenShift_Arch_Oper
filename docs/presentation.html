@@ -1,1 +1,1105 @@
-../presentation/presentation.html
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-03-20 週五 11:38 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OpenShift Practise</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="龔存" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">OpenShift Practise</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org2e7d5a8">1. Overview</a>
+<ul>
+<li><a href="#orgd7620cb">1.1. Kubernetes &amp; OpenShift</a></li>
+<li><a href="#org5e82ea2">1.2. DevOps</a></li>
+</ul>
+</li>
+<li><a href="#orga9658ec">2. Networking</a>
+<ul>
+<li><a href="#org8da4f5f">2.1. Overview</a></li>
+<li><a href="#orgfc8e5fa">2.2. SDN Flows Inside Nodes</a></li>
+</ul>
+</li>
+<li><a href="#orga5a5e88">3. Move Existing Application to OpenShift</a>
+<ul>
+<li><a href="#org69e6e7c">3.1. What is PuzzleBrain?</a></li>
+<li><a href="#org710a882">3.2. Migrate the PuzzleBrain to OpenShift</a>
+<ul>
+<li><a href="#org459cc4c">3.2.1. Prepare the docker image</a></li>
+<li><a href="#org9aaed37">3.2.2. The Dockerfile</a></li>
+<li><a href="#org0471e88">3.2.3. Building &amp; testing the docker images</a></li>
+<li><a href="#org5b1a2ad">3.2.4. Running the docker images on OpenShift</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orga55dfab">4. Creating Applications with Source-to-Image</a>
+<ul>
+<li><a href="#orge80ebca">4.1. Image Streams</a></li>
+<li><a href="#orgc12704d">4.2. Building Application with S2I</a></li>
+<li><a href="#org2a096f0">4.3. Trigger new deployment</a></li>
+</ul>
+</li>
+<li><a href="#orgf77def8">5. Creating an Application with a Template</a>
+<ul>
+<li><a href="#orgabcad49">5.1. What Is an Application Template?</a></li>
+<li><a href="#orgbbb46e3">5.2. Benefits of Using Templates</a></li>
+<li><a href="#org585d496">5.3. Using <i>To-Do-List</i> Application Template</a></li>
+<li><a href="#orga4d9216">5.4. Parameters</a></li>
+<li><a href="#org77c6a30">5.5. Creating with a Template</a></li>
+</ul>
+</li>
+<li><a href="#org1f22361">6. Automatically scaling pods</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org2e7d5a8" class="outline-2">
+<h2 id="org2e7d5a8"><span class="section-number-2">1</span> Overview</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-orgd7620cb" class="outline-3">
+<h3 id="orgd7620cb"><span class="section-number-3">1.1</span> Kubernetes &amp; OpenShift</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+<a href="https://en.wikipedia.org/wiki/Kubernetes"><b>Kubernetes</b></a> (commonly stylized as <b>k8s</b>, refer to <a href="https://en.wikipedia.org/wiki/Cybernetics:_Or_Control_and_Communication_in_the_Animal_and_the_Machine"><i>Cybernetics</i></a>) is an open-source
+container-orchestration system for automating application deployment, scaling,
+and management.
+</p>
+
+<dl class="org-dl">
+<dt>Node</dt><dd>The server hosting the pod and providing the Kubernetes runtime environment.</dd>
+<dt>Pods</dt><dd>A <i>pod</i> is a higher level of abstraction grouping containerized
+components.</dd>
+
+<dt>Replica Sets</dt><dd>A ReplicaSet’s purpose is to maintain a stable set of replica
+Pods running at any given time. As such, it is often used to
+guarantee the availability of a specified number of identical
+Pods.</dd>
+
+<dt>Services</dt><dd>A Kubernetes service is a set of pods that work together, such as
+one tier of a multi-tier application. The set of pods that
+constitute a service are defined by a label selector. Kubernetes
+provides two modes of service discovery, using environmental
+variables or using Kubernetes DNS.</dd>
+
+<dt>Resource</dt><dd>Resource is any kind of component definition managed by Kubernetes.
+The resource contains the configuration of the managed component
+(for example, the role assigned to the node) and the current state
+of the component (for example, whether the node is available).</dd>
+
+<dt>Controller</dt><dd>Is a Kubernetes process that monitors resources and makes
+changes to try to move the current state to the desired state.</dd>
+
+<dt>Label</dt><dd>A key-value pair that can be assigned to any Kubernetes resource.
+Selector uses the label to choose qualified resources for scheduling
+and other operations.</dd>
+
+<dt>Namespaces</dt><dd>Kubernetes provides a partitioning of the resources it manages
+into non-overlapping sets called namespaces. They are intended
+for use in environments with many users spread across multiple
+teams, or projects, or even separating environments like
+development, test, and production.</dd>
+
+<dt>Volumes</dt><dd>Filesystems in the Kubernetes container provide ephemeral storage,
+by default. A Kubernetes Volume provides persistent storage that
+exists for the lifetime of the pod itself (<b>retain</b> or <b>recycle</b>.
+This storage can also be used as shared disk space for containers
+within the pod.</dd>
+</dl>
+
+<p>
+<a href="https://en.wikipedia.org/wiki/OpenShift"><b>OpenShift Container Platform</b></a> is a Kubernetes cluster that is managed by the
+OpenShift tools (<b>oc</b> command or web console).
+</p>
+
+<dl class="org-dl">
+<dt>Master node</dt><dd>The OpenShift Container Platform <i>master</i> is a server that
+performs control functions for the whole cluster environment.
+It is responsible for the creation, scheduling, and management
+of all objects specific to OpenShift. It includes API,
+controller manager, and scheduler capabilities in one OpenShift
+binary. It is also a common practice to install an etcd
+key-value store on OpenShift <i>masters</i> to achieve a low-latency
+link between etcd and OpenShift <i>masters</i>.</dd>
+
+<dt>Infrastructure node</dt><dd>The OpenShift <i>infrastructure</i> node runs
+infrastructure-specific services such as the Docker Registry and the
+HAProxy router. The Docker Registry stores application images in the form
+of containers. The HAProxy router provides routing functions for OpenShift
+applications.</dd>
+
+<dt>Application node</dt><dd>The OpenShift <i>application</i> nodes run containerized
+applications created and deployed by developers. An OpenShift <i>application</i>
+node contains the OpenShift node components combined into a single binary,
+which can be used by OpenShift <i>masters</i> to schedule and control containers.</dd>
+
+<dt>Console</dt><dd>Web UI provided by <i>RHOCP</i> cluster.</dd>
+</dl>
+
+
+
+<div class="figure">
+<p><img src="./arch.png" alt="arch.png" />
+</p>
+<p><span class="figure-number">Figure 1: </span>BOCM OpenShift Cluster</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5e82ea2" class="outline-3">
+<h3 id="org5e82ea2"><span class="section-number-3">1.2</span> DevOps</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+<b>DevOps</b> is concerned with aligning the constituents in the software delivery
+process to a common goal of value delivery—and it’s not just Developers and
+Operators, but InfoSec and Quality Assurance functions and more. Recognize that
+wealth is created when the work product is valued by actors external to the
+production system. Value delivery outcomes are measured by metrics tied to
+production delivery velocity, quality, and waste. DevOps emphasizes behavioral-
+or cultural-related changes such as those which encourage teaming, inclusion,
+feedback, and experimentation. Technological interventions such as automation
+are central as they can reinforce such target behaviors. DevOps does not
+necessarily imply functional roles in software delivery such as development,
+quality assurance, or operations are merged or seconded. More important is that
+a professional respect and shared sensibility is formed across the delivery
+team. 
+</p>
+
+<p>
+<b>CI/CD</b> generally refers to the combined practices of continuous integration and
+either continuous delivery.
+</p>
+
+<p>
+\[
+\boxed{
+DevOps = CI/CD
+}
+\]
+</p>
+
+
+<div class="figure">
+<p><img src="./cicd-agile.png" alt="cicd-agile.png" width="60%" height="60%" />
+</p>
+<p><span class="figure-number">Figure 2: </span>Continuous improvement &amp; Smaller releases, release often, faster feedback</p>
+</div>
+
+
+
+<div class="figure">
+<p><img src="./openshift_flow.jpg" alt="openshift_flow.jpg" width="55%" height="55%" />
+</p>
+<p><span class="figure-number">Figure 3: </span>OpenShift Flow</p>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orga9658ec" class="outline-2">
+<h2 id="orga9658ec"><span class="section-number-2">2</span> Networking</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org8da4f5f" class="outline-3">
+<h3 id="org8da4f5f"><span class="section-number-3">2.1</span> Overview</h3>
+<div class="outline-text-3" id="text-2-1">
+<dl class="org-dl">
+<dt>Cluster</dt><dd>The set of machines in the cluster. i.e. the Masters and the Nodes.</dd>
+
+<dt>Master</dt><dd>A controller of the OpenShift Container Platform cluster. Note that
+the master may not be a node in the cluster, and thus, may not have
+IP connectivity to the pods.</dd>
+
+<dt>Node</dt><dd>Group of containers running on a node, managed by OpenShift Container
+Platform.</dd>
+
+<dt>Service</dt><dd>Abstraction that presents a unified network interface that is
+backed by one or more pods.</dd>
+
+<dt>Router</dt><dd>A web proxy that can map various URLs and paths into OpenShift
+Container Platform services to allow external traffic to travel into
+the cluster.</dd>
+
+<dt>Node Address</dt><dd>The IP address of a node. This is assigned and managed by the
+owner of the network to which the node is attached. Must be
+reachable from any node in the cluster (master and client).</dd>
+
+<dt>Pod Address</dt><dd>The IP address of a pod. These are assigned and managed by
+OpenShift Container Platform. By default they are assigned out
+of the <b>10.128.0.0/14</b> network. Only reachable from the client
+nodes.</dd>
+
+<dt>Service Address</dt><dd>An IP address that represents the service, and is mapped to
+a pod address internally. These are assigned and managed by OpenShift
+Container Platform. By default they are assigned out of the <b>172.30.0.0/16</b>
+network. Only reachable from the client nodes.</dd>
+</dl>
+
+<p>
+The following diagram shows all of the pieces involved with external access:
+</p>
+
+<div class="figure">
+<p><img src="./traffic_path.png" alt="traffic_path.png" />
+</p>
+<p><span class="figure-number">Figure 4: </span>Traffic Path</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfc8e5fa" class="outline-3">
+<h3 id="orgfc8e5fa"><span class="section-number-3">2.2</span> SDN Flows Inside Nodes</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+OpenShift SDN creates and configures three network devices:
+</p>
+
+<dl class="org-dl">
+<dt>br0</dt><dd>the OVS bridge device that pod containers will be attached to.
+OpenShift SDN also configures a set of non-subnet-specific flow rules
+on this bridge.</dd>
+<dt>tun0</dt><dd>an OVS internal port (port 2 on <b>br0</b>). This gets assigned the cluster
+subnet gateway address, and is used for external network access.
+OpenShift SDN configures <b>netfilter</b> and routing rules to enable access
+from the cluster subnet to the external network via NAT.</dd>
+<dt>vxlan_sys_4789</dt><dd>The OVS VXLAN device (port 1 on <b>br0</b>), which provides access
+to containers on remote nodes. Referred to as <b>vxlan0</b> in the
+OVS rules.</dd>
+</dl>
+
+<p>
+For each Pod in the Node, the local OpenShift creates a <i>vethXX</i> interface and
+assign it to the OVS br0. The <i>vxlan_sys_4789</i> of <i>br0</i> is the interface that
+defines the <i>VXLAN</i> tunnels, or the overlay network, that enables the
+communication between local Pods with Pods in remote Nodes. This interface is
+known as <i>vxlan0</i> interface inside the OVS and that is the name used in the
+OpenFlow entries. The <i>tun0</i> interface gets the local cluster network subnet
+gateway address. This is the interface that provide <i>NAT</i> access from the
+cluster network subnet to the external network. In additional to the local
+cluster network subnet gateway address, on each <i>Node</i> the Kubernetes Service
+objects network is also pointed to the <i>tun0</i> interface.
+</p>
+
+
+<div class="figure">
+<p><img src="./openshift_network.png" alt="openshift_network.png" />
+</p>
+<p><span class="figure-number">Figure 5: </span>OpenShift Network &amp; VxLan</p>
+</div>
+
+
+<p>
+The default OpenShift Router is one or more Router Pods running on
+Infrastructure Nodes (<code>infra.myopenshift.com</code>) and is deployed as a <i>Deployment
+Config</i> (<code>deploymentconfig.apps.openshift.io/router</code>). Sharing the <i>Network
+Namespace</i> enables these <i>Router Pods</i> to receive traffic over the
+<i>host-network</i>. By default, the <i>OpenShift Router</i> listens on TCP ports 80
+(HTTP), 443 (HTTPS), and 1936 (HAProxy Stats). Once the traffic arrives to the
+Pod, it will match the corresponding Route object.
+</p>
+
+
+<ul class="org-ul">
+<li><p>
+Pod to pod in the same node
+</p>
+
+<p>
+<i><b>eth0 (pod)</b></i> \(\rightarrow\) <i><b>vethA</b></i> \(\rightarrow\) <i><b>br0</b></i> \(\rightarrow\) <i><b>vethB</b></i> \(\rightarrow\) <i><b>eth0 (pod)</b></i>
+</p></li>
+
+<li><p>
+Pod to pod in the different nodes
+</p>
+
+<p>
+<i><b>eth0 (pod)</b></i> \(\rightarrow\) <i><b>vethA</b></i> \(\rightarrow\) <i><b>br0</b></i> \(\rightarrow\)
+<i><b>vxlan0</b></i> \(\rightarrow\) <i>network</i> \(\rightarrow\) <i><b>vxlan0</b></i> \(\rightarrow\)
+<i><b>br0</b></i> \(\rightarrow\) <i><b>vethB</b></i> \(\rightarrow\) <i><b>eth0 (pod)</b></i>
+</p></li>
+
+<li><p>
+Pod to external host
+</p>
+
+<p>
+<i><b>eth0 (pod)</b></i> \(\rightarrow\) <i><b>vethA</b></i> \(\rightarrow\) <i><b>br0</b></i> \(\rightarrow\)
+<i><b>tun0</b></i> \(\rightarrow\) \(\texttt{SNAT} \atop \texttt{(MASQUERADE)}\)
+\(\rightarrow\) <i><b>eth0 (phy.)</b></i> \(\rightarrow\) <i><b>Host</b></i>
+</p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orga5a5e88" class="outline-2">
+<h2 id="orga5a5e88"><span class="section-number-2">3</span> Move Existing Application to OpenShift</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-org69e6e7c" class="outline-3">
+<h3 id="org69e6e7c"><span class="section-number-3">3.1</span> What is <a href="https://github.com/GongCun/Pentomino/tree/map">PuzzleBrain</a>?</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+PuzzleBrain is a distributed system based on DLX algorithm and MapReduce
+architecture.
+</p>
+
+
+<div class="figure">
+<p><img src="./shape-mapreduce.png" alt="shape-mapreduce.png" />
+</p>
+<p><span class="figure-number">Figure 6: </span>Puzzler solution with MapReduce</p>
+</div>
+
+<p>
+Build the PuzzleBrain program <i>puzzler</i>
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">git clone https://github.com/GongCun/Pentomino.git
+<span style="color: #4f97d7;">cd</span> Pentomino
+git branch -a
+git checkout openshift
+make puzzler
+</pre>
+</div>
+
+<p>
+Test the <i>puzzler</i>
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">mkdir -p ./test
+# <span style="color: #ffd700; background-color: nil;">Server</span>
+<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">cd</span> ./test; ncat -4kl <span style="color: #a45bad;">3001</span> -c ../run.sh<span style="color: #4f97d7;">)</span>
+# <span style="color: #ffd700; background-color: nil;">Client</span>
+<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">cd</span> ./test; ../puzzler -m -b8 -s <span style="color: #a45bad;">127.0.0.1</span> -p <span style="color: #a45bad;">3001</span><span style="color: #4f97d7;">)</span>
+
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org710a882" class="outline-3">
+<h3 id="org710a882"><span class="section-number-3">3.2</span> Migrate the PuzzleBrain to OpenShift</h3>
+<div class="outline-text-3" id="text-3-2">
+
+<div class="figure">
+<p><img src="./openshift_farm.png" alt="openshift_farm.png" />
+</p>
+<p><span class="figure-number">Figure 7: </span>PuzzleBrain in OpenShift</p>
+</div>
+</div>
+
+<div id="outline-container-org459cc4c" class="outline-4">
+<h4 id="org459cc4c"><span class="section-number-4">3.2.1</span> Prepare the docker image</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<pre class="example">
+$ docker login registry.redhat.io
+Username: itd@bocmacau.com
+Password:
+Login Succeeded
+
+$ view /etc/containers/registries.conf
+[registries.search]
+registries = ["hub.docker.com", "registry.redhat.io", "docker.io"]
+
+$ docker search --filter is-official=true --limit=3 rhel7
+$ docker pull registry.redhat.io/rhel7
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org9aaed37" class="outline-4">
+<h4 id="org9aaed37"><span class="section-number-4">3.2.2</span> The Dockerfile</h4>
+<div class="outline-text-4" id="text-3-2-2">
+<p>
+A Dockerfile is a text document that defines how an image should be created.
+Depending on the complexity of the application, the Dockerfile can quickly
+become verbose and unwieldy. As an example, here is the Dockerfile for the
+official rhel7 container:
+</p>
+<pre class="example">
+FROM rhel7:latest
+MAINTAINER Cun Gong &lt;gong_cun@bocmacau.com&gt;
+LABEL description="puzzle container"
+
+RUN yum install -y socat &amp;&amp; yum clean all
+
+ADD root /
+EXPOSE 3001
+CMD ["/puzzle-entry.sh"]
+
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org0471e88" class="outline-4">
+<h4 id="org0471e88"><span class="section-number-4">3.2.3</span> Building &amp; testing the docker images</h4>
+<div class="outline-text-4" id="text-3-2-3">
+<div class="org-src-container">
+<pre class="src src-sh">cp -p ./puzzler ./root &amp;&amp; strip -s root/puzzler
+docker build -t demo-puzzle:v1 .
+</pre>
+</div>
+
+<p>
+Test the docker functions
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">docker run -dit --name=demo-puzzle-test -p <span style="color: #a45bad;">3001:3001</span> demo-puzzle:v1
+# <span style="color: #ffd700; background-color: nil;">Follow the container logs</span>
+docker container logs --follow &lt;container&gt;
+# <span style="color: #ffd700; background-color: nil;">In the host</span>
+<span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">cd</span> ./test; ../puzzler -m -b8 -s <span style="color: #a45bad;">127.0.0.1</span> -p <span style="color: #a45bad;">3001</span><span style="color: #4f97d7;">)</span>
+
+</pre>
+</div>
+
+<p>
+Stop &amp; clean the docker images
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">docker stop &lt;container&gt;
+# <span style="color: #ffd700; background-color: nil;">or</span>
+docker container kill &lt;container&gt;
+docker rm &lt;container&gt;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5b1a2ad" class="outline-4">
+<h4 id="org5b1a2ad"><span class="section-number-4">3.2.4</span> Running the docker images on OpenShift</h4>
+<div class="outline-text-4" id="text-3-2-4">
+<pre class="example">
+$ oc describe svc/docker-registry -n default
+Name:              docker-registry
+...
+IP:                172.30.151.202
+Port:              5000-tcp  5000/TCP
+
+$ oc new-project demo
+$ docker tag demo-puzzle:v1 172.30.151.202:5000/demo/demo-puzzle:v1
+$ docker login -p `oc whoami -t` -u system 172.30.151.202:5000
+$ docker push 172.30.151.202:5000/demo/demo-puzzle:v1
+$ oc new-app demo/demo-puzzle:v1 --name=mypuzzle
+
+</pre>
+
+<p>
+Test the pod
+</p>
+<pre class="example">
+$ oc get svc
+NAME       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+mypuzzle   ClusterIP   ${service-ip}    &lt;none&gt;        3001/TCP   21s
+
+$ (cd ./test; ../puzzler -m -b8 -s ${service-ip} -p 3001)
+</pre>
+
+<p>
+Follow the pods log
+</p>
+<pre class="example">
+$ oc get pods
+$ oc logs -f &lt;pod&gt;
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orga55dfab" class="outline-2">
+<h2 id="orga55dfab"><span class="section-number-2">4</span> Creating Applications with Source-to-Image</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+The Source-to-Image tool implements a mechanism to take application source code
+and build it into a container image. The tool works by starting a container
+using an S2I builder image, injecting the application source code into the
+container, and running an <i>assemble</i> script to set up the contents of the
+image.
+</p>
+
+<p>
+The S2I tool is a standalone application you can use on your own local
+system, independent of any platform for deploying applications to containers. To
+make it easier to use, OpenShift provides integrated support for the tool, which
+forms the core of the PaaS functionality of OpenShift.
+</p>
+</div>
+
+<div id="outline-container-orge80ebca" class="outline-3">
+<h3 id="orge80ebca"><span class="section-number-3">4.1</span> Image Streams</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+OpenShift deploys new versions of user applications into pods quickly. To create
+a new application, in addition to the application source code, a base image (the
+S2I builder image) is required. If either of these two components gets updated,
+OpenShift creates a new container image. Pods created using the older container
+image are replaced by pods using the new image.
+</p>
+
+<p>
+The <i>image stream resource</i> is a configuration that names specific container
+images associated with <i>image stream tags</i>, an alias for these container images.
+OpenShift builds applications against an image stream. The OpenShift installer
+populates several image streams by default during installation. To determine
+available image streams, use the <b>oc get</b> command, as follows:
+</p>
+
+<pre class="example">
+$ oc get is -n openshift
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgc12704d" class="outline-3">
+<h3 id="orgc12704d"><span class="section-number-3">4.2</span> Building Application with S2I</h3>
+<div class="outline-text-3" id="text-4-2">
+<pre class="example">
+$ git clone https://github.com/GongCun/DO180-apps.git
+$ git checkout -b demo
+$ cd DO180-apps/php-helloworld
+
+$ cat ./index.php
+&lt;?php
+print "Hello, World!\n";
+?&gt;
+
+$ git push -u origin demo
+
+$ oc new-app --name=php-helloworld \
+  openshift/php~https://github.com/GongCun/DO180-apps#demo \
+  --context-dir php-helloworld
+
+$ oc logs -f bc/php-helloworld
+$ oc expose --name php-helloworld svc/php-helloworld
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org2a096f0" class="outline-3">
+<h3 id="org2a096f0"><span class="section-number-3">4.3</span> Trigger new deployment</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+Edit the <b>index.php</b> file
+</p>
+<pre class="example">
+&lt;?php
+print "&lt;img src=\"./Haruhi.jpg\" alt=\"Haruhi\" width=\"%75\" height=\"75%\"&gt;";
+?&gt;
+
+</pre>
+
+<p>
+Commit the changes and push the code to remote Git repository
+</p>
+<pre class="example">
+$ git add ./index.php
+$ git commit -m"add .jpg"
+$ git push -u origin demo
+</pre>
+
+<p>
+Start a new Source-to-Image build process and wait for it to build and deploy
+</p>
+<pre class="example">
+$ oc start-build php-helloworld
+$ oc logs -f bc/php-helloworld
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf77def8" class="outline-2">
+<h2 id="orgf77def8"><span class="section-number-2">5</span> Creating an Application with a Template</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-orgabcad49" class="outline-3">
+<h3 id="orgabcad49"><span class="section-number-3">5.1</span> What Is an Application Template?</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+A template describes a set of objects that can be parameterized and processed to
+produce a list of objects for creation by OpenShift. The objects to create can
+include anything that users have permission to create within a project, for
+example services, build configurations, and deployment configurations. A
+template may also define a set of labels to apply to every object defined in the
+template. 
+</p>
+
+<p>
+This means that typically a template will include:
+</p>
+<ul class="org-ul">
+<li>A set of resources that is created as part of “creating/deploying” the template.</li>
+<li>A set of values for the parameters defined in the template.</li>
+<li>A matching label attached to each of the generated resources that provides a
+convenient way to indicate the resources are connected.</li>
+</ul>
+
+<p>
+A template will be defined in JSON or YAML format, and will be loaded into
+OpenShift for user instantiation, also known as application creation. 
+</p>
+</div>
+</div>
+<div id="outline-container-orgbbb46e3" class="outline-3">
+<h3 id="orgbbb46e3"><span class="section-number-3">5.2</span> Benefits of Using Templates</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+A template provides developers with an easy way to create all the necessary
+OpenShift resources for their application to work with minimal effort. This
+allows you to quickly deploy an application without having to understand all the
+underlying technology of the OpenShift platform. 
+</p>
+</div>
+</div>
+<div id="outline-container-org585d496" class="outline-3">
+<h3 id="org585d496"><span class="section-number-3">5.3</span> Using <i>To-Do-List</i> Application Template</h3>
+<div class="outline-text-3" id="text-5-3">
+
+<div class="figure">
+<p><img src="./todolist.png" alt="todolist.png" width="30%" height="30%" />
+</p>
+<p><span class="figure-number">Figure 8: </span><i>To-Do-List</i> architecture</p>
+</div>
+
+<p>
+The components of <i>To-Do-List</i>
+</p>
+<ul class="org-ul">
+<li>The presentation layer is built using AngularJS's single-page HTML5 front end</li>
+<li>The business layer is made up of the HTTP API backend using node.js</li>
+<li>The persistence layer is based on MySQL database services</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orga4d9216" class="outline-3">
+<h3 id="orga4d9216"><span class="section-number-3">5.4</span> Parameters</h3>
+<div class="outline-text-3" id="text-5-4">
+<p>
+Templates define a set of <i>parameters</i>, which are assigned values. OpenShift
+resources defined in the template can get their configuration values by
+referencing named parameters. Parameters in a template can have default
+values, but they are optional. Any default value can be replaced when
+processing the template. 
+</p>
+<pre class="example">
+$ cd ./Template
+$ oc process --parameters -f ./todo-template.yaml
+NAME                DESCRIPTION                               GENERATOR           VALUE
+QUAY_USER           Quay namespace the images are stored in
+
+</pre>
+</div>
+</div>
+<div id="outline-container-org77c6a30" class="outline-3">
+<h3 id="org77c6a30"><span class="section-number-3">5.5</span> Creating with a Template</h3>
+<div class="outline-text-3" id="text-5-5">
+<pre class="example">
+# Login quay.io
+$ docker login -u gongcun quay.io
+Password:
+Login Succeeded
+
+# Creating application
+$ oc process -f ./todo-template.yaml \
+     -p QUAY_USER=gongcun | oc create -f -
+
+# Check the status
+$ oc get pods -w
+$ oc logs -f &lt;pod&gt;
+
+# Create route
+$ oc expose svc/todoapi
+</pre>
+
+<p>
+Use browser to open <a href="http://todoapi-demo.apps.myopenshift.com/todo/">http://todoapi-demo.apps.myopenshift.com/todo/</a>.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org1f22361" class="outline-2">
+<h2 id="org1f22361"><span class="section-number-2">6</span> Automatically scaling pods</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+In OpenShift, a resource request is a threshold you can set that affects
+scheduling and quality of service. It essentially provides the minimum amount of
+resources guarantee to the pod. CPU is measured in units called <i>millicores</i>
+(one-thousandth of a core). By default, pods don't get individual cores; they
+get time-slices of CPU, sharing the cores on the node with other pods. If a
+particular node has four CPUs assigned to it, then 4000 millicores are available
+to all the running pods on that node:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">cat /proc/cpuinfo | grep -wc <span style="color: #2d9574;">'^processor'</span>
+</pre>
+</div>
+
+<p>
+Resource requests also can be combined with a resource <i>limit</i>, which is similar
+to a request but sets the maximum amount of resources guaranteed to the pod.
+Setting requests and limits also allows the user to set a quality of service
+level by default:
+</p>
+
+<dl class="org-dl">
+<dt>BestEffort</dt><dd>Neither a resource nor a limit is specified. This is for
+low-priority applications that can live with very low amounts of
+CPU and memory.</dd>
+<dt>Burstable</dt><dd>Provided when a request is specified that is less than an
+optionally specified limit.</dd>
+<dt>Guaranteed</dt><dd>A request and a limit are both set to the same number. This is
+for the highest-priority applications that need the most
+consistent amount of computing power.</dd>
+</dl>
+
+<p>
+Setting a lower quality of service gives the scheduler more flexibility by
+allowing it to place more pods in the cluster. Setting a higher quality of
+service limits flexibility but gives applications more consistent resources.
+Because choosing the quality of service is about finding reasonable defaults,
+most applications should fall into the <code>Burstable</code> tier.  
+</p>
+
+<p>
+Define the resource limits:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">oc set resources dc/php-helloworld <span style="color: #2d9574;">\</span>
+   --requests=<span style="color: #7590db;">cpu</span>=<span style="color: #a45bad;">100m,memory</span>=<span style="color: #a45bad;">128Mi</span> <span style="color: #2d9574;">\</span>
+   --limits=<span style="color: #7590db;">cpu</span>=<span style="color: #a45bad;">1000m,memory</span>=<span style="color: #a45bad;">1024Mi</span>
+</pre>
+</div>
+
+<p>
+Check the resource limits:
+</p>
+<pre class="example">
+$ oc describe dc/php-helloworld
+...
+    Limits:
+      cpu:      1
+      memory:   1Gi
+    Requests:
+      cpu:              100m
+      memory:           128Mi
+
+</pre>
+
+<p>
+Define the horizontal pod autoscaler (HPA)
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">oc autoscale dc/php-helloworld --min <span style="color: #a45bad;">1</span> --max <span style="color: #a45bad;">4</span> --cpu-percent=<span style="color: #a45bad;">20</span>
+oc get hpa/php-helloworld -w
+oc describe hpa/php-helloworld
+</pre>
+</div>
+
+<p>
+Do the apache benchmark with <b>ab</b> command
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">ab -n <span style="color: #a45bad;">1000000</span> -c <span style="color: #a45bad;">500</span> <span style="color: #2d9574;">\</span>
+   http://php-helloworld-demo.apps.myopenshift.com/
+# <span style="color: #ffd700; background-color: nil;">-n: the total number of HTTP requests</span>
+# <span style="color: #ffd700; background-color: nil;">-c: the number of concurrent requests</span>
+</pre>
+</div>
+
+<p>
+Monitor the auto-scaling
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">watch oc get pods -l <span style="color: #7590db;">app</span>=php-helloworld
+</pre>
+</div>
+
+<p>
+Monitor the performance by Prometheus grafana
+</p>
+<pre class="example">
+# oc get route -n openshift-monitoring
+...
+grafana             grafana-openshift-monitoring.apps.myopenshift.com 
+</pre>
+<p>
+Visit <a href="https://grafana-openshift-monitoring.apps.myopenshift.com">https://grafana-openshift-monitoring.apps.myopenshift.com</a> to monitor the performance. 
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: 龔存</p>
+<p class="date">Created: 2020-03-20 週五 11:38</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
