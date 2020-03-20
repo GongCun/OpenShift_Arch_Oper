@@ -109,7 +109,7 @@ DevOps = CI/CD
 
 #+ATTR_HTML: :width 55% :height 55%
 #+CAPTION: OpenShift Flow
-[[./openshift_flow.jpg]]
+[[./openshift-flow.png]]
 
 
 * Networking
@@ -220,12 +220,15 @@ Build the PuzzleBrain program /puzzler/
   cd Pentomino
   git branch -a
   git checkout openshift
-  make puzzler
+  make
 #+end_src
 
 Test the /puzzler/
 #+begin_src sh
   mkdir -p ./test
+  sed -i 's/^M//g' ./run.sh
+  sed -i 's/^M//g' ./root/*.sh
+
   # Server
   (cd ./test; ncat -4kl 3001 -c ../run.sh)
   # Client
@@ -457,7 +460,7 @@ The components of /To-Do-List/
           -p QUAY_USER=gongcun | oc create -f -
 
      # Check the status
-     $ oc get pods -w
+     $ watch oc get pods
      $ oc logs -f <pod>
 
      # Create route
@@ -522,7 +525,7 @@ Check the resource limits:
 Define the horizontal pod autoscaler (HPA)
 #+begin_src sh
   oc autoscale dc/php-helloworld --min 1 --max 4 --cpu-percent=20
-  oc get hpa/php-helloworld -w
+  watch oc get hpa/php-helloworld
   oc describe hpa/php-helloworld
 #+end_src
 
