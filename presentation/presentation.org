@@ -1,4 +1,4 @@
-#+TITLE: OpenShift Practise
+#+TITLE: OpenShift Practice
 #+AUTHOR: 龔存
 
 * Overview
@@ -343,6 +343,11 @@ system, independent of any platform for deploying applications to containers. To
 make it easier to use, OpenShift provides integrated support for the tool, which
 forms the core of the PaaS functionality of OpenShift.
 
+
+<s2i process diagram>
+
+Detail see [[https://github.com/openshift/source-to-image/tree/release-3.11][source-to-image]].
+
 ** Image Streams 
 OpenShift deploys new versions of user applications into pods quickly. To create
 a new application, in addition to the application source code, a base image (the
@@ -427,7 +432,7 @@ allows you to quickly deploy an application without having to understand all the
 underlying technology of the OpenShift platform. 
 ** Using /To-Do-List/ Application Template
 
-#+ATTR_HTML: :width 30% :height 30%
+#+ATTR_HTML: :width 50% :height 50%
 #+CAPTION: /To-Do-List/ architecture
 [[./todolist.png]]
 
@@ -549,3 +554,148 @@ Monitor the performance by Prometheus grafana
   grafana             grafana-openshift-monitoring.apps.myopenshift.com 
 #+end_example
 Visit https://grafana-openshift-monitoring.apps.myopenshift.com to monitor the performance. 
+* Other
+** Create the GitLab
+#+BEGIN_EXAMPLE
+  $ docker search --limit=3 gitlab-ce
+  INDEX       NAME                               DESCRIPTION                                     STARS
+  docker.io   docker.io/gitlab/gitlab-ce         GitLab Community Edition docker image base...   2814
+
+  $ docker pull docker.io/gitlab/gitlab-ce # not necessary
+  $ oc new-app --name gitlab gitlab/gitlab-ce
+  $ oc logs -f dc/gitlab
+#+END_EXAMPLE
+** Debug the problem
+
+Review the application logs to confirm that the failure is caused by
+insufficient privileges.
+
+#+BEGIN_EXAMPLE
+$ oc get pods -l app=gitlab
+NAME             READY     STATUS             RESTARTS   AGE
+gitlab-1-fj8z2   0/1       CrashLoopBackOff   5          10m
+
+$ oc logs -f po/gitlab-1-fj8z2
+...
+Cleaning stale PIDs & sockets
+find: ‘/run/secrets/etc-pki-entitlement’: Permission denied
+find: ‘/run/secrets/rhsm’: Permission denied
+Generating ssh_host_rsa_key...
+No user exists for uid 1000430000
+
+#+END_EXAMPLE
+
+Create a new service account and add the anyuid security context constraints
+(*SCC*) to it.
+#+begin_example
+  oc create sa gitlab-sa
+  oc adm policy add-scc-to-user anyuid -z gitlab-sa
+
+#+end_example
+
+Modify the gitlab application so that it uses the newly created service account.
+Verify that the new deployment is successful.
+#+begin_example
+  $ oc get --export dc/gitlab -o yaml >./gitlab.yaml
+
+  $ vim ./gitlab.yaml
+    ...
+    spec:
+      serviceAccount: gitlab-sa
+      serviceAccountName: gitlab-sa
+      containers:
+      ...
+
+  $ oc replace -f ./gitlab.yaml
+  $ watch oc get pods
+#+end_example
+
+ Expose the gitlab application (HTTP)
+ #+begin_example
+   $ oc expose svc/gitlab --port 80
+ #+end_example
+
+ Expose the securing application with *Edge Routes*. Prepare the
+ *gitlab-route.yaml* file
+
+ #+begin_example
+   apiVersion: route.openshift.io/v1
+   kind: Route
+   metadata:
+     annotations:
+       description: Route for application's http service.
+     labels:
+       app: gitlab
+     name: gitlab
+     namespace: openshiftdemos
+   spec:
+     host: gitlab.openshiftdemos.apps.myopenshift.com
+     port:
+       targetPort: 80
+     to:
+       kind: Service
+       name: gitlab
+       weight: 100
+     wildcardPolicy: None
+     tls:
+       termination: edge
+       insecureEdgeTerminationPolicy: Redirect
+
+ #+end_example
+
+The *termination* field is *edge* for edge termination. The insecure policy to
+redirect requests sent on an insecure scheme *HTTP* to a secure scheme *HTTPS*.
+Run the following command to take effect:
+#+begin_src sh
+  oc replace -f ./gitlab-route.yaml
+#+end_src
+
+Fix the pod hostname problem:
+#+begin_example
+  $ oc get po/gitlab-2-hcbhw -o yaml >./gitlab-pod.yaml
+
+  $ vim ./gitlab-pod.yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      openshift.io/scc: anyuid
+    labels:
+      app: gitlab
+      deployment: gitlab
+      deploymentconfig: gitlab
+    name: gitlab.openshiftdemos.apps.myopenshift.com
+    namespace: openshiftdemos
+  ...
+
+  # Delete the old pod
+  $ oc scale --replicas=0 dc/gitlab
+
+  # Re-create the new pod
+  $ oc create -f ./gitlab-pod.yaml
+
+  # Watch the pod status
+  $ watch oc get pod -l app=gitlab
+  NAME                                         READY     STATUS    RESTARTS   AGE
+  gitlab.openshiftdemos.apps.myopenshift.com   1/1       Running   0          6m
+
+#+end_example
+
+Create an application with gitlab:
+#+begin_example
+  $ mkdir -p ./demo
+  $ cd ./demo
+  $ cat >./README.md
+  # OpenShift is fun
+  $ git init && git add ./README.md
+  $ git commit -m"init"
+  $ git remote add origin \
+    http://gitlab.openshiftdemos.apps.myopenshift.com/GongCun/demo.git
+  $ git push -u origin master
+  fatal: ... Peer's certificate issuer has been marked as not trusted by the user.
+  $ git config http.sslVerify false
+  $ git push -u origin master
+  Username:
+  Password:
+#+end_example
+
