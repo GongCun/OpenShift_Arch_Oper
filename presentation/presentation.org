@@ -343,11 +343,78 @@ system, independent of any platform for deploying applications to containers. To
 make it easier to use, OpenShift provides integrated support for the tool, which
 forms the core of the PaaS functionality of OpenShift.
 
+#+CAPTION: Source-to-Image process
+[[./s2i.png]]
 
-<s2i process diagram>
+Detail see [[https://github.com/openshift/source-to-image/tree/release-3.11][source-to-image]] and [[https://github.com/openshift-katacoda/simple-http-server][example]].
 
-Detail see [[https://github.com/openshift/source-to-image/tree/release-3.11][source-to-image]].
+** Creating an S2I Builder Image
+As an S2I builder is a container image, you can create your own custom builder
+images. This is done by building an image from a Dockerfile.
 
+To illustrate a simple S2I builder, you can create a builder for running a web
+server for hosting static files. The source files provided to the builder when
+the S2I process is run will be what the web server hosts and makes available. 
+
+The Dockerfile for this builder would contain:
+#+begin_example
+  FROM docker.io/httpd
+  LABEL io.k8s.description="Simple HTTP Webserver" \
+        io.k8s.display-name="Simple HTTP Webserver" \
+        io.openshift.expose-services="8080:http" \
+        io.openshift.tags="builder,http" \
+        io.openshift.s2i.scripts-url="image:///usr/libexec/s2i"
+
+  ADD bin /usr/libexec/s2i/
+  RUN chmod -R 777 /usr/local/apache2/htdocs/ && \
+      chmod -R 777 /usr/local/apache2/logs/ && \
+      sed -i 's/Listen 80/Listen 8080/g' /usr/local/apache2/conf/httpd.conf
+
+  USER 1001
+
+  EXPOSE 8080
+
+  CMD ["/usr/libexec/s2i/usage"]
+#+end_example
+
+There are three scripts in the *bin* directory
+#+begin_example
+  [root@master s2i]# ls -l bin
+  total 12
+  -rwxr-xr-x. 1 root root 231 Mar 24 12:00 assemble
+  -rwxr-xr-x. 1 root root  77 Mar 24 12:00 run
+  -rwxr-xr-x. 1 root root 106 Mar 24 12:00 usage
+#+end_example
+- /assemble/ - The /assemble/ script should take any source files placed in the
+  /tmp/src directory by the s2i build process and copy them into the required
+  location, or compile them into an executable application.
+- /run/ - The /run/ script is executed when the application image produced by
+  the S2I build process is run.
+- /usage/ - The /usage/ script included in the image is configured as the
+  default command executed when the image is run. 
+
+Building the Image from the Dockerfile
+#+begin_src sh
+  docker build -t simple-http-server .
+#+end_src
+Push the source code to GitHub
+#+begin_src sh
+  git add ./index.html
+  git commit -m"init"
+  git remote add origin <github-url>
+  git push -u origin master
+
+#+end_src
+Using the Builder Image with OpenShift
+#+begin_src sh
+  oc new-app simple-http-server~<git-clone-url> --name <application-name>
+  oc expose svc/<application-name> --hostname=<url> --port=8080
+#+end_src
+
+CI/CD: git commit $\rightarrow$ git push $\rightarrow$ oc start-build <is>
+#+begin_example
+$ oc start-build simple-http-server~
+#+end_example
 ** Image Streams 
 OpenShift deploys new versions of user applications into pods quickly. To create
 a new application, in addition to the application source code, a base image (the
@@ -691,9 +758,10 @@ Create an application with gitlab:
   $ git commit -m"init"
   $ git remote add origin \
     http://gitlab.openshiftdemos.apps.myopenshift.com/GongCun/demo.git
-  $ git push -u origin master
-  fatal: ... Peer's certificate issuer has been marked as not trusted by the user.
+
   $ git config http.sslVerify false
+  $ git config --add remote.origin.proxy ""
+  $ git remote show origin
   $ git push -u origin master
   Username:
   Password:
