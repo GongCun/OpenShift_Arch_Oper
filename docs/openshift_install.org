@@ -855,3 +855,99 @@ directory (/var/lib/docker). I have no idea to fix the problem.
     docker save postgres:v3 >postgres-v3.tar
     docker load <./pospostgres-v3.tar
   #+end_src
+
+* Use a hostPath volume as persistent storage in OpenShift container image registry 
+- OpenShift Container Registry uses ephemeral storage by default if no specific
+  storage options are defined in the inventory file. The problem with this set
+  up is that all images kept in the registry will be lost if the registry pod
+  terminates, even if it is started again.
+- A hostPath volume is a type of storage used by OpenShift that is backed by a
+  directory in the local filesystem of one node. A hostPath volume is a useful
+  alternative to the network storage systems in case the application, the
+  registry in this case, is deployed as a single pod and always runs in the same
+  node.
+
+Use a node selector in the registry's deployment config to anchor the pod to the
+node. In this case the node selector uses the label *kubernetes.io/hostname* that
+contains the FQDN of the node. This will trigger a new deployment of the pod: 
+#+BEGIN_EXAMPLE
+  $ oc patch dc docker-registry -p \
+    '{"spec":{"template":{"spec":{"nodeSelector":{"kubernetes.io/hostname": "infra.myopenshift.com"}}}}}'
+#+end_example
+
+Create a directory in the local filesystem of the node where the registry pod
+has been anchored to. This directory will contain the images that are pushed to
+the registry:
+#+begin_example
+  $ mkdir -p /ose/container-images
+
+  $ getenforce
+  Enforcing
+
+  $ semanage fcontext -a -t svirt_sandbox_file_t '/ose/container-images(/.*)?'
+  $ restorecon -RFv /ose/container-images
+
+#+end_example
+
+The docker-registry deployment config uses the service account "registry" to run the pods, add permissions to
+this service account to mount local filesystems by adding the *hostmount-anyuid*
+security context constrain to it. This command will not apply the changes to the
+docker-registry deployment config and its corresponding pods immediately, the
+next steps will trigger a redeployment that will apply it:
+
+#+begin_example
+  $ oc get dc docker-registry -o go-template='{{.spec.template.spec.serviceAccount}}{{"\n"}}'
+  registry
+  $ oc adm policy add-scc-to-user hostmount-anyuid -z registry -n default
+  $ oc describe scc hostmount-anyuid | grep Users:
+#+end_example
+
+Modify the docker-registry's deployment config to use a hostPath volume with the name
+*registry-storage* that references the local directory /ose/container-registry. This modification
+will trigger a new deployment to apply the changes. The hostPath volume will not
+be accessible from the pod just yet because of wrong owner an permissions, these
+will be fixed later.
+
+#+begin_example
+
+  $ oc set volume dc/docker-registry --add --name=registry-storage \
+    -t hostPath --path=/ose/container-images --overwrite          
+#+END_EXAMPLE
+
+The new scc assigned to the registry service account and the change in the
+deployment config in the previous step will change the UID/GID of the processes
+inside the registry pod; these new UID and GID are needed to modify the owner
+and group of the local directory backing the hostPath volume. Find out the
+UID/GID used by the processes in the pod:
+#+BEGIN_EXAMPLE
+  $ oc exec docker-registry-3-sfvkz id
+  uid=1001 gid=0(root) groups=0(root)
+
+#+END_EXAMPLE
+
+
+Change the owner, group and permissions of the local directory in the node where
+it was created to allow the pod to access it at the filesystem level. After this
+changes the registry pod can use the new hostPath volume to store container
+images: 
+#+BEGIN_EXAMPLE
+  $ chown -R 1001:1001 /ose/container-images 
+  $ chmod -R gu+w /ose/container-images
+  $ ls -Zdn /ose/container-images/
+#+END_EXAMPLE
+
+Find the mountPath used by the hostPath volume inside the pod:
+#+BEGIN_EXAMPLE
+  $ oc get dc docker-registry  -o yaml|grep -A 5 volumeMounts
+      volumeMounts:
+      - mountPath: /registry
+        name: registry-storage
+      ...
+#+END_EXAMPLE
+
+Verify that the pod can access the hostPath volume:
+#+BEGIN_EXAMPLE
+  $ oc exec docker-registry-3-sfvkz -- df -Th /registry
+  $ oc new-project test
+  $ oc new-app --name test https://github.com/openshift/ruby-hello-world
+#+END_EXAMPLE
