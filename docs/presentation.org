@@ -1,4 +1,4 @@
-#+TITLE: OpenShift Practise
+#+TITLE: OpenShift Practice
 #+AUTHOR: 龔存
 
 * Overview
@@ -427,7 +427,7 @@ allows you to quickly deploy an application without having to understand all the
 underlying technology of the OpenShift platform. 
 ** Using /To-Do-List/ Application Template
 
-#+ATTR_HTML: :width 30% :height 30%
+#+ATTR_HTML: :width 50% :height 50%
 #+CAPTION: /To-Do-List/ architecture
 [[./todolist.png]]
 
@@ -549,3 +549,34 @@ Monitor the performance by Prometheus grafana
   grafana             grafana-openshift-monitoring.apps.myopenshift.com 
 #+end_example
 Visit https://grafana-openshift-monitoring.apps.myopenshift.com to monitor the performance. 
+* Other
+** Create the GitLab
+#+BEGIN_EXAMPLE
+  $ docker search --limit=3 gitlab-ce
+  INDEX       NAME                               DESCRIPTION                                     STARS
+  docker.io   docker.io/gitlab/gitlab-ce         GitLab Community Edition docker image base...   2814
+
+  $ docker pull docker.io/gitlab/gitlab-ce # not necessary
+  $ oc new-app --name gitlab gitlab/gitlab-ce
+#+END_EXAMPLE
+** Debug the problem
+#+BEGIN_EXAMPLE
+$ oc get pods -l app=gitlab
+NAME             READY     STATUS             RESTARTS   AGE
+gitlab-1-fj8z2   0/1       CrashLoopBackOff   5          10m
+
+$ oc logs -f po/gitlab-1-fj8z2
+...
+Cleaning stale PIDs & sockets
+find: ‘/run/secrets/etc-pki-entitlement’: Permission denied
+find: ‘/run/secrets/rhsm’: Permission denied
+Generating ssh_host_rsa_key...
+No user exists for uid 1000430000
+
+#+END_EXAMPLE
+
+Add the permission
+#+BEGIN_SRC sh
+  oc adm policy add-scc-to-user anyuid -z default -n openshiftdemos
+  oc delete all -l app=gitlab
+#+END_SRC

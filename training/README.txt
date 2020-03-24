@@ -59,3 +59,4 @@ Other screen operation:
     list (Ctrl-b:acladd user). (*note* maybe happen suid error)
   - copy the buffer: <Ctrl-b> + h: copy the current window; Ctrl-b:hardcopy -h
     <file>: copy the whole buffer.
+  - delete detached screen session: screen -X -S <id> quit
