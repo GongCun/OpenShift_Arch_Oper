@@ -332,16 +332,14 @@ Follow the pods log
 
 * Creating Applications with Source-to-Image
 
-The Source-to-Image tool implements a mechanism to take application source code
-and build it into a container image. The tool works by starting a container
+The Source-to-Image (S2I) tool implements a mechanism to take application source
+code and build it into a container image. The tool works by starting a container
 using an S2I builder image, injecting the application source code into the
-container, and running an /assemble/ script to set up the contents of the
-image.
-
-The S2I tool is a standalone application you can use on your own local
-system, independent of any platform for deploying applications to containers. To
-make it easier to use, OpenShift provides integrated support for the tool, which
-forms the core of the PaaS functionality of OpenShift.
+container, and running an /assemble/ script to set up the contents of the image.
+The S2I tool is a standalone application you can use on your own local system,
+independent of any platform for deploying applications to containers. To make it
+easier to use, OpenShift provides integrated support for the tool, which forms
+the core of the PaaS functionality of OpenShift.
 
 #+CAPTION: Source-to-Image process
 [[./s2i.png]]
@@ -392,6 +390,8 @@ There are three scripts in the *bin* directory
   the S2I build process is run.
 - /usage/ - The /usage/ script included in the image is configured as the
   default command executed when the image is run. 
+- /save-artifacts/ (optional) - Captures the artifacts from a previous build
+  into the next incremental build.
 
 Building the Image from the Dockerfile
 #+begin_src sh
@@ -413,7 +413,7 @@ Using the Builder Image with OpenShift
 
 CI/CD: git commit $\rightarrow$ git push $\rightarrow$ oc start-build <is>
 #+begin_example
-$ oc start-build simple-http-server~
+$ oc start-build simple-http-server
 #+end_example
 ** Image Streams 
 OpenShift deploys new versions of user applications into pods quickly. To create
