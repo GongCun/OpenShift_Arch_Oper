@@ -936,6 +936,15 @@ images:
   $ ls -Zdn /ose/container-images/
 #+END_EXAMPLE
 
+At any point after the local directory /ose/container-images was created, backup
+files from previous container images can be restored, but it is important to
+update the owner and group of the files to the ones used by the registry pod,
+and update the SELinux label:
+#+begin_example
+  $ chown -R 1001:1001 /var/container-registry
+  $ restorecon -RFv /var/container-registry
+#+end_example
+
 Find the mountPath used by the hostPath volume inside the pod:
 #+BEGIN_EXAMPLE
   $ oc get dc docker-registry  -o yaml|grep -A 5 volumeMounts

@@ -435,8 +435,9 @@ $ oc get is -n openshift
 ** Building Application with S2I
    #+begin_example
      $ git clone https://github.com/GongCun/DO180-apps.git
+     $ cd DO180-apps
      $ git checkout -b demo
-     $ cd DO180-apps/php-helloworld
+     $ cd ./php-helloworld
 
      $ cat ./index.php
      <?php
