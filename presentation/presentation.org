@@ -348,13 +348,9 @@ Detail see [[https://github.com/openshift/source-to-image/tree/release-3.11][sou
 
 ** Creating an S2I Builder Image
 As an S2I builder is a container image, you can create your own custom builder
-images. This is done by building an image from a Dockerfile.
+images. This is done by building an image from a Dockerfile. The Dockerfile for
+this builder would contain:
 
-To illustrate a simple S2I builder, you can create a builder for running a web
-server for hosting static files. The source files provided to the builder when
-the S2I process is run will be what the web server hosts and makes available. 
-
-The Dockerfile for this builder would contain:
 #+begin_example
   FROM docker.io/httpd
   LABEL io.k8s.description="Simple HTTP Webserver" \
@@ -363,7 +359,10 @@ The Dockerfile for this builder would contain:
         io.openshift.tags="builder,http" \
         io.openshift.s2i.scripts-url="image:///usr/libexec/s2i"
 
-  ADD bin /usr/libexec/s2i/
+  COPY assemble /usr/libexec/s2i/
+  COPY run /usr/libexec/s2i/
+  COPY usage /usr/libexec/s2i/
+
   RUN chmod -R 777 /usr/local/apache2/htdocs/ && \
       chmod -R 777 /usr/local/apache2/logs/ && \
       sed -i 's/Listen 80/Listen 8080/g' /usr/local/apache2/conf/httpd.conf
@@ -375,14 +374,8 @@ The Dockerfile for this builder would contain:
   CMD ["/usr/libexec/s2i/usage"]
 #+end_example
 
-There are three scripts in the *bin* directory
-#+begin_example
-  [root@master s2i]# ls -l bin
-  total 12
-  -rwxr-xr-x. 1 root root 231 Mar 24 12:00 assemble
-  -rwxr-xr-x. 1 root root  77 Mar 24 12:00 run
-  -rwxr-xr-x. 1 root root 106 Mar 24 12:00 usage
-#+end_example
+*s2i* looks for you to supply the following scripts to use with an image:
+
 - /assemble/ - The /assemble/ script should take any source files placed in the
   /tmp/src directory by the s2i build process and copy them into the required
   location, or compile them into an executable application.
@@ -397,6 +390,7 @@ Building the Image from the Dockerfile
 #+begin_src sh
   docker build -t simple-http-server .
 #+end_src
+
 Push the source code to GitHub
 #+begin_src sh
   git add ./index.html
@@ -405,16 +399,62 @@ Push the source code to GitHub
   git push -u origin master
 
 #+end_src
-Using the Builder Image with OpenShift
+
+To using the Builder Image with OpenShift, upload the image to an external image
+registry such as quay.io:
+#+BEGIN_SRC sh
+  docker tag simple-http-server quay.io/gongcun/simple-http-serve
+  docker login -u gongcun quay.io
+  docker push quay.io/gongcun/simple-http-server
+#+END_SRC
+
+Then import it into OpenShift using:
 #+begin_src sh
-  oc new-app simple-http-server~<git-clone-url> --name <application-name>
-  oc expose svc/<application-name> --hostname=<url> --port=8080
+  oc import-image quay.io/gongcun/simple-http-server --confirm
 #+end_src
 
-CI/CD: git commit $\rightarrow$ git push $\rightarrow$ oc start-build <is>
+This will create an images stream called *simple-http-server*, and you can use
+it by running:
+#+BEGIN_SRC sh
+  oc new-app simple-http-server~https://github.com/GongCun/openshifts2i --name=s2i-test
+#+END_SRC
+
+The expose the service:
+#+begin_src sh
+  oc expose svc/s2i-test --hostname=s2i.apps.myopenshift.com --port=8080
+#+end_src
+
+** Trigger new deployment
+CI/CD: /git commit/ $\rightarrow$ /git push/ $\rightarrow$ /oc start-build/
+
+Edit the *index.html* file
+#+BEGIN_SRC html
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <title>Haruhi</title>
+  </head>
+  <body>
+      <img src="Haruhi.jpg" alt="Haruhi.jpg">
+  </body>
+  </html>
+
+#+END_SRC
+
+Commit the changes and push the code to remote Git repository
 #+begin_example
-$ oc start-build simple-http-server
+  $ git add ./index.html ./Haruhi.jpg
+  $ git commit -m"add .jpg"
+  $ git push -u origin master
 #+end_example
+
+Start a new Source-to-Image build process and wait for it to build and deploy
+#+begin_example
+$ oc start-build s2i-test
+$ oc logs -f bc/s2i-test
+#+end_example
+
 ** Image Streams 
 OpenShift deploys new versions of user applications into pods quickly. To create
 a new application, in addition to the application source code, a base image (the
@@ -432,49 +472,15 @@ available image streams, use the *oc get* command, as follows:
 $ oc get is -n openshift
 #+END_EXAMPLE
 
-** Building Application with S2I
-   #+begin_example
-     $ git clone https://github.com/GongCun/DO180-apps.git
-     $ cd DO180-apps
-     $ git checkout -b demo
-     $ cd ./php-helloworld
+Building applications with image stream template
+#+BEGIN_EXAMPLE
+  $ oc new-app --name=php-helloworld \
+    openshift/php~https://github.com/GongCun/DO180-apps#demo \
+    --context-dir php-helloworld
 
-     $ cat ./index.php
-     <?php
-     print "Hello, World!\n";
-     ?>
-
-     $ git push -u origin demo
-
-     $ oc new-app --name=php-helloworld \
-       openshift/php~https://github.com/GongCun/DO180-apps#demo \
-       --context-dir php-helloworld
-
-     $ oc logs -f bc/php-helloworld
-     $ oc expose --name php-helloworld svc/php-helloworld
-   #+end_example
-
-** Trigger new deployment
-Edit the *index.php* file
-#+begin_example
-  <?php
-  print "<img src=\"./Haruhi.jpg\" alt=\"Haruhi\" width=\"%75\" height=\"75%\">";
-  ?>
-
-#+end_example
-
-Commit the changes and push the code to remote Git repository
-#+begin_example
-  $ git add ./index.php
-  $ git commit -m"add .jpg"
-  $ git push -u origin demo
-#+end_example
-
-Start a new Source-to-Image build process and wait for it to build and deploy
-#+begin_example
-$ oc start-build php-helloworld
-$ oc logs -f bc/php-helloworld
-#+end_example
+  $ oc logs -f bc/php-helloworld
+  $ oc expose --name php-helloworld svc/php-helloworld
+#+END_EXAMPLE
 * Creating an Application with a Template 
 ** What Is an Application Template?
 
