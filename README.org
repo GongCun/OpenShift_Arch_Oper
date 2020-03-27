@@ -1,0 +1,8 @@
+#+TITLE: OpenShift: Configuration, Architecture, and Operations
+#+AUTHOR: Cun Gong
+* Installation & Configuration
+https://gongcun.github.io/OpenShift_Arch_Oper/openshift_install.html
+* Architecture & Operations
+https://gongcun.github.io/OpenShift_Arch_Oper/openshift_arch_oper.html
+* Containers, Kubernetes, and Administration
+https://gongcun.github.io/OpenShift_Arch_Oper/presentation.html
