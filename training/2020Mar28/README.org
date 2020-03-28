@@ -1,0 +1,150 @@
+#+TITLE: Training Tips
+#+AUTHOR: Cun Gong
+* Controlling Pod Scheduling
+** Anatomy 
+- Machines :: A fundamental unit that describes the host for a Node. A machine
+              has a providerSpec, which describes the types of compute nodes
+              that are offered for different cloud platforms. For example, a
+              machine type for a worker node on Amazon Web Services (AWS) might
+              define a specific machine type and required metadata.
+- MachineSets :: Groups of machines. MachineSets are to machines as ReplicaSets
+                 are to Pods. If you need more machines or must scale them down,
+                 you change the replicas field on the MachineSet to meet your
+                 compute need.
+- MachineAutoscaler :: This resource automatically scales machines in a cloud.
+     You can set the minimum and maximum scaling boundaries for nodes in a
+     specified MachineSet, and the MachineAutoscaler maintains that range of
+     nodes. The MachineAutoscaler object takes effect after a ClusterAutoscaler
+     object exists. Both ClusterAutoscaler and MachineAutoscaler resources are
+     made available by the ClusterAutoscalerOperator.
+- ClusterAutoscaler :: This resource is based on the upstream ClusterAutoscaler
+     project. In the OpenShift Container Platform implementation, it is
+     integrated with the Machine API by extending the MachineSet API. You can
+     set cluster-wide scaling limits for resources such as cores, nodes, memory,
+     GPU, and so on. You can set the priority so that the cluster prioritizes
+     pods so that new nodes are not brought online for less important pods. You
+     can also set the ScalingPolicy so you can scale up nodes but not scale them
+     down.
+- MachineHealthCheck :: This resource detects when a machine is unhealthy,
+     deletes it, and, on supported platforms, makes a new machine.
+
+
+** labeling Nodes
+Add a label
+#+BEGIN_SRC sh
+  oc label node node-name env=dev
+#+END_SRC
+
+Overwrite a label
+#+BEGIN_SRC sh
+  oc label node node-name env=prod --overwrite
+#+END_SRC
+
+Remove a label
+#+BEGIN_SRC sh
+  oc label node node-name env-
+#+END_SRC
+
+Use the *--show-labels* to see the case-sensitive labels assigned to a node:
+#+BEGIN_SRC sh
+  oc get node node-name --show-labels
+#+END_SRC
+
+Cluster administrators can also use the -L option to determine the value of a
+single label. Multiple -L options in the same oc get command are supported. For
+example:
+#+BEGIN_SRC sh
+  oc get node -L failure-domain.beta.kubernetes.io/region \
+     -L failure-domain.beta.kubernetes.io/zone -L env
+#+END_SRC
+** Labeling Machine Sets
+Although node labels are persistent, if your OpenShift cluster contains machine
+sets (created if your cluster was installed using the full stack automation
+method), then you should also add labels to the machine set configuration. This
+ensures that new machines (and the nodes generated from them) will also contain
+the desired labels.
+
+You can identify the relationship between machines and nodes by listing machines in the
+*openshift-machine-api* namespace and including the -o wide option.
+#+BEGIN_SRC sh
+  oc get machines -n openshift-machine-api -o wide
+#+END_SRC
+
+Machines used for worker nodes should come from a machine set. The name of a
+machine contains the name of the machine set from which it was generated.
+#+BEGIN_SRC sh
+  oc get machineset -n openshift-machine-api
+#+END_SRC
+
+Edit a machine set so that new machines generated from it will have the desired label or labels.
+Modifying a machine set will not apply changes to existing machines or nodes.
+
+#+BEGIN_EXAMPLE
+  [user@demo ~]$ oc edit machineset machineset-name \
+  > -n openshift-machine-api
+  ...output omitted...
+      spec:
+        metadata:
+          creationTimestamp: null
+          labels:
+            env: dev
+          providerSpec:
+  ...output omitted...
+#+END_EXAMPLE
+** Controlling Pod Placement
+#+BEGIN_EXAMPLE
+  [user@demo ~]$ oc edit deployment/myapp
+  ...
+  template:
+    ...
+    spec:
+      nodeSelector:
+        env: dev
+#+END_EXAMPLE
+
+The following oc patch command accomplishes the same thing:
+#+BEGIN_SRC sh
+  oc patch deployment/myapp --patch \
+     '{"spec":{"template":{"spec":{"nodeSelector":{"env":"dev"}}}}}'
+#+END_SRC
+** Configuring a Node Selector for a Project
+#+BEGIN_SRC sh
+  [user@demo ~]$ oc adm new-project demo --node-selector "label-name"
+#+END_SRC
+To configure a default node selector for an existing project, add an annotation to the namespace
+resource with the openshift.io/node-selector key. The oc annotate command can add,
+modify, or remove a node selector annotation:
+#+BEGIN_SRC sh
+  oc annotate namespace <project-name> \
+     openshift.io/node-selector="<label-name>" --overwrite
+#+END_SRC
+** Example
+#+BEGIN_SRC sh
+  oc get nodes -L env -l node-role.kubernetes.io/worker
+  # oc get nodes -L env -l node-role.kubernetes.io/compute # OpenShift 3.11
+
+  oc label node <node-name> env=dev
+  oc get nodes -L env -l node-role.kubernetes.io/worker
+
+  oc get dc/<dc-name> -o yaml >dc.yaml
+  # or
+  oc get deployment/<deployment-name> -o yaml >deployment.yaml
+
+
+#+END_SRC
+
+Add the following lines below to the deployment resource, indenting as shown:
+#+BEGIN_EXAMPLE
+  vim file.yaml
+  ...
+    spec:
+      dnsPolicy: ClusterFirst
+      nodeSelector
+        env: dev
+  ...
+#+END_EXAMPLE
+
+Apply the configure
+#+BEGIN_SRC sh
+  oc apply -f ./file.yaml
+#+END_SRC
