@@ -118,7 +118,7 @@ modify, or remove a node selector annotation:
   oc annotate namespace <project-name> \
      openshift.io/node-selector="<label-name>" --overwrite
 #+END_SRC
-** Example
+** Controlling Pod Scheduling Behavior (Example)
 #+BEGIN_SRC sh
   oc get nodes -L env -l node-role.kubernetes.io/worker
   # oc get nodes -L env -l node-role.kubernetes.io/compute # OpenShift 3.11
@@ -148,3 +148,99 @@ Apply the configure
 #+BEGIN_SRC sh
   oc apply -f ./file.yaml
 #+END_SRC
+* Limiting Resource Usage
+** Defining Resource Requests and Limits for Pods
+A pod definition can include both resource requests and resource limits:
+
+- Resource requests :: Used for scheduling, and to indicate that a pod is not
+     able to run with less than the specified amount of compute resources. The
+     scheduler tries to find a node with sufficient compute resources to satisfy
+     the pod
+- Resource limits :: Used to prevent a pod from using up all compute resources
+     from a node. The node that runs a pod configures the Linux kernel cgroups
+     feature to enforce the resource limits for the pod.
+
+Resource request and resource limits should be defined for each container in
+either a deployment or a deployment configuration resource. [fn:1]
+If requests and limits have not been defined, then you will find a *resources:
+{}* line for each container.
+
+Modify the *resources: {}* line to specify the desired requests and or limits.
+For example:
+#+BEGIN_EXAMPLE
+  spec:
+    resources:
+      requests:
+        cpu: "10m"
+        memory: 20Mi
+      limits:
+        cpu: "80m"
+        memory: 100Mi
+#+END_EXAMPLE
+
+You can use the *oc set resources* command to specify resource requests and
+limits:
+#+BEGIN_SRC sh
+  oc set resource dc/${dc-name} \
+     --requests=cpu=10m,memory=20Mi --limit=cpu=80m,memory=100Mi
+#+END_SRC
+** Viewing Requests, Limits, and Actual Usage
+The *oc describe node* command displays detailed information
+about a node, including information about the pods running on the node. For each pod, it shows
+CPU requests and limits, as well as memory requests and limits. If a request or limit has not been
+specified, then the pod will show a 0 for that column. A summary of all resource requests and limits
+is also displayed.
+#+BEGIN_EXAMPLE
+  # oc describe node <node-name>
+  ...output omitted...
+  Non-terminated Pods:                      (14 in total)
+    Namespace                               Name                           CPU Requests  CPU Limits  Memory Requests  Memory Limits  AGE
+    ---------                               ----                           ------------  ----------  ---------------  -------------  ---
+    openshift-cluster-node-tuning-operator  tuned-l976d                    10m (0%)      0 (0%)      50Mi (0%)        0 (0%)         130m
+    openshift-dns                           dns-default-znkd5              110m (3%)     0 (0%)      70Mi (0%)        512Mi (3%)     31h
+    openshift-image-registry                node-ca-chm52                  10m (0%)      0 (0%)      10Mi (0%)        0 (0%)         31h
+  ...
+    Resource                    Requests     Limits
+    --------                    --------     ------
+    cpu                         2470m (70%)  0 (0%)
+    memory                      970Mi (6%)   512Mi (3%)
+    ephemeral-storage           0 (0%)       0 (0%)
+    attachable-volumes-aws-ebs  0            0
+  ...output omitted...
+#+END_EXAMPLE
+
+The *oc describe node* command displays requests and limits, and the *oc adm top* command
+shows actual usage.
+#+BEGIN_SRC sh
+  oc adm top nodes -l node-role.kubernetes.io/worker
+#+END_SRC
+** Applying Quotas
+OpenShift Container Platform can enforce quotas that track and limit the use of two kinds of
+resources:
+
+- Object count :: The number of Kubernetes resources, such as pods, services,
+                  and routes.
+- Compute resources :: The number of physical or virtual hardware resources,
+     such as CPU, memory, and storage capacity.
+
+Imposing a quota on the number of Kubernetes resources improves the stability of the OpenShift
+control plane, by avoiding unbounded growth of the Etcd database. Quotas on Kubernetes
+resources also avoids exhausting other limited software resources, such as IP addresses for
+services.
+
+In a similar way, imposing a quota on the amount of compute resources avoids exhausting the
+compute capacity of a single node in an OpenShift cluster. It also avoids having one application
+starve other applications in a shared cluster by using all the cluster capacity.
+
+OpenShift manages quotas for the number of resources and the use of compute resources in a
+cluster by using a *ResourceQuota* resource, or a *quota*. A quota specifies hard resource usage
+limits for a project. All attributes of a quota are optional, meaning that any resource that is not
+restricted by a quota can be consumed without bounds.
+
+* Footnotes
+
+[fn:1] A deployment in OpenShift is a replication controller based on a user
+defined template called a deployment configuration. Deployments are created
+manually or in response to triggered events. /DeploymentConfigs/ will create the
+/service/, but /Deployment/ not.
+
