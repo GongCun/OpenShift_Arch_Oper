@@ -237,6 +237,105 @@ cluster by using a *ResourceQuota* resource, or a *quota*. A quota specifies har
 limits for a project. All attributes of a quota are optional, meaning that any resource that is not
 restricted by a quota can be consumed without bounds.
 
+| Resource Name              | Quota Description                                                         |
+|----------------------------+---------------------------------------------------------------------------|
+| pods                       | total number of pods                                                      |
+| replicationcontrollers     | total number of replication controllers                                   |
+| services                   | total number of services                                                  |
+| secrets                    | total number of secrets                                                   |
+| persistentvolumeclaims     | total number of persistent volume claims                                  |
+| cpu (requests.cpu)         | total CPU use across all containers                                       |
+| memory (requests.memory)   | total memory use across all containers                                    |
+| storage (requests.storage) | total storage requests by containers across all persistent volume claims  |
+|                            |                                                                           |
+
+Quota attributes can track either rescues requests and resource limits, for
+example: *Gi* means GiB, and *m* means millicores. One millicore is equivalent
+to 1/1000 of a single CPU core.
+
+The following listing shows a *ResourceQuota* resource defined using YAML
+syntax. This example specified quotas for both the number of resources and the
+use of computer resources:
+#+BEGIN_EXAMPLE
+  apiVersion: v1
+  kind: ResourceQuota
+  metadata:
+    name: dev-quota
+  spec:
+    hard:
+      services: "10"
+      cpu: "1300m"
+      memory: "1.5Gi"
+#+END_EXAMPLE
+
+Resource quotas can be created in the same way as any other OpenShift resource,
+that is, by passing a YAML or JSON resource definition file to the *oc create*
+command:
+#+BEGIN_SRC sh
+  oc create --save-config -f file.yaml
+#+END_SRC
+About the /--save-config/ option:
+#+BEGIN_EXAMPLE
+  --save-config=false: If true, the configuration of current object will be saved
+  in its annotation. Otherwise, the annotation will be unchanged. This flag is
+  useful when you want to perform kubectl apply on this object in the future.
+
+#+END_EXAMPLE
+
+Use the *oc get resourcequota* command to list available quotas, and use the *oc describe*
+*resourcequota* command to view usage statistics related to any hard limits defined in the quota,
+for example:
+#+BEGIN_EXAMPLE
+  $ oc get resourcequota
+  NAME        CREATED AT
+  dev-quota   2020-03-30T02:44:42Z
+
+#+END_EXAMPLE
+
+Without arguments, the *oc describe quota* command displays the cumulative limits set for all
+*ResourceQuota* resources in the project.
+#+BEGIN_EXAMPLE
+  $ oc describe quota
+  Name:       dev-quota
+  Namespace:  schedule-limit
+  Resource    Used  Hard
+  --------    ----  ----
+  cpu         100m  1300m
+  memory      20Mi  1536Mi
+  services    0     10
+
+#+END_EXAMPLE
+
+An active quota can be deleted by name using the *oc delete* command:
+#+BEGIN_SRC sh
+  oc delete resourcequota <quota-name>
+#+END_SRC
+
+When a quota is first created in a project, the project restricts the ability to
+create any new resource that might violate After a quota is created and usage
+statistics are up-to-date, the project accepts the creation of new content. When
+a new resource is created, the quota usage is incremented immediately. When a
+resource is deleted, the quota use is decremented during the next full
+recalculation of quota statistics for the project.
+
+Quotas are applied to new resources, but the do not affect existing resources.
+For example, if you create a quota to limit a project to 15 pods, but there are
+already 20 pods running, then the quota will not remove the additional 5 pods
+that exceed the quota.
+
+*Important* - *ResourceQuota* constrains are applied for the project as a whole,
+ but many OpenShift processes, such as builds and deployments, create pods
+ inside the project and might fail because starting them would exceed the
+ project quota.
+
+If a modification to a project exceeds the quota for a resource count, then the action is denied by
+the server and an appropriate error message is returned to the user. However, if the modification
+exceeds the quota for a compute resource, then the operation does not fail immediately;
+OpenShift retries the operation several times, giving the administrator an opportunity to increase
+the quota or to perform another corrective action, such as bringing a new node
+online.
+
+*Important* - 
 * Footnotes
 
 [fn:1] A deployment in OpenShift is a replication controller based on a user
