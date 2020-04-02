@@ -335,7 +335,94 @@ OpenShift retries the operation several times, giving the administrator an oppor
 the quota or to perform another corrective action, such as bringing a new node
 online.
 
-*Important* - 
+*Important* - If a quota that restricts usage of compute resources for a project
+ is set, then OpenShift refuses to create pods that do not specify resource
+ requests or resource limits for that compute resources. To use most templates
+ and builders with a project restricted by quotas, the project must also contain
+ a limit range resource that specified default values for container resource requests.
+** Applying Limit Ranges
+A *LimitRange* resource, also called a *limit*, defines the default, minimum,
+and maximum values for compute resource requests, and limits for a single pod or
+for a single container defined inside the project. *A resource requests or limit*
+*for a pod is the sum of its container*.
+
+To understand the difference between a limit range and a resource quota,
+consider that a limit range defines valid ranges and default values for a single
+pod, and a resource quota defines only top values for the sum of all pods in a
+project. A cluster administrator concerned about resource usage in an OpenShift
+cluster usually defines both limits and quotas for a project.
+
+A limit range resource can also define default, minimum, and maximum values for
+the storage capacity requested by an image, image stream, or persistent volume
+claim. If a resource that is added to a project does not provide a computer
+resource request, then it takes the default value provided by the limit ranges
+for the project. *If a new resource provides computer resource requests or
+limits that are smaller than the minimum specified by the project limit range,
+then the resource is not created. In a similar way, if a new resource provides
+computer resource or limits that are higher than the maximum specified by the
+project limit ranges, then the resource is not created.
+
+The following table describe some of the compute resources that can be specified
+by a limit range resource.
+
+| Type      | Resource Name | Description                                                                   |
+|-----------+---------------+-------------------------------------------------------------------------------|
+| Container | cpu           | minimum and maximum CPU per container                                         |
+|           | memory        | minimum and maximum memory per container                                      |
+|-----------+---------------+-------------------------------------------------------------------------------|
+| Pod       | cpu           | minimum and maximum CPU per pod                                               |
+|           | memory        | minimum and maximum memory per pod                                            |
+|-----------+---------------+-------------------------------------------------------------------------------|
+| Image     | storage       | maximum size of an image that can be pushed to the internal registry          |
+|-----------+---------------+-------------------------------------------------------------------------------|
+| PVC       | storage       | minimum and maximum capacity of the volume that can be requested by one claim |
+|           |               |                                                                               |
+
+The following listing shows a limit range defined using YAML syntax:
+#+begin_example
+  apiVersion: "v1"
+  kind: "LimitRange"
+  metadata:
+    name: "dev-limits"
+    spec:
+      limits:
+        - type: "Pod"
+          max:
+            cpu: "500m"
+            memory: "750Mi"
+          min:
+            cpu: "10m"
+            memory: "5Mi"
+        - type: "Container"
+          default:
+            cpu: "100m"
+            memory: "100Mi"
+          max:
+            cpu: "500m"
+            memory: "750Mi"
+          min:
+            cpu: "10m"
+            memory: "5Mi"
+#+end_example
+
+Passing a YAML or JSON resource definition file to the *oc create* command:
+#+BEGIN_SRC sh
+  oc create --save-config -f dev-limits.yaml
+#+END_SRC
+
+OpenShift 4.2 does not provide an *oc create* command specifically for limit
+ranges like it does for resource quotas. The only alternative is to use YAML or
+JSON files.
+
+Use the *oc describe limitrange* to view the limit constrains enforced in a
+project.
+#+BEGIN_SRC sh
+  oc describe limitrange dev-limits
+#+END_SRC
+An active limit range can be deleted by name with the *oc delete* command:
+#+BEGIN_SRC sh
+  oc delete limitrange dev-limits
+#+END_SRC
 * Footnotes
 
 [fn:1] A deployment in OpenShift is a replication controller based on a user
