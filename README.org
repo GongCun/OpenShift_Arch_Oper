@@ -6,3 +6,5 @@ https://gongcun.github.io/OpenShift_Arch_Oper/openshift_install.html
 https://gongcun.github.io/OpenShift_Arch_Oper/openshift_arch_oper.html
 * Containers, Kubernetes, and Administration
 https://gongcun.github.io/OpenShift_Arch_Oper/presentation.html
+* About the DevOps
+https://gongcun.github.io/OpenShift_Arch_Oper/presentation_cn
