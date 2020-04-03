@@ -209,7 +209,7 @@ The following diagram shows all of the pieces involved with external access:
 ** What is [[https://github.com/GongCun/Pentomino/tree/map][PuzzleBrain]]?
 
    PuzzleBrain is a distributed system based on DLX algorithm and MapReduce
-   architecture.
+   architecture. More detail can see [[http://gcwordpress.site/?p=2545][here]].
 
    #+CAPTION: Puzzler solution with MapReduce
    [[./shape-mapreduce.png]]
@@ -243,9 +243,8 @@ Test the /puzzler/
 
 *** Prepare the docker image
 #+BEGIN_EXAMPLE
-  $ docker login registry.redhat.io
-  Username: itd@bocmacau.com
-  Password:
+  $ source /opt/presentation/config
+  $ docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} registry.redhat.io
   Login Succeeded
 
   $ view /etc/containers/registries.conf
@@ -254,6 +253,7 @@ Test the /puzzler/
 
   $ docker search --filter is-official=true --limit=3 rhel7
   $ docker pull registry.redhat.io/rhel7
+  $ docker images | grep rhel7 | grep latest
 #+END_EXAMPLE
 
 *** The Dockerfile
@@ -276,12 +276,12 @@ Test the /puzzler/
 *** Building & testing the docker images
 #+BEGIN_SRC sh
   cp -p ./puzzler ./root && strip -s root/puzzler
-  docker build -t demo-puzzle:v1 .
+  docker build -t demo-puzzle .
 #+END_SRC
 
 Test the docker functions
 #+BEGIN_SRC sh
-  docker run -dit --name=demo-puzzle-test -p 3001:3001 demo-puzzle:v1
+  docker run -dit --name=demo-puzzle-test -p 3001:3001 demo-puzzle
   # Follow the container logs
   docker container logs --follow <container>
   # In the host
@@ -306,10 +306,10 @@ Stop & clean the docker images
   Port:              5000-tcp  5000/TCP
 
   $ oc new-project demo
-  $ docker tag demo-puzzle:v1 172.30.151.202:5000/demo/demo-puzzle:v1
+  $ docker tag demo-puzzle 172.30.151.202:5000/demo/demo-puzzle
   $ docker login -p `oc whoami -t` -u system 172.30.151.202:5000
-  $ docker push 172.30.151.202:5000/demo/demo-puzzle:v1
-  $ oc new-app demo/demo-puzzle:v1 --name=mypuzzle
+  $ docker push 172.30.151.202:5000/demo/demo-puzzle
+  $ oc new-app demo/demo-puzzle --name=mypuzzle
 
 #+END_EXAMPLE
 
@@ -327,6 +327,9 @@ Follow the pods log
   $ oc get pods
   $ oc logs -f <pod>
 #+end_example
+
+/See this link for the full application/ -
+http://puzzlebrain.apps.myopenshift.com/
 
 
 * Creating Applications with Source-to-Image
@@ -402,7 +405,7 @@ Push the source code to GitHub
 To using the Builder Image with OpenShift, upload the image to an external image
 registry such as quay.io:
 #+BEGIN_SRC sh
-  docker tag simple-http-server quay.io/gongcun/simple-http-serve
+  docker tag simple-http-server quay.io/gongcun/simple-http-server
   docker login -u gongcun quay.io
   docker push quay.io/gongcun/simple-http-server
 #+END_SRC
@@ -536,6 +539,9 @@ The components of /To-Do-List/
      # Creating application
      $ oc process -f ./todo-template.yaml \
           -p QUAY_USER=gongcun | oc create -f -
+     pod/mysql created
+     pod/todoapi created
+     service/todoapi created
 
      # Check the status
      $ watch oc get pods
@@ -582,42 +588,42 @@ most applications should fall into the =Burstable= tier.
 
 Define the resource limits:
 #+begin_src sh
-  oc set resources dc/php-helloworld \
-     --requests=cpu=100m,memory=128Mi \
-     --limits=cpu=1000m,memory=1024Mi
+  oc set resources dc/s2i-test \
+     --requests=cpu=10m,memory=32Mi \
+     --limits=cpu=100m,memory=128Mi
 #+end_src
 
 Check the resource limits:
 #+begin_example
-  $ oc describe dc/php-helloworld
+  $ oc describe dc/s2i-test
   ...
       Limits:
-        cpu:      1
-        memory:   1Gi
+        cpu:      100m
+        memory:   128Mi
       Requests:
-        cpu:              100m
-        memory:           128Mi
+        cpu:      10m
+        memory:   32Mi
 
 #+end_example
 
 Define the horizontal pod autoscaler (HPA)
 #+begin_src sh
-  oc autoscale dc/php-helloworld --min 1 --max 4 --cpu-percent=20
-  watch oc get hpa/php-helloworld
-  oc describe hpa/php-helloworld
+  oc autoscale dc/s2i-test --min 1 --max 4 --cpu-percent=20
+  watch oc get hpa/s2i-test
+  oc describe hpa/s2i-test
 #+end_src
 
 Do the apache benchmark with *ab* command
 #+begin_src sh
-  ab -n 1000000 -c 500 \
-     http://php-helloworld-demo.apps.myopenshift.com/
+  ab -n 100000 -c 100 \
+     http://s2i.apps.myopenshift.com/
   # -n: the total number of HTTP requests
   # -c: the number of concurrent requests
 #+end_src
 
 Monitor the auto-scaling
 #+begin_src sh
-  watch oc get pods -l app=php-helloworld
+  watch oc get pods -l app=s2i-test
 #+end_src
 
 Monitor the performance by Prometheus grafana
@@ -658,12 +664,16 @@ No user exists for uid 1000430000
 
 #+END_EXAMPLE
 
-Create a new service account and add the anyuid security context constraints
+Create a new service account and add the *anyuid* security context constraints
 (*SCC*) to it.
 #+begin_example
-  oc create sa gitlab-sa
-  oc adm policy add-scc-to-user anyuid -z gitlab-sa
+  $ oc get dc gitlab -o go-template='{{.spec.template.spec.serviceAccount}}{{"\n"}}'
+  <no value>
 
+  $ oc create sa gitlab-sa
+  $ oc adm policy add-scc-to-user anyuid -z gitlab-sa
+  $ oc describe scc anyuid | grep Users:
+  ...,system:serviceaccount:demo:gitlab-sa
 #+end_example
 
 Modify the gitlab application so that it uses the newly created service account.

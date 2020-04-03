@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-04-03 周五 07:59 -->
+<!-- 2020-04-03 週五 13:44 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>OpenShift Practice</title>
@@ -161,6 +161,19 @@
   .footdef  { margin-bottom: 1em; }
   .figure { padding: 1em; }
   .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
   .inlinetask {
     padding: 10px;
     border: 2px solid gray;
@@ -185,7 +198,7 @@
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2018 Free Software Foundation, Inc.
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -256,64 +269,64 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orge33505e">1. Overview</a>
+<li><a href="#org5a056cb">1. Overview</a>
 <ul>
-<li><a href="#orge303255">1.1. Kubernetes &amp; OpenShift</a></li>
-<li><a href="#org778eff2">1.2. DevOps</a></li>
+<li><a href="#org7e6e955">1.1. Kubernetes &amp; OpenShift</a></li>
+<li><a href="#org6f74441">1.2. DevOps</a></li>
 </ul>
 </li>
-<li><a href="#org9461bc1">2. Networking</a>
+<li><a href="#org6013505">2. Networking</a>
 <ul>
-<li><a href="#orga028927">2.1. Overview</a></li>
-<li><a href="#orge1d2652">2.2. SDN Flows Inside Nodes</a></li>
+<li><a href="#org2679903">2.1. Overview</a></li>
+<li><a href="#org64eb78c">2.2. SDN Flows Inside Nodes</a></li>
 </ul>
 </li>
-<li><a href="#orge91bf66">3. Move Existing Application to OpenShift</a>
+<li><a href="#orgd3e53c7">3. Move Existing Application to OpenShift</a>
 <ul>
-<li><a href="#org96ce384">3.1. What is PuzzleBrain?</a></li>
-<li><a href="#org717cc91">3.2. Migrate the PuzzleBrain to OpenShift</a>
+<li><a href="#org99db3cc">3.1. What is PuzzleBrain?</a></li>
+<li><a href="#org74a8e53">3.2. Migrate the PuzzleBrain to OpenShift</a>
 <ul>
-<li><a href="#org865f074">3.2.1. Prepare the docker image</a></li>
-<li><a href="#org65aa647">3.2.2. The Dockerfile</a></li>
-<li><a href="#org1f71d8b">3.2.3. Building &amp; testing the docker images</a></li>
-<li><a href="#org2a79741">3.2.4. Running the docker images on OpenShift</a></li>
+<li><a href="#org9ea3f5e">3.2.1. Prepare the docker image</a></li>
+<li><a href="#org223b63e">3.2.2. The Dockerfile</a></li>
+<li><a href="#orge7a1103">3.2.3. Building &amp; testing the docker images</a></li>
+<li><a href="#org01b8a0d">3.2.4. Running the docker images on OpenShift</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orga717162">4. Creating Applications with Source-to-Image</a>
+<li><a href="#orgfd489f1">4. Creating Applications with Source-to-Image</a>
 <ul>
-<li><a href="#orgc6f7f03">4.1. Creating an S2I Builder Image</a></li>
-<li><a href="#org5ca791b">4.2. Trigger new deployment</a></li>
-<li><a href="#org757e162">4.3. Image Streams</a></li>
+<li><a href="#orga6e3841">4.1. Creating an S2I Builder Image</a></li>
+<li><a href="#org356b374">4.2. Trigger new deployment</a></li>
+<li><a href="#orgdcd5e7d">4.3. Image Streams</a></li>
 </ul>
 </li>
-<li><a href="#orgc40b6a3">5. Creating an Application with a Template</a>
+<li><a href="#orgbf5de49">5. Creating an Application with a Template</a>
 <ul>
-<li><a href="#org5d42775">5.1. What Is an Application Template?</a></li>
-<li><a href="#org87e79de">5.2. Benefits of Using Templates</a></li>
-<li><a href="#orgefe4ad5">5.3. Using <i>To-Do-List</i> Application Template</a></li>
-<li><a href="#orgd2813d4">5.4. Parameters</a></li>
-<li><a href="#orgf46a2f1">5.5. Creating with a Template</a></li>
+<li><a href="#orgb499456">5.1. What Is an Application Template?</a></li>
+<li><a href="#orgd6deb40">5.2. Benefits of Using Templates</a></li>
+<li><a href="#org8ff5001">5.3. Using <i>To-Do-List</i> Application Template</a></li>
+<li><a href="#org75d8f93">5.4. Parameters</a></li>
+<li><a href="#org5faa847">5.5. Creating with a Template</a></li>
 </ul>
 </li>
-<li><a href="#orgfc9d14b">6. Automatically scaling pods</a></li>
-<li><a href="#org30a2091">7. Other</a>
+<li><a href="#orgf506e14">6. Automatically scaling pods</a></li>
+<li><a href="#orgc89eb06">7. Other</a>
 <ul>
-<li><a href="#orgf5af67a">7.1. Create the GitLab</a></li>
-<li><a href="#org34a1077">7.2. Debug the problem</a></li>
+<li><a href="#org020ba76">7.1. Create the GitLab</a></li>
+<li><a href="#org10903a0">7.2. Debug the problem</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orge33505e" class="outline-2">
-<h2 id="orge33505e"><span class="section-number-2">1</span> Overview</h2>
+<div id="outline-container-org5a056cb" class="outline-2">
+<h2 id="org5a056cb"><span class="section-number-2">1</span> Overview</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-orge303255" class="outline-3">
-<h3 id="orge303255"><span class="section-number-3">1.1</span> Kubernetes &amp; OpenShift</h3>
+<div id="outline-container-org7e6e955" class="outline-3">
+<h3 id="org7e6e955"><span class="section-number-3">1.1</span> Kubernetes &amp; OpenShift</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 <a href="https://en.wikipedia.org/wiki/Kubernetes"><b>Kubernetes</b></a> (commonly stylized as <b>k8s</b>, refer to <a href="https://en.wikipedia.org/wiki/Cybernetics:_Or_Control_and_Communication_in_the_Animal_and_the_Machine"><i>Cybernetics</i></a>) is an open-source
@@ -401,8 +414,8 @@ which can be used by OpenShift <i>masters</i> to schedule and control containers
 </div>
 </div>
 
-<div id="outline-container-org778eff2" class="outline-3">
-<h3 id="org778eff2"><span class="section-number-3">1.2</span> DevOps</h3>
+<div id="outline-container-org6f74441" class="outline-3">
+<h3 id="org6f74441"><span class="section-number-3">1.2</span> DevOps</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 <b>DevOps</b> is concerned with aligning the constituents in the software delivery
@@ -452,12 +465,12 @@ DevOps = CI/CD
 </div>
 
 
-<div id="outline-container-org9461bc1" class="outline-2">
-<h2 id="org9461bc1"><span class="section-number-2">2</span> Networking</h2>
+<div id="outline-container-org6013505" class="outline-2">
+<h2 id="org6013505"><span class="section-number-2">2</span> Networking</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-orga028927" class="outline-3">
-<h3 id="orga028927"><span class="section-number-3">2.1</span> Overview</h3>
+<div id="outline-container-org2679903" class="outline-3">
+<h3 id="org2679903"><span class="section-number-3">2.1</span> Overview</h3>
 <div class="outline-text-3" id="text-2-1">
 <dl class="org-dl">
 <dt>Cluster</dt><dd>The set of machines in the cluster. i.e. the Masters and the Nodes.</dd>
@@ -503,8 +516,8 @@ The following diagram shows all of the pieces involved with external access:
 </div>
 </div>
 
-<div id="outline-container-orge1d2652" class="outline-3">
-<h3 id="orge1d2652"><span class="section-number-3">2.2</span> SDN Flows Inside Nodes</h3>
+<div id="outline-container-org64eb78c" class="outline-3">
+<h3 id="org64eb78c"><span class="section-number-3">2.2</span> SDN Flows Inside Nodes</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 OpenShift SDN creates and configures three network devices:
@@ -589,16 +602,16 @@ Pod to external host
 </div>
 
 
-<div id="outline-container-orge91bf66" class="outline-2">
-<h2 id="orge91bf66"><span class="section-number-2">3</span> Move Existing Application to OpenShift</h2>
+<div id="outline-container-orgd3e53c7" class="outline-2">
+<h2 id="orgd3e53c7"><span class="section-number-2">3</span> Move Existing Application to OpenShift</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-org96ce384" class="outline-3">
-<h3 id="org96ce384"><span class="section-number-3">3.1</span> What is <a href="https://github.com/GongCun/Pentomino/tree/map">PuzzleBrain</a>?</h3>
+<div id="outline-container-org99db3cc" class="outline-3">
+<h3 id="org99db3cc"><span class="section-number-3">3.1</span> What is <a href="https://github.com/GongCun/Pentomino/tree/map">PuzzleBrain</a>?</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 PuzzleBrain is a distributed system based on DLX algorithm and MapReduce
-architecture.
+architecture. More detail can see <a href="http://gcwordpress.site/?p=2545">here</a>.
 </p>
 
 
@@ -628,9 +641,9 @@ Test the <i>puzzler</i>
 sed -i <span style="color: #2d9574;">'s/^M//g'</span> ./run.sh
 sed -i <span style="color: #2d9574;">'s/^M//g'</span> ./root/*.sh
 
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Server</span>
+# <span style="color: #ffd700; background-color: nil;">Server</span>
 <span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">cd</span> ./test; ncat -4kl <span style="color: #a45bad;">3001</span> -c ../run.sh<span style="color: #4f97d7;">)</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Client</span>
+# <span style="color: #ffd700; background-color: nil;">Client</span>
 <span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">cd</span> ./test; ../puzzler -m -b8 -s <span style="color: #a45bad;">127.0.0.1</span> -p <span style="color: #a45bad;">3001</span><span style="color: #4f97d7;">)</span>
 
 </pre>
@@ -639,8 +652,8 @@ sed -i <span style="color: #2d9574;">'s/^M//g'</span> ./root/*.sh
 </div>
 
 
-<div id="outline-container-org717cc91" class="outline-3">
-<h3 id="org717cc91"><span class="section-number-3">3.2</span> Migrate the PuzzleBrain to OpenShift</h3>
+<div id="outline-container-org74a8e53" class="outline-3">
+<h3 id="org74a8e53"><span class="section-number-3">3.2</span> Migrate the PuzzleBrain to OpenShift</h3>
 <div class="outline-text-3" id="text-3-2">
 
 <div class="figure">
@@ -650,13 +663,12 @@ sed -i <span style="color: #2d9574;">'s/^M//g'</span> ./root/*.sh
 </div>
 </div>
 
-<div id="outline-container-org865f074" class="outline-4">
-<h4 id="org865f074"><span class="section-number-4">3.2.1</span> Prepare the docker image</h4>
+<div id="outline-container-org9ea3f5e" class="outline-4">
+<h4 id="org9ea3f5e"><span class="section-number-4">3.2.1</span> Prepare the docker image</h4>
 <div class="outline-text-4" id="text-3-2-1">
 <pre class="example">
-$ docker login registry.redhat.io
-Username: itd@bocmacau.com
-Password:
+$ source /opt/presentation/config
+$ docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} registry.redhat.io
 Login Succeeded
 
 $ view /etc/containers/registries.conf
@@ -665,12 +677,13 @@ registries = ["hub.docker.com", "registry.redhat.io", "docker.io"]
 
 $ docker search --filter is-official=true --limit=3 rhel7
 $ docker pull registry.redhat.io/rhel7
+$ docker images | grep rhel7 | grep latest
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org65aa647" class="outline-4">
-<h4 id="org65aa647"><span class="section-number-4">3.2.2</span> The Dockerfile</h4>
+<div id="outline-container-org223b63e" class="outline-4">
+<h4 id="org223b63e"><span class="section-number-4">3.2.2</span> The Dockerfile</h4>
 <div class="outline-text-4" id="text-3-2-2">
 <p>
 A Dockerfile is a text document that defines how an image should be created.
@@ -692,12 +705,12 @@ CMD ["/puzzle-entry.sh"]
 </div>
 </div>
 
-<div id="outline-container-org1f71d8b" class="outline-4">
-<h4 id="org1f71d8b"><span class="section-number-4">3.2.3</span> Building &amp; testing the docker images</h4>
+<div id="outline-container-orge7a1103" class="outline-4">
+<h4 id="orge7a1103"><span class="section-number-4">3.2.3</span> Building &amp; testing the docker images</h4>
 <div class="outline-text-4" id="text-3-2-3">
 <div class="org-src-container">
 <pre class="src src-sh">cp -p ./puzzler ./root &amp;&amp; strip -s root/puzzler
-docker build -t demo-puzzle:v1 .
+docker build -t demo-puzzle .
 </pre>
 </div>
 
@@ -705,10 +718,10 @@ docker build -t demo-puzzle:v1 .
 Test the docker functions
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">docker run -dit --name=demo-puzzle-test -p <span style="color: #a45bad;">3001:3001</span> demo-puzzle:v1
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Follow the container logs</span>
+<pre class="src src-sh">docker run -dit --name=demo-puzzle-test -p <span style="color: #a45bad;">3001:3001</span> demo-puzzle
+# <span style="color: #ffd700; background-color: nil;">Follow the container logs</span>
 docker container logs --follow &lt;container&gt;
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">In the host</span>
+# <span style="color: #ffd700; background-color: nil;">In the host</span>
 <span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">cd</span> ./test; ../puzzler -m -b8 -s <span style="color: #a45bad;">127.0.0.1</span> -p <span style="color: #a45bad;">3001</span><span style="color: #4f97d7;">)</span>
 
 </pre>
@@ -719,7 +732,7 @@ Stop &amp; clean the docker images
 </p>
 <div class="org-src-container">
 <pre class="src src-sh">docker stop &lt;container&gt;
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">or</span>
+# <span style="color: #ffd700; background-color: nil;">or</span>
 docker container kill &lt;container&gt;
 docker rm &lt;container&gt;
 </pre>
@@ -727,8 +740,8 @@ docker rm &lt;container&gt;
 </div>
 </div>
 
-<div id="outline-container-org2a79741" class="outline-4">
-<h4 id="org2a79741"><span class="section-number-4">3.2.4</span> Running the docker images on OpenShift</h4>
+<div id="outline-container-org01b8a0d" class="outline-4">
+<h4 id="org01b8a0d"><span class="section-number-4">3.2.4</span> Running the docker images on OpenShift</h4>
 <div class="outline-text-4" id="text-3-2-4">
 <pre class="example">
 $ oc describe svc/docker-registry -n default
@@ -738,10 +751,10 @@ IP:                172.30.151.202
 Port:              5000-tcp  5000/TCP
 
 $ oc new-project demo
-$ docker tag demo-puzzle:v1 172.30.151.202:5000/demo/demo-puzzle:v1
+$ docker tag demo-puzzle 172.30.151.202:5000/demo/demo-puzzle
 $ docker login -p `oc whoami -t` -u system 172.30.151.202:5000
-$ docker push 172.30.151.202:5000/demo/demo-puzzle:v1
-$ oc new-app demo/demo-puzzle:v1 --name=mypuzzle
+$ docker push 172.30.151.202:5000/demo/demo-puzzle
+$ oc new-app demo/demo-puzzle --name=mypuzzle
 
 </pre>
 
@@ -763,14 +776,19 @@ Follow the pods log
 $ oc get pods
 $ oc logs -f &lt;pod&gt;
 </pre>
+
+<p>
+<i>See this link for the full application</i> -
+<a href="http://puzzlebrain.apps.myopenshift.com/">http://puzzlebrain.apps.myopenshift.com/</a>
+</p>
 </div>
 </div>
 </div>
 </div>
 
 
-<div id="outline-container-orga717162" class="outline-2">
-<h2 id="orga717162"><span class="section-number-2">4</span> Creating Applications with Source-to-Image</h2>
+<div id="outline-container-orgfd489f1" class="outline-2">
+<h2 id="orgfd489f1"><span class="section-number-2">4</span> Creating Applications with Source-to-Image</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 The Source-to-Image (S2I) tool implements a mechanism to take application source
@@ -795,8 +813,8 @@ Detail see <a href="https://github.com/openshift/source-to-image/tree/release-3.
 </p>
 </div>
 
-<div id="outline-container-orgc6f7f03" class="outline-3">
-<h3 id="orgc6f7f03"><span class="section-number-3">4.1</span> Creating an S2I Builder Image</h3>
+<div id="outline-container-orga6e3841" class="outline-3">
+<h3 id="orga6e3841"><span class="section-number-3">4.1</span> Creating an S2I Builder Image</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 As an S2I builder is a container image, you can create your own custom builder
@@ -868,7 +886,7 @@ To using the Builder Image with OpenShift, upload the image to an external image
 registry such as quay.io:
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">docker tag simple-http-server quay.io/gongcun/simple-http-serve
+<pre class="src src-sh">docker tag simple-http-server quay.io/gongcun/simple-http-server
 docker login -u gongcun quay.io
 docker push quay.io/gongcun/simple-http-server
 </pre>
@@ -901,8 +919,8 @@ The expose the service:
 </div>
 </div>
 
-<div id="outline-container-org5ca791b" class="outline-3">
-<h3 id="org5ca791b"><span class="section-number-3">4.2</span> Trigger new deployment</h3>
+<div id="outline-container-org356b374" class="outline-3">
+<h3 id="org356b374"><span class="section-number-3">4.2</span> Trigger new deployment</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
 CI/CD: <i>git commit</i> \(\rightarrow\) <i>git push</i> \(\rightarrow\) <i>oc start-build</i>
@@ -945,8 +963,8 @@ $ oc logs -f bc/s2i-test
 </div>
 </div>
 
-<div id="outline-container-org757e162" class="outline-3">
-<h3 id="org757e162"><span class="section-number-3">4.3</span> Image Streams</h3>
+<div id="outline-container-orgdcd5e7d" class="outline-3">
+<h3 id="orgdcd5e7d"><span class="section-number-3">4.3</span> Image Streams</h3>
 <div class="outline-text-3" id="text-4-3">
 <p>
 OpenShift deploys new versions of user applications into pods quickly. To create
@@ -982,12 +1000,12 @@ $ oc expose --name php-helloworld svc/php-helloworld
 </div>
 </div>
 </div>
-<div id="outline-container-orgc40b6a3" class="outline-2">
-<h2 id="orgc40b6a3"><span class="section-number-2">5</span> Creating an Application with a Template</h2>
+<div id="outline-container-orgbf5de49" class="outline-2">
+<h2 id="orgbf5de49"><span class="section-number-2">5</span> Creating an Application with a Template</h2>
 <div class="outline-text-2" id="text-5">
 </div>
-<div id="outline-container-org5d42775" class="outline-3">
-<h3 id="org5d42775"><span class="section-number-3">5.1</span> What Is an Application Template?</h3>
+<div id="outline-container-orgb499456" class="outline-3">
+<h3 id="orgb499456"><span class="section-number-3">5.1</span> What Is an Application Template?</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 A template describes a set of objects that can be parameterized and processed to
@@ -1014,8 +1032,8 @@ OpenShift for user instantiation, also known as application creation.
 </p>
 </div>
 </div>
-<div id="outline-container-org87e79de" class="outline-3">
-<h3 id="org87e79de"><span class="section-number-3">5.2</span> Benefits of Using Templates</h3>
+<div id="outline-container-orgd6deb40" class="outline-3">
+<h3 id="orgd6deb40"><span class="section-number-3">5.2</span> Benefits of Using Templates</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 A template provides developers with an easy way to create all the necessary
@@ -1025,8 +1043,8 @@ underlying technology of the OpenShift platform.
 </p>
 </div>
 </div>
-<div id="outline-container-orgefe4ad5" class="outline-3">
-<h3 id="orgefe4ad5"><span class="section-number-3">5.3</span> Using <i>To-Do-List</i> Application Template</h3>
+<div id="outline-container-org8ff5001" class="outline-3">
+<h3 id="org8ff5001"><span class="section-number-3">5.3</span> Using <i>To-Do-List</i> Application Template</h3>
 <div class="outline-text-3" id="text-5-3">
 
 <div class="figure">
@@ -1045,8 +1063,8 @@ The components of <i>To-Do-List</i>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgd2813d4" class="outline-3">
-<h3 id="orgd2813d4"><span class="section-number-3">5.4</span> Parameters</h3>
+<div id="outline-container-org75d8f93" class="outline-3">
+<h3 id="org75d8f93"><span class="section-number-3">5.4</span> Parameters</h3>
 <div class="outline-text-3" id="text-5-4">
 <p>
 Templates define a set of <i>parameters</i>, which are assigned values. OpenShift
@@ -1064,8 +1082,8 @@ QUAY_USER           Quay namespace the images are stored in
 </pre>
 </div>
 </div>
-<div id="outline-container-orgf46a2f1" class="outline-3">
-<h3 id="orgf46a2f1"><span class="section-number-3">5.5</span> Creating with a Template</h3>
+<div id="outline-container-org5faa847" class="outline-3">
+<h3 id="org5faa847"><span class="section-number-3">5.5</span> Creating with a Template</h3>
 <div class="outline-text-3" id="text-5-5">
 <pre class="example">
 # Login quay.io
@@ -1076,6 +1094,9 @@ Login Succeeded
 # Creating application
 $ oc process -f ./todo-template.yaml \
      -p QUAY_USER=gongcun | oc create -f -
+pod/mysql created
+pod/todoapi created
+service/todoapi created
 
 # Check the status
 $ watch oc get pods
@@ -1091,8 +1112,8 @@ Use browser to open <a href="http://todoapi-demo.apps.myopenshift.com/todo/">htt
 </div>
 </div>
 </div>
-<div id="outline-container-orgfc9d14b" class="outline-2">
-<h2 id="orgfc9d14b"><span class="section-number-2">6</span> Automatically scaling pods</h2>
+<div id="outline-container-orgf506e14" class="outline-2">
+<h2 id="orgf506e14"><span class="section-number-2">6</span> Automatically scaling pods</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 In OpenShift, a resource request is a threshold you can set that affects
@@ -1139,9 +1160,9 @@ most applications should fall into the <code>Burstable</code> tier.
 Define the resource limits:
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">oc set resources dc/php-helloworld <span style="color: #2d9574;">\</span>
-   --requests=<span style="color: #7590db;">cpu</span>=<span style="color: #a45bad;">100m,memory</span>=<span style="color: #a45bad;">128Mi</span> <span style="color: #2d9574;">\</span>
-   --limits=<span style="color: #7590db;">cpu</span>=<span style="color: #a45bad;">1000m,memory</span>=<span style="color: #a45bad;">1024Mi</span>
+<pre class="src src-sh">oc set resources dc/s2i-test <span style="color: #2d9574;">\</span>
+   --requests=<span style="color: #7590db;">cpu</span>=<span style="color: #a45bad;">10m,memory</span>=<span style="color: #a45bad;">32Mi</span> <span style="color: #2d9574;">\</span>
+   --limits=<span style="color: #7590db;">cpu</span>=<span style="color: #a45bad;">100m,memory</span>=<span style="color: #a45bad;">128Mi</span>
 </pre>
 </div>
 
@@ -1149,14 +1170,14 @@ Define the resource limits:
 Check the resource limits:
 </p>
 <pre class="example">
-$ oc describe dc/php-helloworld
+$ oc describe dc/s2i-test
 ...
     Limits:
-      cpu:      1
-      memory:   1Gi
+      cpu:      100m
+      memory:   128Mi
     Requests:
-      cpu:              100m
-      memory:           128Mi
+      cpu:      10m
+      memory:   32Mi
 
 </pre>
 
@@ -1164,9 +1185,9 @@ $ oc describe dc/php-helloworld
 Define the horizontal pod autoscaler (HPA)
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">oc autoscale dc/php-helloworld --min <span style="color: #a45bad;">1</span> --max <span style="color: #a45bad;">4</span> --cpu-percent=<span style="color: #a45bad;">20</span>
-watch oc get hpa/php-helloworld
-oc describe hpa/php-helloworld
+<pre class="src src-sh">oc autoscale dc/s2i-test --min <span style="color: #a45bad;">1</span> --max <span style="color: #a45bad;">4</span> --cpu-percent=<span style="color: #a45bad;">20</span>
+watch oc get hpa/s2i-test
+oc describe hpa/s2i-test
 </pre>
 </div>
 
@@ -1174,10 +1195,10 @@ oc describe hpa/php-helloworld
 Do the apache benchmark with <b>ab</b> command
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">ab -n <span style="color: #a45bad;">1000000</span> -c <span style="color: #a45bad;">500</span> <span style="color: #2d9574;">\</span>
-   http://php-helloworld-demo.apps.myopenshift.com/
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">-n: the total number of HTTP requests</span>
-<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">-c: the number of concurrent requests</span>
+<pre class="src src-sh">ab -n <span style="color: #a45bad;">100000</span> -c <span style="color: #a45bad;">100</span> <span style="color: #2d9574;">\</span>
+   http://s2i.apps.myopenshift.com/
+# <span style="color: #ffd700; background-color: nil;">-n: the total number of HTTP requests</span>
+# <span style="color: #ffd700; background-color: nil;">-c: the number of concurrent requests</span>
 </pre>
 </div>
 
@@ -1185,7 +1206,7 @@ Do the apache benchmark with <b>ab</b> command
 Monitor the auto-scaling
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">watch oc get pods -l <span style="color: #7590db;">app</span>=php-helloworld
+<pre class="src src-sh">watch oc get pods -l <span style="color: #7590db;">app</span>=s2i-test
 </pre>
 </div>
 
@@ -1202,12 +1223,12 @@ Visit <a href="https://grafana-openshift-monitoring.apps.myopenshift.com">https:
 </p>
 </div>
 </div>
-<div id="outline-container-org30a2091" class="outline-2">
-<h2 id="org30a2091"><span class="section-number-2">7</span> Other</h2>
+<div id="outline-container-orgc89eb06" class="outline-2">
+<h2 id="orgc89eb06"><span class="section-number-2">7</span> Other</h2>
 <div class="outline-text-2" id="text-7">
 </div>
-<div id="outline-container-orgf5af67a" class="outline-3">
-<h3 id="orgf5af67a"><span class="section-number-3">7.1</span> Create the GitLab</h3>
+<div id="outline-container-org020ba76" class="outline-3">
+<h3 id="org020ba76"><span class="section-number-3">7.1</span> Create the GitLab</h3>
 <div class="outline-text-3" id="text-7-1">
 <pre class="example">
 $ docker search --limit=3 gitlab-ce
@@ -1220,8 +1241,8 @@ $ oc logs -f dc/gitlab
 </pre>
 </div>
 </div>
-<div id="outline-container-org34a1077" class="outline-3">
-<h3 id="org34a1077"><span class="section-number-3">7.2</span> Debug the problem</h3>
+<div id="outline-container-org10903a0" class="outline-3">
+<h3 id="org10903a0"><span class="section-number-3">7.2</span> Debug the problem</h3>
 <div class="outline-text-3" id="text-7-2">
 <p>
 Review the application logs to confirm that the failure is caused by
@@ -1244,13 +1265,17 @@ No user exists for uid 1000430000
 </pre>
 
 <p>
-Create a new service account and add the anyuid security context constraints
+Create a new service account and add the <b>anyuid</b> security context constraints
 (<b>SCC</b>) to it.
 </p>
 <pre class="example">
-oc create sa gitlab-sa
-oc adm policy add-scc-to-user anyuid -z gitlab-sa
+$ oc get dc gitlab -o go-template='{{.spec.template.spec.serviceAccount}}{{"\n"}}'
+&lt;no value&gt;
 
+$ oc create sa gitlab-sa
+$ oc adm policy add-scc-to-user anyuid -z gitlab-sa
+$ oc describe scc anyuid | grep Users:
+...,system:serviceaccount:demo:gitlab-sa
 </pre>
 
 <p>
@@ -1378,7 +1403,7 @@ Password:
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: 龔存</p>
-<p class="date">Created: 2020-04-03 周五 07:59</p>
+<p class="date">Created: 2020-04-03 週五 13:44</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
