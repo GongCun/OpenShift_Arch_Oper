@@ -258,9 +258,8 @@ Test the /puzzler/
 
 *** The Dockerfile
     A Dockerfile is a text document that defines how an image should be created.
-    Depending on the complexity of the application, the Dockerfile can quickly
-    become verbose and unwieldy. As an example, here is the Dockerfile for the
-    official rhel7 container:
+    Depending on the complexity of the application, here is the Dockerfile for
+    the official rhel7 container:
     #+begin_example
       FROM rhel7:latest
       MAINTAINER Cun Gong <gong_cun@bocmacau.com>
