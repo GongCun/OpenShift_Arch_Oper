@@ -423,6 +423,37 @@ An active limit range can be deleted by name with the *oc delete* command:
 #+BEGIN_SRC sh
   oc delete limitrange dev-limits
 #+END_SRC
+** Applying Quotas to Multiple Projects
+The *ClusterResourceQuota* resource is created at cluster level, in a similar
+way to a persistent volume, and specifies resource constraints that apply to
+multiple projects.
+
+Cluster administrators can specify which projects are subject to cluster
+resource quotas in two ways:
+- Using the *openshift.io/requester* annotation to specify the project owner.
+  All projects with the specified owner are subject to the quota.
+- Using a selector. All projects whose labels match the selector are subject to
+  the quota.
+#+BEGIN_SRC sh
+  oc create clusterquota user-qa \
+     --project-annotation-selector openshift.io/requester=qa \
+     --hard pods=12,secrets=20
+#+END_SRC
+The following is an example of creating a cluster resource quota for all projects that have been
+assigned the *environment=qa* label:
+#+BEGIN_SRC sh
+  oc create clusterquota env-qa \
+     --project-label-selector environment=qa \
+     --hard pods=10,services=5
+#+END_SRC
+Project users can use the *oc describe QUOTA* command to view cluster resource quotas that
+apply to the current project, if any.
+
+Use the *oc delete* command to delete a cluster resource quota:
+#+BEGIN_SRC sh
+  oc delete clusterquota QUOTA
+#+END_SRC
+
 * Footnotes
 
 [fn:1] A deployment in OpenShift is a replication controller based on a user

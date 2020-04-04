@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-04-03 週五 13:44 -->
+<!-- 2020-04-04 周六 20:26 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>OpenShift Practice</title>
@@ -161,19 +161,6 @@
   .footdef  { margin-bottom: 1em; }
   .figure { padding: 1em; }
   .figure p { text-align: center; }
-  .equation-container {
-    display: table;
-    text-align: center;
-    width: 100%;
-  }
-  .equation {
-    vertical-align: middle;
-  }
-  .equation-label {
-    display: table-cell;
-    text-align: right;
-    vertical-align: middle;
-  }
   .inlinetask {
     padding: 10px;
     border: 2px solid gray;
@@ -198,7 +185,7 @@
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2019 Free Software Foundation, Inc.
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -269,64 +256,65 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org5a056cb">1. Overview</a>
+<li><a href="#org1c68bea">1. Overview</a>
 <ul>
-<li><a href="#org7e6e955">1.1. Kubernetes &amp; OpenShift</a></li>
-<li><a href="#org6f74441">1.2. DevOps</a></li>
+<li><a href="#org3ff777d">1.1. Kubernetes &amp; OpenShift</a></li>
+<li><a href="#orgc4b5394">1.2. DevOps</a></li>
 </ul>
 </li>
-<li><a href="#org6013505">2. Networking</a>
+<li><a href="#orgbd0fcf3">2. Networking</a>
 <ul>
-<li><a href="#org2679903">2.1. Overview</a></li>
-<li><a href="#org64eb78c">2.2. SDN Flows Inside Nodes</a></li>
+<li><a href="#org8e8cf67">2.1. Overview</a></li>
+<li><a href="#org8d5d61b">2.2. SDN Flows Inside Nodes</a></li>
 </ul>
 </li>
-<li><a href="#orgd3e53c7">3. Move Existing Application to OpenShift</a>
+<li><a href="#org1a11bb8">3. Move Existing Application to OpenShift</a>
 <ul>
-<li><a href="#org99db3cc">3.1. What is PuzzleBrain?</a></li>
-<li><a href="#org74a8e53">3.2. Migrate the PuzzleBrain to OpenShift</a>
+<li><a href="#org1eaa5ee">3.1. What is PuzzleBrain?</a></li>
+<li><a href="#orge9cda1c">3.2. Migrate the PuzzleBrain to OpenShift</a>
 <ul>
-<li><a href="#org9ea3f5e">3.2.1. Prepare the docker image</a></li>
-<li><a href="#org223b63e">3.2.2. The Dockerfile</a></li>
-<li><a href="#orge7a1103">3.2.3. Building &amp; testing the docker images</a></li>
-<li><a href="#org01b8a0d">3.2.4. Running the docker images on OpenShift</a></li>
+<li><a href="#org86d6d91">3.2.1. What is docker?</a></li>
+<li><a href="#orgee133b1">3.2.2. Prepare the docker image</a></li>
+<li><a href="#orgcecc7d7">3.2.3. The Dockerfile</a></li>
+<li><a href="#org6583362">3.2.4. Building &amp; testing the docker images</a></li>
+<li><a href="#orgb7ba893">3.2.5. Running the docker images on OpenShift</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgfd489f1">4. Creating Applications with Source-to-Image</a>
+<li><a href="#org5b1ba9d">4. Creating Applications with Source-to-Image</a>
 <ul>
-<li><a href="#orga6e3841">4.1. Creating an S2I Builder Image</a></li>
-<li><a href="#org356b374">4.2. Trigger new deployment</a></li>
-<li><a href="#orgdcd5e7d">4.3. Image Streams</a></li>
+<li><a href="#org8fd702f">4.1. Creating an S2I Builder Image</a></li>
+<li><a href="#orgfce21f9">4.2. Trigger new deployment</a></li>
+<li><a href="#orge0fe39a">4.3. Image Streams</a></li>
 </ul>
 </li>
-<li><a href="#orgbf5de49">5. Creating an Application with a Template</a>
+<li><a href="#org22dae73">5. Creating an Application with a Template</a>
 <ul>
-<li><a href="#orgb499456">5.1. What Is an Application Template?</a></li>
-<li><a href="#orgd6deb40">5.2. Benefits of Using Templates</a></li>
-<li><a href="#org8ff5001">5.3. Using <i>To-Do-List</i> Application Template</a></li>
-<li><a href="#org75d8f93">5.4. Parameters</a></li>
-<li><a href="#org5faa847">5.5. Creating with a Template</a></li>
+<li><a href="#orgc5931d1">5.1. What Is an Application Template?</a></li>
+<li><a href="#org6b06621">5.2. Benefits of Using Templates</a></li>
+<li><a href="#org1c94dba">5.3. Using <i>To-Do-List</i> Application Template</a></li>
+<li><a href="#org05610ed">5.4. Parameters</a></li>
+<li><a href="#org565921f">5.5. Creating with a Template</a></li>
 </ul>
 </li>
-<li><a href="#orgf506e14">6. Automatically scaling pods</a></li>
-<li><a href="#orgc89eb06">7. Other</a>
+<li><a href="#org3fae084">6. Automatically scaling pods</a></li>
+<li><a href="#org436a153">7. Other</a>
 <ul>
-<li><a href="#org020ba76">7.1. Create the GitLab</a></li>
-<li><a href="#org10903a0">7.2. Debug the problem</a></li>
+<li><a href="#orgfe1809f">7.1. Create the GitLab</a></li>
+<li><a href="#org102dd80">7.2. Debug the problem</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org5a056cb" class="outline-2">
-<h2 id="org5a056cb"><span class="section-number-2">1</span> Overview</h2>
+<div id="outline-container-org1c68bea" class="outline-2">
+<h2 id="org1c68bea"><span class="section-number-2">1</span> Overview</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org7e6e955" class="outline-3">
-<h3 id="org7e6e955"><span class="section-number-3">1.1</span> Kubernetes &amp; OpenShift</h3>
+<div id="outline-container-org3ff777d" class="outline-3">
+<h3 id="org3ff777d"><span class="section-number-3">1.1</span> Kubernetes &amp; OpenShift</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 <a href="https://en.wikipedia.org/wiki/Kubernetes"><b>Kubernetes</b></a> (commonly stylized as <b>k8s</b>, refer to <a href="https://en.wikipedia.org/wiki/Cybernetics:_Or_Control_and_Communication_in_the_Animal_and_the_Machine"><i>Cybernetics</i></a>) is an open-source
@@ -414,8 +402,8 @@ which can be used by OpenShift <i>masters</i> to schedule and control containers
 </div>
 </div>
 
-<div id="outline-container-org6f74441" class="outline-3">
-<h3 id="org6f74441"><span class="section-number-3">1.2</span> DevOps</h3>
+<div id="outline-container-orgc4b5394" class="outline-3">
+<h3 id="orgc4b5394"><span class="section-number-3">1.2</span> DevOps</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 <b>DevOps</b> is concerned with aligning the constituents in the software delivery
@@ -465,12 +453,12 @@ DevOps = CI/CD
 </div>
 
 
-<div id="outline-container-org6013505" class="outline-2">
-<h2 id="org6013505"><span class="section-number-2">2</span> Networking</h2>
+<div id="outline-container-orgbd0fcf3" class="outline-2">
+<h2 id="orgbd0fcf3"><span class="section-number-2">2</span> Networking</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org2679903" class="outline-3">
-<h3 id="org2679903"><span class="section-number-3">2.1</span> Overview</h3>
+<div id="outline-container-org8e8cf67" class="outline-3">
+<h3 id="org8e8cf67"><span class="section-number-3">2.1</span> Overview</h3>
 <div class="outline-text-3" id="text-2-1">
 <dl class="org-dl">
 <dt>Cluster</dt><dd>The set of machines in the cluster. i.e. the Masters and the Nodes.</dd>
@@ -516,8 +504,8 @@ The following diagram shows all of the pieces involved with external access:
 </div>
 </div>
 
-<div id="outline-container-org64eb78c" class="outline-3">
-<h3 id="org64eb78c"><span class="section-number-3">2.2</span> SDN Flows Inside Nodes</h3>
+<div id="outline-container-org8d5d61b" class="outline-3">
+<h3 id="org8d5d61b"><span class="section-number-3">2.2</span> SDN Flows Inside Nodes</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 OpenShift SDN creates and configures three network devices:
@@ -602,12 +590,12 @@ Pod to external host
 </div>
 
 
-<div id="outline-container-orgd3e53c7" class="outline-2">
-<h2 id="orgd3e53c7"><span class="section-number-2">3</span> Move Existing Application to OpenShift</h2>
+<div id="outline-container-org1a11bb8" class="outline-2">
+<h2 id="org1a11bb8"><span class="section-number-2">3</span> Move Existing Application to OpenShift</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-org99db3cc" class="outline-3">
-<h3 id="org99db3cc"><span class="section-number-3">3.1</span> What is <a href="https://github.com/GongCun/Pentomino/tree/map">PuzzleBrain</a>?</h3>
+<div id="outline-container-org1eaa5ee" class="outline-3">
+<h3 id="org1eaa5ee"><span class="section-number-3">3.1</span> What is <a href="https://github.com/GongCun/Pentomino/tree/map">PuzzleBrain</a>?</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 PuzzleBrain is a distributed system based on DLX algorithm and MapReduce
@@ -641,9 +629,9 @@ Test the <i>puzzler</i>
 sed -i <span style="color: #2d9574;">'s/^M//g'</span> ./run.sh
 sed -i <span style="color: #2d9574;">'s/^M//g'</span> ./root/*.sh
 
-# <span style="color: #ffd700; background-color: nil;">Server</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Server</span>
 <span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">cd</span> ./test; ncat -4kl <span style="color: #a45bad;">3001</span> -c ../run.sh<span style="color: #4f97d7;">)</span>
-# <span style="color: #ffd700; background-color: nil;">Client</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Client</span>
 <span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">cd</span> ./test; ../puzzler -m -b8 -s <span style="color: #a45bad;">127.0.0.1</span> -p <span style="color: #a45bad;">3001</span><span style="color: #4f97d7;">)</span>
 
 </pre>
@@ -652,8 +640,8 @@ sed -i <span style="color: #2d9574;">'s/^M//g'</span> ./root/*.sh
 </div>
 
 
-<div id="outline-container-org74a8e53" class="outline-3">
-<h3 id="org74a8e53"><span class="section-number-3">3.2</span> Migrate the PuzzleBrain to OpenShift</h3>
+<div id="outline-container-orge9cda1c" class="outline-3">
+<h3 id="orge9cda1c"><span class="section-number-3">3.2</span> Migrate the PuzzleBrain to OpenShift</h3>
 <div class="outline-text-3" id="text-3-2">
 
 <div class="figure">
@@ -663,9 +651,101 @@ sed -i <span style="color: #2d9574;">'s/^M//g'</span> ./root/*.sh
 </div>
 </div>
 
-<div id="outline-container-org9ea3f5e" class="outline-4">
-<h4 id="org9ea3f5e"><span class="section-number-4">3.2.1</span> Prepare the docker image</h4>
+<div id="outline-container-org86d6d91" class="outline-4">
+<h4 id="org86d6d91"><span class="section-number-4">3.2.1</span> What is docker?</h4>
 <div class="outline-text-4" id="text-3-2-1">
+<p>
+<i>由于此处参阅参阅的大部分是中文资料<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>, 因此用中文叙述。</i>
+</p>
+
+<p>
+<b>Docker</b> 是基于 Go 语言实现的开源容器项目，目标是实现“build， ship and run any
+app, anywhere”，即通过对应用的封装（Packaging）、分发（Distribution）、部署
+（Deployment）、运行（Runtime）生命周期进行管理，达到应用组件级别的“一次封装，
+到处运行”。这里的应用组件，既可以是一个Web应用、一个编译环境，也可以是一套数据
+库平台服务，甚至是一个操作系统或集群。
+</p>
+
+<p>
+Docker 最重要的基础是 Linux 容器技术（Linux Containers，LXC）<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>。 最古老的容
+器技术是 <b>chroot</b> 工具，而 LXC 通常被认为介于 chroot 和虚拟机之间的技术，其目标
+是建立一个尽可能与标准安装的Linux相同但不需要分离核心的环境。
+</p>
+
+<p>
+容器有效地将由单个操作系统管理的资源划分到孤立的组中，以更好地在孤立的组之间平衡
+有冲突的资源使用需求。与虚拟化相比，这样既不需要指令级模拟，也不需要即时编译。容
+器可以在核心CPU本地运行指令，而不需要任何专门的解释机制。此外，也避免了准虚拟化
+(para-virtualization)和系统调用替换中的复杂性。
+</p>
+
+<p>
+最古老的容器技术是 <b>chroot</b> ，即更改根目录路径（默认的根目录是/），在 chroot 之
+后，将以指定的位置作为系统的根目录。
+</p>
+
+<p>
+建立指定目录，并拷贝基本命令
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">mkdir -p ./root/<span style="color: #4f97d7;">{</span>bin,lib,lib64<span style="color: #4f97d7;">}</span>
+cp -apf /bin/<span style="color: #4f97d7;">{</span>bash,ls<span style="color: #4f97d7;">}</span> ./root/bin
+rsync -a /lib/* ./root/lib
+rsync -a /lib64/* ./root/lib64
+
+</pre>
+</div>
+
+<p>
+如果要拷贝 <b>whoami</b> 等命令，需要拷贝用户及组文件：
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">mkdir -p ./root/usr/bin
+cp -ap <span style="color: #fa8072;">`which whoami`</span> ./root/usr/bin
+mkdir -p ./root/etc/ &amp;&amp; cp -apf /etc/<span style="color: #4f97d7;">{</span>passwd,group<span style="color: #4f97d7;">}</span> ./root/etc
+</pre>
+</div>
+
+<p>
+运行 chroot 命令
+</p>
+<pre class="example">
+$ sudo LC_ALL=C chroot ./root
+bash-4.4# whoami
+root
+bash-4.4# ls -l
+total 20
+drwxrwxr-x  2 cungong cungong 4096 Apr  4 08:23 bin
+drwxrwxr-x  2 cungong cungong 4096 Apr  4 08:40 etc
+drwxrwxr-x 19 cungong cungong 4096 Apr  4 08:30 lib
+drwxrwxr-x  2 cungong cungong 4096 Apr  4 08:30 lib64
+drwxrwxr-x  3 cungong cungong 4096 Apr  4 08:37 usr
+
+</pre>
+
+<p>
+这样 chroot 就在原有系统中创建一个独立的虚拟化的文件系统。可以用来做以下工作：
+</p>
+<dl class="org-dl">
+<dt>测试和开发</dt><dd>在虚拟化系统中测试软件，减少在生产环境中测试带来的风险。</dd>
+<dt>依赖控制</dt><dd>在虚拟化系统中安装需要的依赖关系，并进行软件的开发、构建和测试。</dd>
+<dt>兼容性</dt><dd>避免软件使用的库或文件可能和主机系统发生名称或链接冲突。</dd>
+<dt>修复</dt><dd>系统无法开机时，可以用 chroot 引导另一个根文件系统（如 Live CD），然后
+修复原来损坏的环境。</dd>
+<dt>特权分离</dt><dd>chroot 的虚拟化环境就是一个程序沙盒，可以用来隔离特权用户的操作对
+原有系统的破坏。</dd>
+</dl>
+<p>
+当然这些好处都被容器继承并发扬。
+</p>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgee133b1" class="outline-4">
+<h4 id="orgee133b1"><span class="section-number-4">3.2.2</span> Prepare the docker image</h4>
+<div class="outline-text-4" id="text-3-2-2">
 <pre class="example">
 $ source /opt/presentation/config
 $ docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} registry.redhat.io
@@ -682,9 +762,9 @@ $ docker images | grep rhel7 | grep latest
 </div>
 </div>
 
-<div id="outline-container-org223b63e" class="outline-4">
-<h4 id="org223b63e"><span class="section-number-4">3.2.2</span> The Dockerfile</h4>
-<div class="outline-text-4" id="text-3-2-2">
+<div id="outline-container-orgcecc7d7" class="outline-4">
+<h4 id="orgcecc7d7"><span class="section-number-4">3.2.3</span> The Dockerfile</h4>
+<div class="outline-text-4" id="text-3-2-3">
 <p>
 A Dockerfile is a text document that defines how an image should be created.
 Depending on the complexity of the application, here is the Dockerfile for
@@ -705,9 +785,9 @@ CMD ["/puzzle-entry.sh"]
 </div>
 </div>
 
-<div id="outline-container-orge7a1103" class="outline-4">
-<h4 id="orge7a1103"><span class="section-number-4">3.2.3</span> Building &amp; testing the docker images</h4>
-<div class="outline-text-4" id="text-3-2-3">
+<div id="outline-container-org6583362" class="outline-4">
+<h4 id="org6583362"><span class="section-number-4">3.2.4</span> Building &amp; testing the docker images</h4>
+<div class="outline-text-4" id="text-3-2-4">
 <div class="org-src-container">
 <pre class="src src-sh">cp -p ./puzzler ./root &amp;&amp; strip -s root/puzzler
 docker build -t demo-puzzle .
@@ -719,9 +799,9 @@ Test the docker functions
 </p>
 <div class="org-src-container">
 <pre class="src src-sh">docker run -dit --name=demo-puzzle-test -p <span style="color: #a45bad;">3001:3001</span> demo-puzzle
-# <span style="color: #ffd700; background-color: nil;">Follow the container logs</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">Follow the container logs</span>
 docker container logs --follow &lt;container&gt;
-# <span style="color: #ffd700; background-color: nil;">In the host</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">In the host</span>
 <span style="color: #4f97d7;">(</span><span style="color: #4f97d7;">cd</span> ./test; ../puzzler -m -b8 -s <span style="color: #a45bad;">127.0.0.1</span> -p <span style="color: #a45bad;">3001</span><span style="color: #4f97d7;">)</span>
 
 </pre>
@@ -732,7 +812,7 @@ Stop &amp; clean the docker images
 </p>
 <div class="org-src-container">
 <pre class="src src-sh">docker stop &lt;container&gt;
-# <span style="color: #ffd700; background-color: nil;">or</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">or</span>
 docker container kill &lt;container&gt;
 docker rm &lt;container&gt;
 </pre>
@@ -740,9 +820,9 @@ docker rm &lt;container&gt;
 </div>
 </div>
 
-<div id="outline-container-org01b8a0d" class="outline-4">
-<h4 id="org01b8a0d"><span class="section-number-4">3.2.4</span> Running the docker images on OpenShift</h4>
-<div class="outline-text-4" id="text-3-2-4">
+<div id="outline-container-orgb7ba893" class="outline-4">
+<h4 id="orgb7ba893"><span class="section-number-4">3.2.5</span> Running the docker images on OpenShift</h4>
+<div class="outline-text-4" id="text-3-2-5">
 <pre class="example">
 $ oc describe svc/docker-registry -n default
 Name:              docker-registry
@@ -787,8 +867,8 @@ $ oc logs -f &lt;pod&gt;
 </div>
 
 
-<div id="outline-container-orgfd489f1" class="outline-2">
-<h2 id="orgfd489f1"><span class="section-number-2">4</span> Creating Applications with Source-to-Image</h2>
+<div id="outline-container-org5b1ba9d" class="outline-2">
+<h2 id="org5b1ba9d"><span class="section-number-2">4</span> Creating Applications with Source-to-Image</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 The Source-to-Image (S2I) tool implements a mechanism to take application source
@@ -813,8 +893,8 @@ Detail see <a href="https://github.com/openshift/source-to-image/tree/release-3.
 </p>
 </div>
 
-<div id="outline-container-orga6e3841" class="outline-3">
-<h3 id="orga6e3841"><span class="section-number-3">4.1</span> Creating an S2I Builder Image</h3>
+<div id="outline-container-org8fd702f" class="outline-3">
+<h3 id="org8fd702f"><span class="section-number-3">4.1</span> Creating an S2I Builder Image</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 As an S2I builder is a container image, you can create your own custom builder
@@ -919,8 +999,8 @@ The expose the service:
 </div>
 </div>
 
-<div id="outline-container-org356b374" class="outline-3">
-<h3 id="org356b374"><span class="section-number-3">4.2</span> Trigger new deployment</h3>
+<div id="outline-container-orgfce21f9" class="outline-3">
+<h3 id="orgfce21f9"><span class="section-number-3">4.2</span> Trigger new deployment</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
 CI/CD: <i>git commit</i> \(\rightarrow\) <i>git push</i> \(\rightarrow\) <i>oc start-build</i>
@@ -963,8 +1043,8 @@ $ oc logs -f bc/s2i-test
 </div>
 </div>
 
-<div id="outline-container-orgdcd5e7d" class="outline-3">
-<h3 id="orgdcd5e7d"><span class="section-number-3">4.3</span> Image Streams</h3>
+<div id="outline-container-orge0fe39a" class="outline-3">
+<h3 id="orge0fe39a"><span class="section-number-3">4.3</span> Image Streams</h3>
 <div class="outline-text-3" id="text-4-3">
 <p>
 OpenShift deploys new versions of user applications into pods quickly. To create
@@ -1000,12 +1080,12 @@ $ oc expose --name php-helloworld svc/php-helloworld
 </div>
 </div>
 </div>
-<div id="outline-container-orgbf5de49" class="outline-2">
-<h2 id="orgbf5de49"><span class="section-number-2">5</span> Creating an Application with a Template</h2>
+<div id="outline-container-org22dae73" class="outline-2">
+<h2 id="org22dae73"><span class="section-number-2">5</span> Creating an Application with a Template</h2>
 <div class="outline-text-2" id="text-5">
 </div>
-<div id="outline-container-orgb499456" class="outline-3">
-<h3 id="orgb499456"><span class="section-number-3">5.1</span> What Is an Application Template?</h3>
+<div id="outline-container-orgc5931d1" class="outline-3">
+<h3 id="orgc5931d1"><span class="section-number-3">5.1</span> What Is an Application Template?</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 A template describes a set of objects that can be parameterized and processed to
@@ -1032,8 +1112,8 @@ OpenShift for user instantiation, also known as application creation.
 </p>
 </div>
 </div>
-<div id="outline-container-orgd6deb40" class="outline-3">
-<h3 id="orgd6deb40"><span class="section-number-3">5.2</span> Benefits of Using Templates</h3>
+<div id="outline-container-org6b06621" class="outline-3">
+<h3 id="org6b06621"><span class="section-number-3">5.2</span> Benefits of Using Templates</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 A template provides developers with an easy way to create all the necessary
@@ -1043,8 +1123,8 @@ underlying technology of the OpenShift platform.
 </p>
 </div>
 </div>
-<div id="outline-container-org8ff5001" class="outline-3">
-<h3 id="org8ff5001"><span class="section-number-3">5.3</span> Using <i>To-Do-List</i> Application Template</h3>
+<div id="outline-container-org1c94dba" class="outline-3">
+<h3 id="org1c94dba"><span class="section-number-3">5.3</span> Using <i>To-Do-List</i> Application Template</h3>
 <div class="outline-text-3" id="text-5-3">
 
 <div class="figure">
@@ -1063,8 +1143,8 @@ The components of <i>To-Do-List</i>
 </ul>
 </div>
 </div>
-<div id="outline-container-org75d8f93" class="outline-3">
-<h3 id="org75d8f93"><span class="section-number-3">5.4</span> Parameters</h3>
+<div id="outline-container-org05610ed" class="outline-3">
+<h3 id="org05610ed"><span class="section-number-3">5.4</span> Parameters</h3>
 <div class="outline-text-3" id="text-5-4">
 <p>
 Templates define a set of <i>parameters</i>, which are assigned values. OpenShift
@@ -1082,8 +1162,8 @@ QUAY_USER           Quay namespace the images are stored in
 </pre>
 </div>
 </div>
-<div id="outline-container-org5faa847" class="outline-3">
-<h3 id="org5faa847"><span class="section-number-3">5.5</span> Creating with a Template</h3>
+<div id="outline-container-org565921f" class="outline-3">
+<h3 id="org565921f"><span class="section-number-3">5.5</span> Creating with a Template</h3>
 <div class="outline-text-3" id="text-5-5">
 <pre class="example">
 # Login quay.io
@@ -1112,8 +1192,8 @@ Use browser to open <a href="http://todoapi-demo.apps.myopenshift.com/todo/">htt
 </div>
 </div>
 </div>
-<div id="outline-container-orgf506e14" class="outline-2">
-<h2 id="orgf506e14"><span class="section-number-2">6</span> Automatically scaling pods</h2>
+<div id="outline-container-org3fae084" class="outline-2">
+<h2 id="org3fae084"><span class="section-number-2">6</span> Automatically scaling pods</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 In OpenShift, a resource request is a threshold you can set that affects
@@ -1197,8 +1277,8 @@ Do the apache benchmark with <b>ab</b> command
 <div class="org-src-container">
 <pre class="src src-sh">ab -n <span style="color: #a45bad;">100000</span> -c <span style="color: #a45bad;">100</span> <span style="color: #2d9574;">\</span>
    http://s2i.apps.myopenshift.com/
-# <span style="color: #ffd700; background-color: nil;">-n: the total number of HTTP requests</span>
-# <span style="color: #ffd700; background-color: nil;">-c: the number of concurrent requests</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">-n: the total number of HTTP requests</span>
+<span style="color: #ffd700; background-color: nil;"># </span><span style="color: #ffd700; background-color: nil;">-c: the number of concurrent requests</span>
 </pre>
 </div>
 
@@ -1223,12 +1303,12 @@ Visit <a href="https://grafana-openshift-monitoring.apps.myopenshift.com">https:
 </p>
 </div>
 </div>
-<div id="outline-container-orgc89eb06" class="outline-2">
-<h2 id="orgc89eb06"><span class="section-number-2">7</span> Other</h2>
+<div id="outline-container-org436a153" class="outline-2">
+<h2 id="org436a153"><span class="section-number-2">7</span> Other</h2>
 <div class="outline-text-2" id="text-7">
 </div>
-<div id="outline-container-org020ba76" class="outline-3">
-<h3 id="org020ba76"><span class="section-number-3">7.1</span> Create the GitLab</h3>
+<div id="outline-container-orgfe1809f" class="outline-3">
+<h3 id="orgfe1809f"><span class="section-number-3">7.1</span> Create the GitLab</h3>
 <div class="outline-text-3" id="text-7-1">
 <pre class="example">
 $ docker search --limit=3 gitlab-ce
@@ -1241,8 +1321,8 @@ $ oc logs -f dc/gitlab
 </pre>
 </div>
 </div>
-<div id="outline-container-org10903a0" class="outline-3">
-<h3 id="org10903a0"><span class="section-number-3">7.2</span> Debug the problem</h3>
+<div id="outline-container-org102dd80" class="outline-3">
+<h3 id="org102dd80"><span class="section-number-3">7.2</span> Debug the problem</h3>
 <div class="outline-text-3" id="text-7-2">
 <p>
 Review the application logs to confirm that the failure is caused by
@@ -1400,10 +1480,27 @@ Password:
 </div>
 </div>
 </div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+《Docker技术入门与实战》（第三版，杨保华等编著），《Linux 大棚命令百篇 (网
+络和系统篇)》（吴鹏冲等编著）。
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+Docker 在0.9版本之前都是使用 LXC 技术，在0.9版之后，已不再是唯一且预设的
+执行环境。自0.9版开始，Docker开发了 libcontainer 项目作为更广发的容器驱动实现，
+从而替换掉了 LXC 的实现。
+</p></div></div>
+
+
 </div>
+</div></div>
 <div id="postamble" class="status">
 <p class="author">Author: 龔存</p>
-<p class="date">Created: 2020-04-03 週五 13:44</p>
+<p class="date">Created: 2020-04-04 周六 20:26</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

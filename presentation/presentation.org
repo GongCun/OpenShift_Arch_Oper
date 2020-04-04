@@ -241,6 +241,70 @@ Test the /puzzler/
 	  #+CAPTION: PuzzleBrain in OpenShift
 	  [[./openshift_farm.png]]
 
+*** What is docker?
+/由于此处参阅参阅的大部分是中文资料[fn:1], 因此用中文叙述。/
+
+*Docker* 是基于 Go 语言实现的开源容器项目，目标是实现“build， ship and run any
+app, anywhere”，即通过对应用的封装（Packaging）、分发（Distribution）、部署
+（Deployment）、运行（Runtime）生命周期进行管理，达到应用组件级别的“一次封装，
+到处运行”。这里的应用组件，既可以是一个Web应用、一个编译环境，也可以是一套数据
+库平台服务，甚至是一个操作系统或集群。
+
+Docker 最重要的基础是 Linux 容器技术（Linux Containers，LXC）[fn:2]。 最古老的容
+器技术是 *chroot* 工具，而 LXC 通常被认为介于 chroot 和虚拟机之间的技术，其目标
+是建立一个尽可能与标准安装的Linux相同但不需要分离核心的环境。
+
+容器有效地将由单个操作系统管理的资源划分到孤立的组中，以更好地在孤立的组之间平衡
+有冲突的资源使用需求。与虚拟化相比，这样既不需要指令级模拟，也不需要即时编译。容
+器可以在核心CPU本地运行指令，而不需要任何专门的解释机制。此外，也避免了准虚拟化
+(para-virtualization)和系统调用替换中的复杂性。
+
+最古老的容器技术是 *chroot* ，即更改根目录路径（默认的根目录是/），在 chroot 之
+后，将以指定的位置作为系统的根目录。
+
+建立指定目录，并拷贝基本命令
+#+BEGIN_SRC sh
+  mkdir -p ./root/{bin,lib,lib64}
+  cp -apf /bin/{bash,ls} ./root/bin
+  rsync -a /lib/* ./root/lib
+  rsync -a /lib64/* ./root/lib64
+
+#+END_SRC
+
+如果要拷贝 *whoami* 等命令，需要拷贝用户及组文件：
+#+BEGIN_SRC sh
+  mkdir -p ./root/usr/bin
+  cp -ap `which whoami` ./root/usr/bin
+  mkdir -p ./root/etc/ && cp -apf /etc/{passwd,group} ./root/etc
+#+END_SRC
+
+运行 chroot 命令
+#+BEGIN_EXAMPLE
+  $ sudo LC_ALL=C chroot ./root
+  bash-4.4# whoami
+  root
+  bash-4.4# ls -l
+  total 20
+  drwxrwxr-x  2 cungong cungong 4096 Apr  4 08:23 bin
+  drwxrwxr-x  2 cungong cungong 4096 Apr  4 08:40 etc
+  drwxrwxr-x 19 cungong cungong 4096 Apr  4 08:30 lib
+  drwxrwxr-x  2 cungong cungong 4096 Apr  4 08:30 lib64
+  drwxrwxr-x  3 cungong cungong 4096 Apr  4 08:37 usr
+
+#+END_EXAMPLE
+
+这样 chroot 就在原有系统中创建一个独立的虚拟化的文件系统。可以用来做以下工作：
+- 测试和开发 :: 在虚拟化系统中测试软件，减少在生产环境中测试带来的风险。
+- 依赖控制 :: 在虚拟化系统中安装需要的依赖关系，并进行软件的开发、构建和测试。
+- 兼容性 :: 避免软件使用的库或文件可能和主机系统发生名称或链接冲突。
+- 修复 :: 系统无法开机时，可以用 chroot 引导另一个根文件系统（如 Live CD），然后
+        修复原来损坏的环境。
+- 特权分离 :: chroot 的虚拟化环境就是一个程序沙盒，可以用来隔离特权用户的操作对
+          原有系统的破坏。
+当然这些好处都被容器继承并发扬。
+
+
+
 *** Prepare the docker image
 #+BEGIN_EXAMPLE
   $ source /opt/presentation/config
@@ -782,4 +846,13 @@ Create an application with gitlab:
   Username:
   Password:
 #+end_example
+
+* Footnotes
+
+[fn:2] Docker 在0.9版本之前都是使用 LXC 技术，在0.9版之后，已不再是唯一且预设的
+执行环境。自0.9版开始，Docker开发了 libcontainer 项目作为更广发的容器驱动实现，
+从而替换掉了 LXC 的实现。
+
+[fn:1] 《Docker技术入门与实战》（第三版，杨保华等编著），《Linux 大棚命令百篇 (网
+络和系统篇)》（吴鹏冲等编著）。
 
